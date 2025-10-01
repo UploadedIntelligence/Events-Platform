@@ -1,12 +1,12 @@
 services:
-  db:
-    container_name: events_platform
-    image: postgres
-    environment:
-      POSTGRES_USER: Valentin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: events_platform
-    ports:
-      - 3000:5432
-    expose:
-      - 5432
+    db:
+        container_name: events_platform
+        image: postgres
+        environment:
+            POSTGRES_USER: Valentin
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: events_platform
+        ports:
+            - 3000:5432
+        expose:
+            - 5432

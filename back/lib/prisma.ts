@@ -1,14 +1,16 @@
-import { PrismaClient } from "../generated/prisma";
-import { withAccelerate } from "@prisma/extension-accelerate";
+import { PrismaClient } from '../generated/prisma';
+import { withAccelerate } from '@prisma/extension-accelerate';
 
 const globalForPrisma = global as unknown as {
     prisma: PrismaClient;
 };
 
-const prisma =
-    globalForPrisma.prisma || new PrismaClient().$extends(withAccelerate());
+const prisma = globalForPrisma.prisma || new PrismaClient().$extends(withAccelerate());
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-prisma.$connect().then(() => console.log("Prisma connected!")).catch(e => console.error("Prisma error:", e));
+prisma
+    .$connect()
+    .then(() => console.log('Prisma connected!'))
+    .catch((e) => console.error('Prisma error:', e));
 export default prisma;
