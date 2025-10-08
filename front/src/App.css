@@ -4,3 +4,10 @@
     padding: 2rem;
     text-align: center;
 }
+
+.login,
+.register,
+.create-event {
+    display: inline-grid;
+    gap: 10px;
+}
