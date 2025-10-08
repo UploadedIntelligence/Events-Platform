@@ -1,9 +1,10 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { getUser, registerUser, logUser } from './controllers/users.controller';
-import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
+import { getUser } from './controllers/users.controller';
+import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
+import { createEvent, fetchFutureEvents, fetchPastEvents } from './controllers/events.controller';
 
 const app = express();
 
@@ -20,8 +21,10 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.status(200).send('Root route working'));
 app.get('/user', getUser);
-app.get('/user/register', registerUser);
-app.get('/user/login', logUser);
+
+app.post('/create-event', createEvent);
+app.get('/upcoming-events', fetchFutureEvents);
+app.get('/past-events', fetchPastEvents);
 
 app.listen(process.env.APP_PORT, () => {
     console.log(`Now listening port ${process.env.APP_PORT}`);
