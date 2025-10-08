@@ -1,0 +1,5 @@
+@mixin media-tablet {
+    @media screen and (min-width: 769px) {
+        @content;
+    }
+}
