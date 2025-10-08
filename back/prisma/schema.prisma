@@ -41,6 +41,7 @@ model Event {
   start       DateTime
   end         DateTime
   location    String
+  imgUrl      String?
   attendees   User[]
 }
 
