@@ -1,20 +1,46 @@
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Alert } from '@mui/material';
 import axios from '../config/client.ts';
 import { useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { type FormValues } from '../utilities/types.ts';
 import { Dayjs } from 'dayjs';
+import 'dayjs/locale/en-gb';
 import authClient from '../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
+import type { DateTimeValidationError } from '@mui/x-date-pickers';
 
 export function CreateEventPage() {
     const { data } = authClient.useSession();
 
     const [startTime, setStartTime] = useState<Dayjs | null>(null);
     const [endTime, setEndTime] = useState<Dayjs | null>(null);
+    const [startError, setStartError] = useState<DateTimeValidationError | null>(null);
+    const [endError, setEndError] = useState<DateTimeValidationError | null>(null);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+    const [submissionValid, setSubmissionValid] = useState<boolean>(false);
+
+    const errorMessageStart = useMemo(() => {
+        switch (startError) {
+            case 'disablePast': {
+                return 'Event cannot be in the past';
+            }
+        }
+    }, [startError]);
+
+    const errorMessageEnd = useMemo(() => {
+        switch (endError) {
+            case 'disablePast': {
+                return 'Event cannot be in the past';
+            }
+            case 'minDate':
+            case 'minTime': {
+                return 'End date/time cannot be before the start time';
+            }
+        }
+    }, [endError]);
 
     const {
         register,
@@ -29,18 +55,32 @@ export function CreateEventPage() {
         },
     });
 
-    function createEvent(data: FormValues) {
+    async function createEvent(data: FormValues) {
         console.log('data here', data, startTime?.toISOString(), endTime);
-        axios.post('/create-event', {
-            ...data,
-            startTime: startTime?.toISOString(),
-            endTime: endTime?.toISOString(),
-        });
+        const response = await axios
+            .post('/create-event', {
+                ...data,
+                startTime: startTime?.toISOString(),
+                endTime: endTime?.toISOString(),
+            })
+            .then((res) => {
+                setIsVisible(true);
+                setTimeout(() => setIsVisible(false), 5000);
+                setSubmissionValid(true);
+                console.log(res.data);
+            })
+            .catch((e) => {
+                setIsVisible(true);
+                setTimeout(() => setIsVisible(false), 5000);
+                setSubmissionValid(false);
+                console.log(e);
+            });
+        console.log(response);
     }
 
     return (
         <div>
-            {data ? (
+            {data?.user.role === 'user' ? (
                 <form className="create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"
@@ -49,7 +89,7 @@ export function CreateEventPage() {
                         {...register('eventName', {
                             required: true,
                             pattern: {
-                                value: /^.{1,10}$/,
+                                value: /^.{1,30}$/,
                                 message: 'max 30 characters',
                             },
                         })}
@@ -69,7 +109,7 @@ export function CreateEventPage() {
                         rows={5}
                     />
                     <TextField
-                        label="City"
+                        label="Location"
                         error={!!errors.city}
                         helperText={errors.city?.message}
                         {...register('city', {
@@ -80,23 +120,47 @@ export function CreateEventPage() {
                             },
                         })}
                     />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                         <DateTimePicker
+                            disablePast
+                            onError={(newError) => setStartError(newError)}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessageStart,
+                                },
+                            }}
                             label="Start Time"
                             ampm={false}
                             value={startTime}
                             onChange={(newValue) => setStartTime(newValue)}
                         />
                         <DateTimePicker
+                            disablePast
+                            onError={(newError) => setEndError(newError)}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessageEnd,
+                                },
+                            }}
+                            minDateTime={startTime ?? undefined}
                             label="End Time"
                             ampm={false}
                             value={endTime}
                             onChange={(newValue) => setEndTime(newValue)}
                         />
                     </LocalizationProvider>
-                    <Button type="submit" variant="contained" disabled={!isValid}>
+                    <Button type="submit" variant="contained" disabled={!isValid || !!startError || !!endError}>
                         Submit Event
                     </Button>
+                    {isVisible && (
+                        <Alert
+                            variant="filled"
+                            severity={submissionValid ? 'success' : 'error'}
+                            sx={{ margin: '10px' }}
+                        >
+                            {submissionValid ? 'Event created successfully' : 'There was a problem with your request'}
+                        </Alert>
+                    )}
                 </form>
             ) : (
                 <Navigate to="/" />
