@@ -8,6 +8,7 @@ import { RegisterPage } from './pages/register.tsx';
 import { Spinner } from './pages/loading.tsx';
 import { CreateEventPage } from './pages/create-event.tsx';
 import { NavBar } from './components/nav-bar.tsx';
+import { UserSettings } from './components/user-settings.tsx';
 
 function App() {
     const { data, isPending } = authClient.useSession();
@@ -24,8 +25,8 @@ function App() {
             callbackURL: 'http://localhost:5173',
             errorCallbackURL: 'http://localhost:5173',
             // can be added via authClien.linkSocial to ask user for calendar permission
-            // rather than having it automatically when signed in via google account
-            scopes: ['https://www.googleapis.com/auth/calendar.events']
+            // rather than having it automatically when signed in via Google account
+            scopes: ['https://www.googleapis.com/auth/calendar.events'],
         });
         if (error) {
             console.log('signIn Error:', error);
@@ -57,13 +58,15 @@ function App() {
                 <Route path="*" element={<LoginPage />} />
                 <Route path="/user/register" element={<RegisterPage />} />
                 <Route path="/create-event" element={<CreateEventPage />} />
+                <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
             {!data && (
                 <div className="register">
-                    <Button onClick={googleSignIn}>Sign in with Google</Button>
+                    <Button onClick={googleSignIn}>Google Signup/Login</Button>
                     {location.pathname !== '/user/register' && (
                         <Button onClick={() => navigate('/user/register')}>Register</Button>
                     )}
+                    {location.pathname !== '/' && <Button onClick={() => navigate('/')}>Login with password</Button>}
                 </div>
             )}
         </ThemeProvider>
