@@ -34,8 +34,7 @@ export async function fetchEvents(req: Request, res: Response) {
             where: {
                 ...(req.path === '/past-events' && { start: { lt: today } }),
                 ...(req.path === '/upcoming-events' &&
-                    { start: { gt: today } } &&
-                    { attendees: { none: { id: session!.user.id } } } ),
+                    { start: { gt: today }, attendees: { none: { id: session!.user.id } } } ),
                 ...(req.path === '/attending' &&
                     { attendees: { some: { id: session!.user.id } } })
             },
