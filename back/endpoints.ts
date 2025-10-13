@@ -1,10 +1,9 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { getUser } from './controllers/users.controller';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
-import { createEvent, fetchFutureEvents, fetchPastEvents } from './controllers/events.controller';
+import { createEvent, fetchEvents, attendOrCancelEvent} from './controllers/events.controller';
 
 const app = express();
 
@@ -20,11 +19,10 @@ app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use(express.json());
 
 app.get('/', (req, res) => res.status(200).send('Root route working'));
-app.get('/user', getUser);
 
 app.post('/create-event', createEvent);
-app.get('/upcoming-events', fetchFutureEvents);
-app.get('/past-events', fetchPastEvents);
+app.put('/attend-or-cancel', attendOrCancelEvent)
+app.get(['/upcoming-events', '/past-events', '/attending'], fetchEvents);
 
 app.listen(process.env.APP_PORT, () => {
     console.log(`Now listening port ${process.env.APP_PORT}`);
