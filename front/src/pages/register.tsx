@@ -58,6 +58,7 @@ export function RegisterPage() {
             name: name,
             email: email,
             password: password,
+            role: 'user',
         });
     }
 
@@ -110,7 +111,7 @@ export function RegisterPage() {
                             })}
                         />
                         <Tooltip
-                            placement="top"
+                            placement="bottom"
                             title={password_tooltip.split('\n').map((line) => (
                                 <Typography fontSize="14px">
                                     {line}
@@ -118,7 +119,7 @@ export function RegisterPage() {
                                 </Typography>
                             ))}
                         >
-                            <Typography>ℹ️ Strength: </Typography>
+                            <Typography sx={{ width: 'fit-content', justifySelf: 'center' }}>ℹ️ Strength: </Typography>
                         </Tooltip>
                         <LinearProgress variant="determinate" value={strength}></LinearProgress>
                         <Button type="submit" disabled={!(isValid && strength === 100)} variant="contained">
