@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { fromNodeHeaders } from 'better-auth/node';
 import { auth } from '../lib/auth';
-import { google } from 'googleapis'
+import { google } from 'googleapis';
 import prisma from '../lib/prisma';
 
 export async function createEvent(req: Request, res: Response) {
@@ -26,17 +26,18 @@ export async function createEvent(req: Request, res: Response) {
 export async function fetchEvents(req: Request, res: Response) {
     const today = new Date();
     const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers)
+        headers: fromNodeHeaders(req.headers),
     });
-    console.log(session?.user.id)
+    console.log(session?.user.id);
     try {
         const events = await prisma.event.findMany({
             where: {
                 ...(req.path === '/past-events' && { start: { lt: today } }),
-                ...(req.path === '/upcoming-events' &&
-                    { start: { gt: today }, attendees: { none: { id: session!.user.id } } } ),
-                ...(req.path === '/attending' &&
-                    { attendees: { some: { id: session!.user.id } } })
+                ...(req.path === '/upcoming-events' && {
+                    start: { gt: today },
+                    attendees: { none: { id: session!.user.id } },
+                }),
+                ...(req.path === '/attending' && { attendees: { some: { id: session!.user.id } } }),
             },
             orderBy: {
                 start: 'asc',
@@ -51,53 +52,57 @@ export async function fetchEvents(req: Request, res: Response) {
 export async function attendOrCancelEvent(req: Request, res: Response) {
     const { event_id, is_attending } = req.body;
     const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers)
-    })
+        headers: fromNodeHeaders(req.headers),
+    });
 
     if (!session) {
-        res.status(401).json('Not authenticated')
+        res.status(401).json('Not authenticated');
     }
 
     try {
         const googleAccount = await prisma.account.findFirst({
             where: {
                 userId: session!.user.id,
-                providerId: 'google'
-            }
-        })
+                providerId: 'google',
+            },
+        });
 
         if (!googleAccount?.accessToken) {
-            return res.status(401).json('Calendar access not provided')
+            return res.status(401).json('Calendar access not provided');
         }
 
         const client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            'http://localhost:7000/api/auth/callback/google'
+            'http://localhost:7000/api/auth/callback/google',
         );
 
         client.setCredentials({
             access_token: googleAccount.accessToken,
-            refresh_token: googleAccount.refreshToken
-        })
+            refresh_token: googleAccount.refreshToken,
+        });
 
-        const calendar = google.calendar({ version: 'v3', auth: client})
+        const calendar = google.calendar({ version: 'v3', auth: client });
 
         const updated_event = await prisma.event.update({
             where: {
-                id: event_id
+                id: event_id,
             },
             data: {
                 attendees: {
-                    ...(is_attending && {disconnect: {
-                            id: session!.user.id
-                        }}),
-                    ...(!is_attending && {connect: {
-                        id: session!.user.id
-                    }})
-                }
-            }
-        })
+                    ...(is_attending && {
+                        disconnect: {
+                            id: session!.user.id,
+                        },
+                    }),
+                    ...(!is_attending && {
+                        connect: {
+                            id: session!.user.id,
+                        },
+                    }),
+                },
+            },
+        });
 
         const calendar_return = await calendar.events.insert({
             calendarId: 'primary',
@@ -105,13 +110,13 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
                 summary: updated_event.name,
                 description: updated_event.description,
                 start: { dateTime: updated_event.start.toISOString() },
-                end: { dateTime: updated_event.end.toISOString() }
-            }
-        })
+                end: { dateTime: updated_event.end.toISOString() },
+            },
+        });
 
-        console.log('event added?', calendar_return)
+        console.log('event added?', calendar_return);
 
-        res.status(200).json('Your attendance successfully recorded')
+        res.status(200).json('Your attendance successfully recorded');
     } catch (e) {
         console.log(e);
     }

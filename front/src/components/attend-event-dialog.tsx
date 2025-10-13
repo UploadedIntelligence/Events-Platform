@@ -3,8 +3,6 @@ import * as React from 'react';
 import axios from '../config/client.ts';
 import { useState } from 'react';
 
-
-
 export function AttendOrCancelEventDialog({
     setEvents,
     dialogOpen,
@@ -12,13 +10,12 @@ export function AttendOrCancelEventDialog({
     selectedEvent,
     isAttending,
 }: {
-    setEvents: React.Dispatch<React.SetStateAction<Array<any>>>
+    setEvents: React.Dispatch<React.SetStateAction<Array<any>>>;
     selectedEvent: any;
     isAttending: boolean;
     dialogOpen: boolean;
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-
     const [success, setSuccess] = useState<boolean | null>(null);
     async function attendOrCancelEvent() {
         let events: any;
@@ -30,7 +27,7 @@ export function AttendOrCancelEventDialog({
         );
         console.log('success?', response.status);
         if (response.status === 200) {
-            setSuccess(true)
+            setSuccess(true);
 
             if (isAttending) {
                 events = await axios.get('/attending', { withCredentials: true });
@@ -39,7 +36,6 @@ export function AttendOrCancelEventDialog({
                 events = await axios.get('/upcoming-events', { withCredentials: true });
                 setEvents(events.data);
             }
-
         } else {
             setSuccess(false);
         }
@@ -56,13 +52,16 @@ export function AttendOrCancelEventDialog({
                 onClose={() => setDialogOpen(false)}
                 slotProps={{
                     transition: {
-                        onExited: () => setSuccess(null)}
+                        onExited: () => setSuccess(null),
+                    },
                 }}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
                 {success ? (
-                    <Alert variant='filled' severity='success'>Attendance {isAttending ? 'cancelled' : 'registered'} successfully</Alert>
+                    <Alert variant="filled" severity="success">
+                        Attendance {isAttending ? 'cancelled' : 'registered'} successfully
+                    </Alert>
                 ) : (
                     <>
                         <DialogTitle id="alert-dialog-title">

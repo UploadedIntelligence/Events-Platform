@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
-import { createEvent, fetchEvents, attendOrCancelEvent} from './controllers/events.controller';
+import { createEvent, fetchEvents, attendOrCancelEvent } from './controllers/events.controller';
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.status(200).send('Root route working'));
 
 app.post('/create-event', createEvent);
-app.put('/attend-or-cancel', attendOrCancelEvent)
+app.put('/attend-or-cancel', attendOrCancelEvent);
 app.get(['/upcoming-events', '/past-events', '/attending'], fetchEvents);
 
 app.listen(process.env.APP_PORT, () => {
