@@ -19,15 +19,12 @@ export function NavBar() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
+    console.log(data);
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-
-        //
     };
     const handleClose = () => {
         setAnchorEl(null);
-
-        //
     };
     //////////////////
     // check if user is staff/admin to create events
@@ -61,14 +58,16 @@ export function NavBar() {
                 <AppBar className="NavBar-main" position="static">
                     <Toolbar variant="dense" sx={{ display: 'inline', minHeight: 0 }}>
                         <div className="NavBar-content">
-                            <Button
-                                onClick={() => {
-                                    setVisibleEvents(false);
-                                    navigate('/create-event');
-                                }}
-                            >
-                                Create an event
-                            </Button>
+                            {data.user.role !== 'user' && (
+                                <Button
+                                    onClick={() => {
+                                        setVisibleEvents(false);
+                                        navigate('/create-event');
+                                    }}
+                                >
+                                    Create an event
+                                </Button>
+                            )}
                             <Button
                                 onClick={() => {
                                     fetchEvents('future');
@@ -113,7 +112,14 @@ export function NavBar() {
                                     },
                                 }}
                             >
-                                <MenuItem onClick={() => navigate('/user-settings')}>Settings</MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        navigate('/user-settings');
+                                        setVisibleEvents(false);
+                                    }}
+                                >
+                                    Settings
+                                </MenuItem>
                                 <MenuItem onClick={logOut}>Logout</MenuItem>
                             </Menu>
                         </div>

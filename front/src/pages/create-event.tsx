@@ -1,4 +1,4 @@
-import { TextField, Button, Alert } from '@mui/material';
+import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
 import axios from '../config/client.ts';
 import { useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -46,6 +46,7 @@ export function CreateEventPage() {
         register,
         handleSubmit,
         formState: { errors, isValid },
+        reset,
     } = useForm({
         mode: 'onChange',
         defaultValues: {
@@ -65,13 +66,14 @@ export function CreateEventPage() {
             })
             .then((res) => {
                 setIsVisible(true);
-                setTimeout(() => setIsVisible(false), 5000);
                 setSubmissionValid(true);
                 console.log(res.data);
+                reset();
+                setEndTime(null);
+                setStartTime(null);
             })
             .catch((e) => {
                 setIsVisible(true);
-                setTimeout(() => setIsVisible(false), 5000);
                 setSubmissionValid(false);
                 console.log(e);
             });
@@ -80,7 +82,7 @@ export function CreateEventPage() {
 
     return (
         <div>
-            {data?.user.role === 'user' ? (
+            {data?.user.role !== 'user' ? (
                 <form className="create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"
@@ -153,13 +155,17 @@ export function CreateEventPage() {
                         Submit Event
                     </Button>
                     {isVisible && (
-                        <Alert
-                            variant="filled"
-                            severity={submissionValid ? 'success' : 'error'}
-                            sx={{ margin: '10px' }}
-                        >
-                            {submissionValid ? 'Event created successfully' : 'There was a problem with your request'}
-                        </Alert>
+                        <ClickAwayListener onClickAway={() => setIsVisible(false)}>
+                            <Alert
+                                variant="filled"
+                                severity={submissionValid ? 'success' : 'error'}
+                                sx={{ margin: '10px' }}
+                            >
+                                {submissionValid
+                                    ? 'Event created successfully'
+                                    : 'There was a problem with your request'}
+                            </Alert>
+                        </ClickAwayListener>
                     )}
                 </form>
             ) : (

@@ -17,19 +17,30 @@ enum Role {
   admin
 }
 
+enum Status {
+  pending
+  approved
+  rejected
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  password      String?
-  role          Role      @default(user)
-  attending     Event[]
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id               String            @id @default(cuid())
+  name             String
+  email            String            @unique
+  password         String?
+  role             Role              @default(user)
+  attending        Event[]
+  emailVerified    Boolean           @default(false)
+  image            String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+  sessions         Session[]
+  accounts         Account[]
+  staffApplication StaffApplication?
+
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
 
   @@map("user")
 }
@@ -55,6 +66,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@unique([token])
   @@map("session")
@@ -88,4 +101,14 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model StaffApplication {
+  id         String    @id @default(cuid())
+  userEmail  String    @unique
+  user       User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  status     Status    @default(pending)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  rejectedAt DateTime?
 }

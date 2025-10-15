@@ -1,5 +1,5 @@
 import { createAuthClient } from 'better-auth/react';
-import { inferAdditionalFields } from 'better-auth/client/plugins';
+import { adminClient, inferAdditionalFields } from 'better-auth/client/plugins';
 
 export default createAuthClient({
     baseURL: 'http://localhost:7000',
@@ -9,7 +9,11 @@ export default createAuthClient({
                 role: {
                     type: 'string',
                 },
+                staffApplication: {
+                    type: 'boolean',
+                },
             },
         }),
+        adminClient(),
     ],
 });

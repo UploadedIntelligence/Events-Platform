@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { admin } from 'better-auth/plugins';
 import prisma from './prisma';
 
 export const auth = betterAuth({
@@ -12,11 +13,16 @@ export const auth = betterAuth({
                 type: 'string',
                 defaultValue: 'user',
             },
+            staffApplication: {
+                type: 'string',
+                defaultValue: ''
+            }
         },
     },
     emailAndPassword: {
         enabled: true,
     },
+    plugins: [admin()],
     socialProviders: {
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID as string,

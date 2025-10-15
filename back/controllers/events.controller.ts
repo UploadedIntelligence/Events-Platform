@@ -17,9 +17,9 @@ export async function createEvent(req: Request, res: Response) {
                 end: endTime,
             },
         });
-        res.status(200).json('Event successfully created');
+        return res.status(200).json('Event successfully created');
     } catch (e) {
-        res.status(400).json(e);
+        return res.status(400).json(e);
     }
 }
 
@@ -43,7 +43,7 @@ export async function fetchEvents(req: Request, res: Response) {
                 start: 'asc',
             },
         });
-        res.status(200).send(events);
+        return res.status(200).send(events);
     } catch (e) {
         console.log(e);
     }
@@ -56,10 +56,11 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
     });
 
     if (!session) {
-        res.status(401).json('Not authenticated');
+        return res.status(401).json('Not authenticated');
     }
 
     try {
+        let calendar;
         const googleAccount = await prisma.account.findFirst({
             where: {
                 userId: session!.user.id,
@@ -67,22 +68,20 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             },
         });
 
-        if (!googleAccount?.accessToken) {
-            return res.status(401).json('Calendar access not provided');
+        if (googleAccount?.accessToken) {
+            const client = new google.auth.OAuth2(
+                process.env.GOOGLE_CLIENT_ID,
+                process.env.GOOGLE_CLIENT_SECRET,
+                'http://localhost:7000/api/auth/callback/google',
+            );
+
+            client.setCredentials({
+                access_token: googleAccount.accessToken,
+                refresh_token: googleAccount.refreshToken,
+            });
+
+            calendar = google.calendar({ version: 'v3', auth: client });
         }
-
-        const client = new google.auth.OAuth2(
-            process.env.GOOGLE_CLIENT_ID,
-            process.env.GOOGLE_CLIENT_SECRET,
-            'http://localhost:7000/api/auth/callback/google',
-        );
-
-        client.setCredentials({
-            access_token: googleAccount.accessToken,
-            refresh_token: googleAccount.refreshToken,
-        });
-
-        const calendar = google.calendar({ version: 'v3', auth: client });
 
         const updated_event = await prisma.event.update({
             where: {
@@ -104,7 +103,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             },
         });
 
-        const calendar_return = await calendar.events.insert({
+        const calendar_return = await calendar?.events.insert({
             calendarId: 'primary',
             requestBody: {
                 summary: updated_event.name,
@@ -116,7 +115,10 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
 
         console.log('event added?', calendar_return);
 
-        res.status(200).json('Your attendance successfully recorded');
+        return res.status(200).json({
+            message: 'Your attendance successfully recorded',
+            googleAccess: `${!!googleAccount?.accessToken}`,
+        });
     } catch (e) {
         console.log(e);
     }

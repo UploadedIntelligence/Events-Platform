@@ -14,7 +14,7 @@ function App() {
     const { data, isPending } = authClient.useSession();
     const navigate = useNavigate();
     const location = useLocation();
-
+    console.log(data);
     if (isPending) {
         return <Spinner />;
     }
