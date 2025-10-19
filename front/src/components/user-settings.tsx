@@ -10,6 +10,7 @@ import {
     TableCell,
     TableRow,
     TableBody,
+    DialogContentText,
 } from '@mui/material';
 import axios from '../config/client.ts';
 import authClient from '../services/auth-client.ts';
@@ -20,16 +21,20 @@ export function UserSettings() {
     const { data } = authClient.useSession();
     const [adminSettings, setAdminSettings] = useState<boolean>(false);
     const [viewApplications, setViewApplications] = useState<boolean>(false);
-    const [applications, setApplications] = useState<any>(null);
+    const [applications, setApplications] = useState<Array<any> | null>(null);
 
     async function applyStaff() {
         await axios.get('/apply-staff', { withCredentials: true });
     }
 
-    async function fetchApplications(): void {
+    async function fetchApplications(): Promise<void> {
         const applications_response = (await axios.get('/applications', { withCredentials: true })).data;
         console.log(applications_response);
         setApplications(applications_response);
+    }
+
+    async function applicationResponse(applicant_email: string, response: string): Promise<void> {
+        await axios.put('/application-response', { applicant_email, response }, { withCredentials: true });
     }
 
     return (
@@ -54,35 +59,39 @@ export function UserSettings() {
                                             <TableRow>
                                                 <TableCell>User: </TableCell>
                                                 <TableCell>Status: </TableCell>
+                                                <TableCell align="center">Approve/Reject</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            <TableRow>
-                                                <TableCell sx={{ padding: 0 }}>
-                                                    {applications ? (
-                                                        applications.map((application: any, idx: number) => {
-                                                            return (
-                                                                <a key={idx}>
-                                                                    <Button>{application.email}</Button>
-                                                                </a>
-                                                            );
-                                                        })
-                                                    ) : (
-                                                        <DialogContentText>No providers found</DialogContentText>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell sx={{ padding: 0, verticalAlign: 'top' }}>
-                                                    {applications
-                                                        ? applications.map((application, idx) => {
-                                                              return (
-                                                                  <a key={idx}>
-                                                                      {application.status}
-                                                                  </a>
-                                                              );
-                                                          })
-                                                        : []}
-                                                </TableCell>
-                                            </TableRow>
+                                            {applications ? (
+                                                applications.map((application: any, idx: number) => {
+                                                    console.log(application);
+                                                    return (
+                                                        <TableRow>
+                                                            <TableCell>
+                                                                <Typography key={idx}>
+                                                                    {application.userEmail}
+                                                                </Typography>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <Typography key={idx}>{application.status}</Typography>
+                                                            </TableCell>
+                                                            <TableCell sx={{ justifySelf: 'flex-end' }} align='center'>
+                                                                <Button key={idx} onClick={() => applicationResponse(application.userEmail, 'approved')}>Approve</Button>
+                                                                <Button
+                                                                    key={idx}
+                                                                    sx={{ marginLeft: '8px' }}
+                                                                    color="secondary"
+                                                                >
+                                                                    Reject
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                })
+                                            ) : (
+                                                <DialogContentText>No providers found</DialogContentText>
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
@@ -93,7 +102,7 @@ export function UserSettings() {
                     <Card>
                         <CardContent>
                             <Typography>Hello, {data?.user.name}</Typography>
-                            <CardActions style={{ display: 'grid' }}>
+                            <div style={{ display: 'grid' }}>
                                 {data?.user.role === 'admin' && (
                                     <Button onClick={() => setAdminSettings(true)}>Admin settings</Button>
                                 )}
@@ -105,7 +114,7 @@ export function UserSettings() {
                                 )}
                                 <Button>History</Button>
                                 <Button>Delete account</Button>
-                            </CardActions>
+                            </div>
                         </CardContent>
                     </Card>
                 )
