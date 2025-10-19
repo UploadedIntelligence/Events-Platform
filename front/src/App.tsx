@@ -2,7 +2,7 @@ import './App.css';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { LoginPage } from './pages/login.tsx';
 import { Button, createTheme, ThemeProvider } from '@mui/material';
-import { green } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import authClient from './services/auth-client.ts';
 import { RegisterPage } from './pages/register.tsx';
 import { Spinner } from './pages/loading.tsx';
@@ -39,9 +39,15 @@ function App() {
             primary: {
                 main: green[700],
             },
+            secondary: {
+                main: red[500],
+            },
         },
         components: {
             MuiButton: {
+                defaultProps: {
+                    variant: 'outlined',
+                },
                 styleOverrides: {
                     root: {
                         fontWeight: '600',
