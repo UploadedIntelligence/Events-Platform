@@ -8,7 +8,7 @@ import { applicationsResponse, fetchApplications, staffApplication } from './con
 
 const app = express();
 
-app.use(cors({ origin: ['http://localhost:5173'], methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
+app.use(cors({ origin: ['https://events-platform-2-f7qv.onrender.com/'], methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
