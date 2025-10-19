@@ -65,7 +65,6 @@ export function UserSettings() {
                                         <TableBody>
                                             {applications ? (
                                                 applications.map((application: any, idx: number) => {
-                                                    console.log(application);
                                                     return (
                                                         <TableRow>
                                                             <TableCell>
@@ -76,12 +75,28 @@ export function UserSettings() {
                                                             <TableCell>
                                                                 <Typography key={idx}>{application.status}</Typography>
                                                             </TableCell>
-                                                            <TableCell sx={{ justifySelf: 'flex-end' }} align='center'>
-                                                                <Button key={idx} onClick={() => applicationResponse(application.userEmail, 'approved')}>Approve</Button>
+                                                            <TableCell sx={{ justifySelf: 'flex-end' }} align="center">
+                                                                <Button
+                                                                    key={idx}
+                                                                    onClick={() =>
+                                                                        applicationResponse(
+                                                                            application.userEmail,
+                                                                            'approved',
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Approve
+                                                                </Button>
                                                                 <Button
                                                                     key={idx}
                                                                     sx={{ marginLeft: '8px' }}
                                                                     color="secondary"
+                                                                    onClick={() =>
+                                                                        applicationResponse(
+                                                                            application.userEmail,
+                                                                            'rejected',
+                                                                        )
+                                                                    }
                                                                 >
                                                                     Reject
                                                                 </Button>
