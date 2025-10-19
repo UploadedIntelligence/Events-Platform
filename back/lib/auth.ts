@@ -32,5 +32,5 @@ export const auth = betterAuth({
             prompt: 'consent',
         },
     },
-    trustedOrigins: ['https://clinquant-medovik-161e95.netlify.app/'],
+    trustedOrigins: ['https://clinquant-medovik-161e95.netlify.app'],
 });
