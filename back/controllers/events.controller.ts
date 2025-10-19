@@ -103,7 +103,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             },
         });
 
-        const calendar_return = await calendar?.events.insert({
+        await calendar?.events.insert({
             calendarId: 'primary',
             requestBody: {
                 summary: updated_event.name,
@@ -113,12 +113,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             },
         });
 
-        console.log('event added?', calendar_return);
-
-        return res.status(200).json({
-            message: 'Your attendance successfully recorded',
-            googleAccess: `${!!googleAccount?.accessToken}`,
-        });
+        return res.status(200).json({message: 'Your attendance successfully recorded'});
     } catch (e) {
         console.log(e);
     }

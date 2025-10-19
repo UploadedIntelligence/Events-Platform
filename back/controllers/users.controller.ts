@@ -35,51 +35,60 @@ export async function staffApplication(req: Request, res: Response) {
 
 export async function fetchApplications(req: Request, res: Response) {
     const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers)
+        headers: fromNodeHeaders(req.headers),
     });
 
     if (session?.user.role !== 'admin') {
-        return res.status(401).json('Forbidden')
+        return res.status(401).json('Forbidden');
     }
 
     try {
         const applications = await prisma.staffApplication.findMany({
             orderBy: [
                 {
-                    createdAt: 'desc'
-                }
-            ]
+                    createdAt: 'desc',
+                },
+            ],
         });
-        console.log(applications)
-        return res.status(200).json(applications)
+        console.log(applications);
+        return res.status(200).json(applications);
     } catch (e) {
-        return console.log(e)
+        return console.log(e);
     }
 }
 
 export async function applicationsResponse(req: Request, res: Response) {
     const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers)
-    })
+        headers: fromNodeHeaders(req.headers),
+    });
 
     const { applicant_email, response } = req.body;
 
     if (session?.user.role !== 'admin') {
-        return res.status(401).json('Forbidden')
+        return res.status(401).json('Forbidden');
     }
 
     try {
         await prisma.staffApplication.update({
             where: {
-                userEmail: applicant_email
+                userEmail: applicant_email,
             },
             data: {
-                status: response
-            }
-        })
+                status: response,
+            },
+        });
 
-        res.status(200).json('Application status successfully updated')
+        await prisma.user.update({
+            where: {
+                email: applicant_email,
+            },
+            data: {
+                role: response === 'approved' ? 'staff' : 'user',
+            },
+        });
+
+        res.status(200).json('Application status successfully updated');
     } catch (e) {
-        return res.status(401).json('Forbidden')
+        return res.status(401).json('Forbidden');
     }
 }
