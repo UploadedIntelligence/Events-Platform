@@ -30,7 +30,7 @@ export function LoginPage() {
             password: user_password,
         });
 
-        console.log('manual sign in error:', data);
+        console.log('manual sign in error:', {data, error});
         if (error) {
             console.log('manual sign in error:', error);
         }
