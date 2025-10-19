@@ -32,5 +32,5 @@ export const auth = betterAuth({
             prompt: 'consent',
         },
     },
-    trustedOrigins: ['https://events-platform-2-f7qv.onrender.com/'],
+    trustedOrigins: ['https://resilient-sunshine-7f772b.netlify.app/'],
 });

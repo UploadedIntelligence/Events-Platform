@@ -8,7 +8,7 @@ import { applicationsResponse, fetchApplications, staffApplication } from './con
 
 const app = express();
 
-app.use(cors({ origin: ['https://events-platform-2-f7qv.onrender.com/'], methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
+app.use(cors({ origin: ['https://resilient-sunshine-7f772b.netlify.app/'], methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
