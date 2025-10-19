@@ -19,7 +19,7 @@ export async function staffApplication(req: Request, res: Response) {
     });
 
     if (has_application) {
-        return res.status(400).json('Application pending');
+        return res.status(400).json('You cannot send more than 1 applications');
     } else if (session!.user.role === 'user') {
         await prisma.staffApplication.create({
             data: {
@@ -43,10 +43,43 @@ export async function fetchApplications(req: Request, res: Response) {
     }
 
     try {
-        const applications = await prisma.staffApplication.findMany();
+        const applications = await prisma.staffApplication.findMany({
+            orderBy: [
+                {
+                    createdAt: 'desc'
+                }
+            ]
+        });
         console.log(applications)
         return res.status(200).json(applications)
     } catch (e) {
         return console.log(e)
+    }
+}
+
+export async function applicationsResponse(req: Request, res: Response) {
+    const session = await auth.api.getSession({
+        headers: fromNodeHeaders(req.headers)
+    })
+
+    const { applicant_email, response } = req.body;
+
+    if (session?.user.role !== 'admin') {
+        return res.status(401).json('Forbidden')
+    }
+
+    try {
+        await prisma.staffApplication.update({
+            where: {
+                userEmail: applicant_email
+            },
+            data: {
+                status: response
+            }
+        })
+
+        res.status(200).json('Application status successfully updated')
+    } catch (e) {
+        return res.status(401).json('Forbidden')
     }
 }

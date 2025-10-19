@@ -4,7 +4,7 @@ import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
 import { createEvent, fetchEvents, attendOrCancelEvent } from './controllers/events.controller';
-import {fetchApplications, staffApplication } from './controllers/users.controller';
+import { applicationsResponse, fetchApplications, staffApplication } from './controllers/users.controller';
 
 const app = express();
 
@@ -26,6 +26,7 @@ app.put('/attend-or-cancel', attendOrCancelEvent);
 app.get(['/upcoming-events', '/past-events', '/attending'], fetchEvents);
 app.get('/apply-staff', staffApplication);
 app.get('/applications', fetchApplications);
+app.put('/application-response', applicationsResponse)
 
 app.listen(process.env.APP_PORT, () => {
     console.log(`Now listening port ${process.env.APP_PORT}`);
