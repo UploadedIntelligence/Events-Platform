@@ -11,6 +11,7 @@ export default createAuthClient({
                 },
                 staffApplication: {
                     type: 'boolean',
+                    defaultValue: false,
                 },
             },
         }),
