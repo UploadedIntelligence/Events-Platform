@@ -32,5 +32,5 @@ export const auth = betterAuth({
             prompt: 'consent',
         },
     },
-    trustedOrigins: ['http://localhost:5173'],
+    trustedOrigins: ['https://events-platform-2-f7qv.onrender.com/'],
 });
