@@ -22,8 +22,8 @@ function App() {
     async function googleSignIn() {
         const { error } = await authClient.signIn.social({
             provider: 'google',
-            callbackURL: 'http://localhost:5173',
-            errorCallbackURL: 'http://localhost:5173',
+            callbackURL: 'https://events-platform-2-f7qv.onrender.com/',
+            errorCallbackURL: 'https://events-platform-2-f7qv.onrender.com/',
             // can be added via authClien.linkSocial to ask user for calendar permission
             // rather than having it automatically when signed in via Google account
             scopes: ['https://www.googleapis.com/auth/calendar.events'],

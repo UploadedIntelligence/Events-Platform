@@ -15,8 +15,8 @@ export const auth = betterAuth({
             },
             staffApplication: {
                 type: 'string',
-                defaultValue: ''
-            }
+                defaultValue: '',
+            },
         },
     },
     emailAndPassword: {
