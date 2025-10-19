@@ -49,9 +49,8 @@ export function ShowEvents({
                                 <Typography>Free event</Typography>
                                 {(isUpcoming || isAttending) && (
                                     <Button
-                                        color={isAttending ? 'error' : 'success'}
+                                        color={isAttending ? 'secondary' : 'primary'}
                                         size="small"
-                                        variant="contained"
                                         onClick={() => showDialog(event)}
                                     >
                                         {isUpcoming ? 'Attend' : 'Cancel Attendance'}

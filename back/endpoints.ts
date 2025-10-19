@@ -26,7 +26,7 @@ app.put('/attend-or-cancel', attendOrCancelEvent);
 app.get(['/upcoming-events', '/past-events', '/attending'], fetchEvents);
 app.get('/apply-staff', staffApplication);
 app.get('/applications', fetchApplications);
-app.put('/application-response', applicationsResponse)
+app.put('/application-response', applicationsResponse);
 
 app.listen(process.env.APP_PORT, () => {
     console.log(`Now listening port ${process.env.APP_PORT}`);
