@@ -22,8 +22,8 @@ function App() {
     async function googleSignIn() {
         const { error } = await authClient.signIn.social({
             provider: 'google',
-            callbackURL: 'https://clinquant-medovik-161e95.netlify.app/',
-            errorCallbackURL: 'https://clinquant-medovik-161e95.netlify.app/',
+            callbackURL: 'https://clinquant-medovik-161e95.netlify.app',
+            errorCallbackURL: 'https://clinquant-medovik-161e95.netlify.app',
             // can be added via authClien.linkSocial to ask user for calendar permission
             // rather than having it automatically when signed in via Google account
             scopes: ['https://www.googleapis.com/auth/calendar.events'],
