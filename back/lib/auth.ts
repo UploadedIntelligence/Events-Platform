@@ -7,6 +7,7 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: 'postgresql',
     }),
+    baseURL: 'https://events-platform-2-f7qv.onrender.com',
     user: {
         additionalFields: {
             role: {
