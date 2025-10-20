@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'http://localhost:7000',
+    baseURL: 'https://events-platform-2-f7qv.onrender.com',
 });
