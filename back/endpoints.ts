@@ -12,7 +12,7 @@ app.use(cors({ origin: ['https://clinquant-medovik-161e95.netlify.app'], methods
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path}`);
+    console.log(`${req.method} ${req.path} ${JSON.stringify(req.body)}`);
     next();
 });
 
