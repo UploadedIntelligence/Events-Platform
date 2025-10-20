@@ -8,7 +8,12 @@ export const auth = betterAuth({
         provider: 'postgresql',
     }),
     baseURL: 'https://events-platform-2-f7qv.onrender.com',
-
+    advanced: {
+        defaultCookieAttributes: {
+            sameSite: 'None', // this enables cross-site cookies
+            secure: true, // required for SameSite=None
+        },
+    },
     user: {
         additionalFields: {
             role: {
