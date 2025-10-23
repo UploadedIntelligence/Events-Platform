@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from '../config/client.ts';
 import { Card, CardContent, Typography, CardActions, Button, Dialog } from '@mui/material';
-import { Spinner } from '../pages/loading.tsx';
+import { Spinner } from './loading.tsx';
 
 interface IEventDetails {
     id: number;

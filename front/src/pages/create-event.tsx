@@ -1,6 +1,6 @@
 import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
 import axios from '../config/client.ts';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -12,7 +12,7 @@ import authClient from '../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
 
-export function CreateEventPage() {
+export function CreateEvent() {
     const { data } = authClient.useSession();
 
     const [startTime, setStartTime] = useState<Dayjs | null>(null);
@@ -47,12 +47,15 @@ export function CreateEventPage() {
         handleSubmit,
         formState: { errors, isValid },
         reset,
+        control
     } = useForm({
         mode: 'onChange',
         defaultValues: {
             eventName: '',
             description: '',
             city: '',
+            startDateTime: null,
+            endDateTime: null,
         },
     });
 
@@ -123,19 +126,29 @@ export function CreateEventPage() {
                         })}
                     />
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
-                        <DateTimePicker
-                            disablePast
-                            onError={(newError) => setStartError(newError)}
-                            slotProps={{
-                                textField: {
-                                    helperText: errorMessageStart,
-                                },
+                        <Controller
+                            control={control}
+                            name="startDateTime"
+                            render={({field: { ref }}) => {
+                                return (
+                                    <DateTimePicker
+                                        inputRef={ref}
+                                        disablePast
+                                        onError={(newError) => setStartError(newError)}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errorMessageStart,
+                                            },
+                                        }}
+                                        label="Start Time"
+                                        ampm={false}
+                                        value={startTime}
+                                        onChange={(newValue) => setStartTime(newValue)}
+                                    />
+                                );
                             }}
-                            label="Start Time"
-                            ampm={false}
-                            value={startTime}
-                            onChange={(newValue) => setStartTime(newValue)}
                         />
+
                         <DateTimePicker
                             disablePast
                             onError={(newError) => setEndError(newError)}
