@@ -17,8 +17,7 @@ export function FetchEvents({ event_type }: { event_type: string }) {
     const { data, isPending, error } = useQuery({
             queryKey: [event_type],
             queryFn: () => {
-                console.log(event_type);
-                return axios.get<Array<IEventDetails>>('/upcoming-events', { withCredentials: true });
+                return axios.get<Array<IEventDetails>>(event_type, { withCredentials: true });
             },
         }),
         events = data?.data;
