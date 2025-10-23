@@ -113,7 +113,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             },
         });
 
-        return res.status(200).json({message: 'Your attendance successfully recorded'});
+        return res.status(200).json({ message: 'Your attendance successfully recorded' });
     } catch (e) {
         console.log(e);
     }
