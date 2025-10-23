@@ -2,12 +2,14 @@ import axios from '../config/client.ts';
 import '../styles/nav-bar.scss';
 import { Button, AppBar, Toolbar, Menu, MenuItem } from '@mui/material';
 import authClient from '../services/auth-client.ts';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { useState, type MouseEvent } from 'react';
 import { AttendOrCancelEventDialog } from './attend-event-dialog.tsx';
 import { ShowEvents } from './show-events.tsx';
+import {FetchEvents} from "./fetch-events.tsx";
+import {CreateEventPage} from "../pages/create-event.tsx";
 
-export function NavBar() {
+export function UserLandingPage() {
     const navigate = useNavigate();
     const { data } = authClient.useSession();
     const [events, setEvents] = useState<Array<any>>([]);
@@ -58,7 +60,7 @@ export function NavBar() {
                 <AppBar className="NavBar-main" position="static">
                     <Toolbar variant="dense" sx={{ display: 'inline', minHeight: 0 }}>
                         <div className="NavBar-content">
-                            {data.user.role !== 'user' && (
+                            {data.user?.role !== 'user' && (
                                 <Button
                                     onClick={() => {
                                         setVisibleEvents(false);
@@ -84,6 +86,10 @@ export function NavBar() {
                             >
                                 Past Events
                             </Button>
+                            <NavLink to='/upcoming-events'>
+                                <Button>upcoming events</Button>
+
+                            </NavLink>
                             <Button
                                 onClick={() => {
                                     fetchEvents('attending');
@@ -126,7 +132,7 @@ export function NavBar() {
                     </Toolbar>
                 </AppBar>
             ) : (
-                <Navigate to="/user/login" />
+                <Navigate to="/login" />
             )}
             <ShowEvents
                 visibleEvents={visibleEvents}
@@ -143,6 +149,12 @@ export function NavBar() {
                 selectedEvent={selectedEvent}
                 isAttending={isAttending}
             />
+            <Routes>
+                <Route path="/create-event" element={<CreateEventPage />} />
+                <Route path='/upcoming-events' element={<FetchEvents event_type={'/upcoming-events'} />}/>
+                <Route path='/past-events' element={<FetchEvents event_type={'/past-events'} />}/>
+                <Route path='/attending' element={<FetchEvents event_type={'/attending'} />}/>
+            </Routes>
         </div>
     );
 }

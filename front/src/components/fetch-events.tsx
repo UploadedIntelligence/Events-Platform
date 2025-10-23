@@ -1,35 +1,39 @@
-import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
-import * as React from 'react';
+import { useQuery } from "@tanstack/react-query";
+import axios from '../config/client.ts';
+import {Card, CardContent, Typography, CardActions, Button, Dialog} from "@mui/material";
+import {Spinner} from "../pages/loading.tsx";
 
-export function ShowEvents({
-    visibleEvents,
-    isUpcoming,
-    isAttending,
-    events,
-    setDialogOpen,
-    setSelectedEvent,
-}: {
-    visibleEvents: boolean;
-    isUpcoming: boolean;
-    isAttending: boolean;
-    events: Array<any>;
-    setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectedEvent: React.Dispatch<React.SetStateAction<any>>;
-}) {
-    async function showDialog(event: any) {
-        setDialogOpen(true);
-        setSelectedEvent(event);
+interface IEventDetails {
+    id: number,
+    name: string,
+    location: string,
+    description: string,
+    start:  Date,
+    end: Date,
+    imgUrl: string | null
+}
+
+export function FetchEvents({ event_type }: { event_type:string }) {
+    const { data, isPending, error } = useQuery({
+        queryKey: [event_type],
+        queryFn: () => {
+            console.log(event_type)
+            return axios.get<Array<IEventDetails>>('/upcoming-events', { withCredentials: true })
+        }
+    }),
+        events = data?.data
+    console.log(events)
+    if (isPending) {
+        return <Spinner/>
     }
 
-    console.log(events);
-
-    if (!events.length) {
-        return <div>No events</div>
+    function showDialog() {
+        return
     }
 
     return (
-        <div hidden={!visibleEvents}>
-            {events.map((event) => {
+        <div >
+            {events!.map((event) => {
                 const formatDate = (date: string) => {
                     return new Date(date).toLocaleString('en-GB');
                 };
@@ -51,13 +55,13 @@ export function ShowEvents({
                             <Typography variant="body2">{event.description}</Typography>
                             <CardActions>
                                 <Typography>Free event</Typography>
-                                {(isUpcoming || isAttending) && (
+                                {(event_type === '/upcoming-events' || event_type === '/attending') && (
                                     <Button
-                                        color={isAttending ? 'secondary' : 'primary'}
+                                        color={event_type === '/attending' ? 'secondary' : 'primary'}
                                         size="small"
-                                        onClick={() => showDialog(event)}
+                                        onClick={() => showDialog()}
                                     >
-                                        {isUpcoming ? 'Attend' : 'Cancel Attendance'}
+                                        {event_type === '/upcoming-events' ? 'Attend' : 'Cancel Attendance'}
                                     </Button>
                                 )}
                             </CardActions>
@@ -65,6 +69,11 @@ export function ShowEvents({
                     </Card>
                 );
             })}
+            <Dialog >
+                Hi
+            </Dialog>
         </div>
-    );
+    )
+
+
 }
