@@ -2,7 +2,7 @@ import { createAuthClient } from 'better-auth/react';
 import { adminClient, inferAdditionalFields } from 'better-auth/client/plugins';
 
 export default createAuthClient({
-    baseURL: 'https://events-platform-2-f7qv.onrender.com',
+    baseURL: import.meta.env.VITE_SERVER_URL,
     plugins: [
         inferAdditionalFields({
             user: {

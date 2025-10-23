@@ -1,9 +1,11 @@
 import { Button, TextField, Typography } from '@mui/material';
 import authClient from '../services/auth-client.ts';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { googleSignIn } from "../services/google-sign-in.ts";
 
 export function LoginPage() {
+    const navigate = useNavigate();
     const { data, error } = authClient.useSession();
 
     const {
@@ -60,6 +62,8 @@ export function LoginPage() {
                             Submit
                         </Button>
                     </form>
+                    <Button onClick={() => navigate('/register')}>Register</Button>
+                    <Button onClick={googleSignIn}>Google Signup/Login</Button>
                 </div>
             )}
         </div>

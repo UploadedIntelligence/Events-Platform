@@ -1,10 +1,12 @@
 import { Button, LinearProgress, TextField, Tooltip, Typography } from '@mui/material';
 import authClient from '../services/auth-client.ts';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
+import { googleSignIn } from "../services/google-sign-in.ts";
 
 export function RegisterPage() {
+    const navigate = useNavigate();
     const { data, error } = authClient.useSession();
     const [strength, setStrength] = useState<number>(0);
     const {
@@ -19,6 +21,7 @@ export function RegisterPage() {
             password: '',
         },
     });
+
 
     let [name, email, password] = [watch('name'), watch('email'), watch('password')];
 
@@ -126,6 +129,8 @@ export function RegisterPage() {
                             Submit
                         </Button>
                     </form>
+                    <Button onClick={googleSignIn}>Google Signup/Login</Button>
+                    <Button onClick={() => navigate('/')}>Login with password</Button>
                 </div>
             )}
         </div>
