@@ -5,8 +5,8 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import authClient from './services/auth-client.ts';
 import { RegisterPage } from './pages/register.tsx';
-import { Spinner } from './pages/loading.tsx';
-import { UserLandingPage } from './components/user-landing-page.tsx';
+import { Spinner } from './components/loading.tsx';
+import { UserLandingPage } from './pages/user-landing-page.tsx';
 
 function App() {
     const { isPending } = authClient.useSession();
