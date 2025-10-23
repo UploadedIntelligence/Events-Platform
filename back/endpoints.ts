@@ -8,7 +8,7 @@ import { applicationsResponse, fetchApplications, staffApplication } from './con
 
 const app = express();
 
-app.use(cors({ origin: ['https://clinquant-medovik-161e95.netlify.app'], methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
+app.use(cors({ origin: [process.env.FRONT_END_URL!], methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {

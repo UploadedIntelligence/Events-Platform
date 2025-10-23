@@ -28,7 +28,7 @@ export async function fetchEvents(req: Request, res: Response) {
     const session = await auth.api.getSession({
         headers: fromNodeHeaders(req.headers),
     });
-    console.log(session?.user.id);
+
     try {
         const events = await prisma.event.findMany({
             where: {

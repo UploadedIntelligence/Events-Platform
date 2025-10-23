@@ -7,7 +7,7 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: 'postgresql',
     }),
-    baseURL: 'https://events-platform-2-f7qv.onrender.com',
+    baseURL: process.env.SERVER_URL!,
     advanced: {
         defaultCookieAttributes: {
             sameSite: 'None', // this enables cross-site cookies
@@ -30,10 +30,10 @@ export const auth = betterAuth({
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-            scope: ['https://www.googleapis.com/auth/calendar.events'],
+            scope: [process.env.GOOGLE_SCOPE!],
             accessType: 'offline',
             prompt: 'consent',
         },
     },
-    trustedOrigins: ['https://clinquant-medovik-161e95.netlify.app'],
+    trustedOrigins: [process.env.FRONT_END_URL!],
 });
