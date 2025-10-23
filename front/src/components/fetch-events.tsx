@@ -1,38 +1,42 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import axios from '../config/client.ts';
-import {Card, CardContent, Typography, CardActions, Button, Dialog} from "@mui/material";
-import {Spinner} from "../pages/loading.tsx";
+import { Card, CardContent, Typography, CardActions, Button, Dialog } from '@mui/material';
+import { Spinner } from '../pages/loading.tsx';
 
 interface IEventDetails {
-    id: number,
-    name: string,
-    location: string,
-    description: string,
-    start:  Date,
-    end: Date,
-    imgUrl: string | null
+    id: number;
+    name: string;
+    location: string;
+    description: string;
+    start: string;
+    end: string;
+    imgUrl: string | null;
 }
 
-export function FetchEvents({ event_type }: { event_type:string }) {
+export function FetchEvents({ event_type }: { event_type: string }) {
     const { data, isPending, error } = useQuery({
-        queryKey: [event_type],
-        queryFn: () => {
-            console.log(event_type)
-            return axios.get<Array<IEventDetails>>('/upcoming-events', { withCredentials: true })
-        }
-    }),
-        events = data?.data
-    console.log(events)
+            queryKey: [event_type],
+            queryFn: () => {
+                console.log(event_type);
+                return axios.get<Array<IEventDetails>>('/upcoming-events', { withCredentials: true });
+            },
+        }),
+        events = data?.data;
+    console.log(events);
     if (isPending) {
-        return <Spinner/>
+        return <Spinner />;
+    }
+
+    if (error) {
+        console.log(error);
     }
 
     function showDialog() {
-        return
+        return;
     }
 
     return (
-        <div >
+        <div>
             {events!.map((event) => {
                 const formatDate = (date: string) => {
                     return new Date(date).toLocaleString('en-GB');
@@ -69,11 +73,7 @@ export function FetchEvents({ event_type }: { event_type:string }) {
                     </Card>
                 );
             })}
-            <Dialog >
-                Hi
-            </Dialog>
+            <Dialog open={false}>Hi</Dialog>
         </div>
-    )
-
-
+    );
 }

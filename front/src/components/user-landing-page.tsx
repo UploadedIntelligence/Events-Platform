@@ -1,23 +1,15 @@
-import axios from '../config/client.ts';
 import '../styles/nav-bar.scss';
 import { Button, AppBar, Toolbar, Menu, MenuItem } from '@mui/material';
 import authClient from '../services/auth-client.ts';
 import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { useState, type MouseEvent } from 'react';
-import { AttendOrCancelEventDialog } from './attend-event-dialog.tsx';
-import { ShowEvents } from './show-events.tsx';
-import {FetchEvents} from "./fetch-events.tsx";
-import {CreateEventPage} from "../pages/create-event.tsx";
+import { FetchEvents } from './fetch-events.tsx';
+import { CreateEventPage } from '../pages/create-event.tsx';
+import { UserSettings } from './user-settings.tsx';
 
 export function UserLandingPage() {
     const navigate = useNavigate();
     const { data } = authClient.useSession();
-    const [events, setEvents] = useState<Array<any>>([]);
-    const [visibleEvents, setVisibleEvents] = useState<boolean>(false);
-    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [selectedEvent, setSelectedEvent] = useState<any>(null);
-    const [isUpcoming, setIsUpcoming] = useState<boolean>(false);
-    const [isAttending, setIsAttending] = useState<boolean>(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -35,25 +27,6 @@ export function UserLandingPage() {
         authClient.signOut();
     }
 
-    async function fetchEvents(pastFutureOrAttending: 'past' | 'future' | 'attending') {
-        let events;
-        if (pastFutureOrAttending === 'future') {
-            events = await axios.get('/upcoming-events', { withCredentials: true });
-            setIsUpcoming(true);
-            setIsAttending(false);
-        } else if (pastFutureOrAttending === 'past') {
-            events = await axios.get('/past-events', { withCredentials: true });
-            setIsUpcoming(false);
-            setIsAttending(false);
-        } else {
-            events = await axios.get('/attending', { withCredentials: true });
-            setIsUpcoming(false);
-            setIsAttending(true);
-        }
-        setVisibleEvents(true);
-        setEvents(events.data);
-    }
-
     return (
         <div>
             {data ? (
@@ -63,41 +36,22 @@ export function UserLandingPage() {
                             {data.user?.role !== 'user' && (
                                 <Button
                                     onClick={() => {
-                                        setVisibleEvents(false);
                                         navigate('/create-event');
                                     }}
                                 >
                                     Create an event
                                 </Button>
                             )}
-                            <Button
-                                onClick={() => {
-                                    fetchEvents('future');
-                                    navigate('/');
-                                }}
-                            >
-                                Upcoming Events
-                            </Button>
-                            <Button
-                                onClick={() => {
-                                    fetchEvents('past');
-                                    navigate('/');
-                                }}
-                            >
-                                Past Events
-                            </Button>
-                            <NavLink to='/upcoming-events'>
+                            <NavLink to="/upcoming-events">
                                 <Button>upcoming events</Button>
-
                             </NavLink>
-                            <Button
-                                onClick={() => {
-                                    fetchEvents('attending');
-                                    navigate('/');
-                                }}
-                            >
-                                Attending
-                            </Button>
+                            <NavLink to="/past-events">
+                                <Button>past events</Button>
+                            </NavLink>
+                            <NavLink to="/attending">
+                                <Button>attending</Button>
+                            </NavLink>
+
                             <Button
                                 id="basic-button"
                                 aria-controls={open ? 'basic-menu' : undefined}
@@ -121,7 +75,6 @@ export function UserLandingPage() {
                                 <MenuItem
                                     onClick={() => {
                                         navigate('/user-settings');
-                                        setVisibleEvents(false);
                                     }}
                                 >
                                     Settings
@@ -134,26 +87,12 @@ export function UserLandingPage() {
             ) : (
                 <Navigate to="/login" />
             )}
-            <ShowEvents
-                visibleEvents={visibleEvents}
-                events={events}
-                setDialogOpen={setDialogOpen}
-                setSelectedEvent={setSelectedEvent}
-                isUpcoming={isUpcoming}
-                isAttending={isAttending}
-            />
-            <AttendOrCancelEventDialog
-                setEvents={setEvents}
-                dialogOpen={dialogOpen}
-                setDialogOpen={setDialogOpen}
-                selectedEvent={selectedEvent}
-                isAttending={isAttending}
-            />
             <Routes>
                 <Route path="/create-event" element={<CreateEventPage />} />
-                <Route path='/upcoming-events' element={<FetchEvents event_type={'/upcoming-events'} />}/>
-                <Route path='/past-events' element={<FetchEvents event_type={'/past-events'} />}/>
-                <Route path='/attending' element={<FetchEvents event_type={'/attending'} />}/>
+                <Route path="/upcoming-events" element={<FetchEvents event_type={'/upcoming-events'} />} />
+                <Route path="/past-events" element={<FetchEvents event_type={'/past-events'} />} />
+                <Route path="/attending" element={<FetchEvents event_type={'/attending'} />} />
+                <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
         </div>
     );

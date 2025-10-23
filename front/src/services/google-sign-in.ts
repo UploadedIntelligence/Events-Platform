@@ -1,4 +1,4 @@
-import authClient from "./auth-client.ts";
+import authClient from './auth-client.ts';
 
 export async function googleSignIn() {
     const { error } = await authClient.signIn.social({

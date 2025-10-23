@@ -24,7 +24,7 @@ export function ShowEvents({
     console.log(events);
 
     if (!events.length) {
-        return <div>No events</div>
+        return <div>No events</div>;
     }
 
     return (

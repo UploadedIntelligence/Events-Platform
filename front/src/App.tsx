@@ -7,17 +7,13 @@ import authClient from './services/auth-client.ts';
 import { RegisterPage } from './pages/register.tsx';
 import { Spinner } from './pages/loading.tsx';
 import { UserLandingPage } from './components/user-landing-page.tsx';
-import { UserSettings } from './components/user-settings.tsx';
 
 function App() {
     const { isPending } = authClient.useSession();
 
-
     if (isPending) {
         return <Spinner />;
     }
-
-
 
     const theme = createTheme({
         palette: {
@@ -49,7 +45,6 @@ function App() {
                 <Route path="/*" element={<UserLandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
         </ThemeProvider>
     );

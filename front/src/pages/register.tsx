@@ -1,9 +1,9 @@
 import { Button, LinearProgress, TextField, Tooltip, Typography } from '@mui/material';
 import authClient from '../services/auth-client.ts';
-import { Navigate, useNavigate} from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { googleSignIn } from "../services/google-sign-in.ts";
+import { googleSignIn } from '../services/google-sign-in.ts';
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -21,7 +21,6 @@ export function RegisterPage() {
             password: '',
         },
     });
-
 
     let [name, email, password] = [watch('name'), watch('email'), watch('password')];
 

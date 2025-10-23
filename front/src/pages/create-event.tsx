@@ -82,7 +82,7 @@ export function CreateEventPage() {
 
     return (
         <div>
-            {(data?.user?.role === 'staff' || data?.user?.role === 'admin') ? (
+            {data?.user?.role === 'staff' || data?.user?.role === 'admin' ? (
                 <form className="create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"
