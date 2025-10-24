@@ -6,7 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState, useMemo } from 'react';
 import { type FormValues } from '../utilities/types.ts';
-import { Dayjs } from 'dayjs';
 import 'dayjs/locale/en-gb';
 import authClient from '../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
@@ -15,8 +14,6 @@ import type { DateTimeValidationError } from '@mui/x-date-pickers';
 export function CreateEvent() {
     const { data } = authClient.useSession();
 
-    const [startTime, setStartTime] = useState<Dayjs | null>(null);
-    const [endTime, setEndTime] = useState<Dayjs | null>(null);
     const [startError, setStartError] = useState<DateTimeValidationError | null>(null);
     const [endError, setEndError] = useState<DateTimeValidationError | null>(null);
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -47,7 +44,8 @@ export function CreateEvent() {
         handleSubmit,
         formState: { errors, isValid },
         reset,
-        control
+        control,
+        watch,
     } = useForm({
         mode: 'onChange',
         defaultValues: {
@@ -58,29 +56,26 @@ export function CreateEvent() {
             endDateTime: null,
         },
     });
+    const startDateTime = watch('startDateTime');
 
-    async function createEvent(data: FormValues) {
-        console.log('data here', data, startTime?.toISOString(), endTime);
-        const response = await axios
+    async function createEvent(event_data: FormValues) {
+        await axios
             .post('/create-event', {
-                ...data,
-                startTime: startTime?.toISOString(),
-                endTime: endTime?.toISOString(),
+                ...event_data,
+                startTime: event_data.startDateTime?.toISOString(),
+                endTime: event_data.endDateTime?.toISOString(),
             })
             .then((res) => {
                 setIsVisible(true);
                 setSubmissionValid(true);
-                console.log(res.data);
                 reset();
-                setEndTime(null);
-                setStartTime(null);
+                console.log(res);
             })
             .catch((e) => {
                 setIsVisible(true);
                 setSubmissionValid(false);
                 console.log(e);
             });
-        console.log(response);
     }
 
     return (
@@ -129,12 +124,12 @@ export function CreateEvent() {
                         <Controller
                             control={control}
                             name="startDateTime"
-                            render={({field: { ref }}) => {
+                            render={({ field }) => {
                                 return (
                                     <DateTimePicker
-                                        inputRef={ref}
                                         disablePast
                                         onError={(newError) => setStartError(newError)}
+                                        onChange={(newValue) => field.onChange(newValue)}
                                         slotProps={{
                                             textField: {
                                                 helperText: errorMessageStart,
@@ -142,26 +137,30 @@ export function CreateEvent() {
                                         }}
                                         label="Start Time"
                                         ampm={false}
-                                        value={startTime}
-                                        onChange={(newValue) => setStartTime(newValue)}
                                     />
                                 );
                             }}
                         />
-
-                        <DateTimePicker
-                            disablePast
-                            onError={(newError) => setEndError(newError)}
-                            slotProps={{
-                                textField: {
-                                    helperText: errorMessageEnd,
-                                },
+                        <Controller
+                            control={control}
+                            name="endDateTime"
+                            render={({ field }) => {
+                                return (
+                                    <DateTimePicker
+                                        disablePast
+                                        minDateTime={startDateTime ?? undefined}
+                                        onError={(newError) => setEndError(newError)}
+                                        onChange={(newValue) => field.onChange(newValue)}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errorMessageEnd,
+                                            },
+                                        }}
+                                        label="End Time"
+                                        ampm={false}
+                                    />
+                                );
                             }}
-                            minDateTime={startTime ?? undefined}
-                            label="End Time"
-                            ampm={false}
-                            value={endTime}
-                            onChange={(newValue) => setEndTime(newValue)}
                         />
                     </LocalizationProvider>
                     <Button type="submit" variant="contained" disabled={!isValid || !!startError || !!endError}>
