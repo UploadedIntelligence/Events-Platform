@@ -136,7 +136,7 @@ export function CreateEvent() {
                             rules={{
                                 validate: {
                                     disablePast: disablePast('End time'),
-                                    minDateTime: minDateTime()
+                                    minDateTime: minDateTime('startTime')
                                 }
                             }}
                             render={({ field }) => {
