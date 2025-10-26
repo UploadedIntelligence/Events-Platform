@@ -4,6 +4,6 @@ export type FormValues = {
     eventName: string;
     description: string;
     city: string;
-    startDateTime: Dayjs | null;
-    endDateTime: Dayjs | null;
+    startTime: Dayjs | null;
+    endTime: Dayjs | null;
 };
