@@ -4,40 +4,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { type FormValues } from '../utilities/types.ts';
 import 'dayjs/locale/en-gb';
 import authClient from '../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
-import type { DateTimeValidationError } from '@mui/x-date-pickers';
+import { disablePast, minDateTime } from '../utilities/validation.ts';
+
 
 export function CreateEvent() {
     const { data } = authClient.useSession();
 
-    const [startError, setStartError] = useState<DateTimeValidationError | null>(null);
-    const [endError, setEndError] = useState<DateTimeValidationError | null>(null);
     const [isVisible, setIsVisible] = useState<boolean>(false);
-    const [submissionValid, setSubmissionValid] = useState<boolean>(false);
-
-    const errorMessageStart = useMemo(() => {
-        switch (startError) {
-            case 'disablePast': {
-                return 'Event cannot be in the past';
-            }
-        }
-    }, [startError]);
-
-    const errorMessageEnd = useMemo(() => {
-        switch (endError) {
-            case 'disablePast': {
-                return 'Event cannot be in the past';
-            }
-            case 'minDate':
-            case 'minTime': {
-                return 'End date/time cannot be before the start time';
-            }
-        }
-    }, [endError]);
+    const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
     const {
         register,
@@ -46,36 +25,34 @@ export function CreateEvent() {
         reset,
         control,
         watch,
+        setError,
     } = useForm({
         mode: 'onChange',
         defaultValues: {
             eventName: '',
             description: '',
             city: '',
-            startDateTime: null,
-            endDateTime: null,
+            startTime: null,
+            endTime: null,
         },
     });
-    const startDateTime = watch('startDateTime');
+    const startDateTime = watch('startTime');
 
     async function createEvent(event_data: FormValues) {
-        await axios
-            .post('/create-event', {
+        setRequestState("Pending")
+        try {
+            await axios.post('/create-event', {
                 ...event_data,
-                startTime: event_data.startDateTime?.toISOString(),
-                endTime: event_data.endDateTime?.toISOString(),
-            })
-            .then((res) => {
-                setIsVisible(true);
-                setSubmissionValid(true);
-                reset();
-                console.log(res);
-            })
-            .catch((e) => {
-                setIsVisible(true);
-                setSubmissionValid(false);
-                console.log(e);
+                startTime: event_data.startTime?.toISOString(),
+                endTime: event_data.endTime?.toISOString(),
             });
+            setRequestState("Success");
+            reset();
+        } catch (e) {
+            setRequestState("Error");
+            console.log(e);
+        }
+        setIsVisible(true);
     }
 
     return (
@@ -123,57 +100,91 @@ export function CreateEvent() {
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                         <Controller
                             control={control}
-                            name="startDateTime"
+                            name="startTime"
+                            rules={{
+                                validate: {
+                                    disablePast: disablePast('Start time'),
+                                },
+                            }}
                             render={({ field }) => {
                                 return (
                                     <DateTimePicker
-                                        disablePast
-                                        onError={(newError) => setStartError(newError)}
-                                        onChange={(newValue) => field.onChange(newValue)}
-                                        slotProps={{
-                                            textField: {
-                                                helperText: errorMessageStart,
-                                            },
-                                        }}
                                         label="Start Time"
                                         ampm={false}
+                                        disablePast
+                                        onError={(error) => {
+                                            if (error === 'invalidDate') {
+                                                setError('startTime', {
+                                                    type: error,
+                                                    message: 'Invalid start time',
+                                                });
+                                            }
+                                        }}
+                                        {...field}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors.startTime?.message,
+                                            },
+                                        }}
                                     />
                                 );
                             }}
                         />
                         <Controller
                             control={control}
-                            name="endDateTime"
+                            name="endTime"
+                            rules={{
+                                validate: {
+                                    disablePast: disablePast('End time'),
+                                    minDateTime: minDateTime()
+                                }
+                            }}
                             render={({ field }) => {
                                 return (
                                     <DateTimePicker
-                                        disablePast
-                                        minDateTime={startDateTime ?? undefined}
-                                        onError={(newError) => setEndError(newError)}
-                                        onChange={(newValue) => field.onChange(newValue)}
-                                        slotProps={{
-                                            textField: {
-                                                helperText: errorMessageEnd,
-                                            },
-                                        }}
                                         label="End Time"
                                         ampm={false}
+                                        disablePast
+                                        minDateTime={startDateTime ?? undefined}
+                                        onError={(error) => {
+                                            if (error === 'invalidDate') {
+                                                setError('endTime', {
+                                                    type: error,
+                                                    message: 'Invalid end time',
+                                                });
+                                            }
+                                        }}
+                                        slotProps={{
+                                            textField: {
+                                                helperText: errors.endTime?.message,
+                                            },
+                                        }}
+                                        {...field}
                                     />
                                 );
                             }}
                         />
                     </LocalizationProvider>
-                    <Button type="submit" variant="contained" disabled={!isValid || !!startError || !!endError}>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        disabled={!isValid || requestState !== 'Idle'}
+                    >
                         Submit Event
                     </Button>
                     {isVisible && (
-                        <ClickAwayListener onClickAway={() => setIsVisible(false)}>
+                        <ClickAwayListener
+                            onClickAway={() => {
+                                setIsVisible(false);
+                                setRequestState('Idle');
+                            }}
+                        >
                             <Alert
                                 variant="filled"
-                                severity={submissionValid ? 'success' : 'error'}
+                                severity={requestState === 'Success' ? 'success' : 'error'}
                                 sx={{ margin: '10px' }}
                             >
-                                {submissionValid
+                                {requestState === 'Success'
                                     ? 'Event created successfully'
                                     : 'There was a problem with your request'}
                             </Alert>
