@@ -11,3 +11,7 @@
     display: inline-grid;
     gap: 10px;
 }
+
+a {
+    display: contents;
+}

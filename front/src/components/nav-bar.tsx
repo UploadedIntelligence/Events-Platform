@@ -21,7 +21,7 @@ export function NavBar() {
     }
     return (
         <AppBar className="NavBar-main" position="static">
-            <Toolbar variant="dense" sx={{ display: 'inline', minHeight: 0 }}>
+            <Toolbar variant="dense" sx={{ display: 'inline', minHeight: 0, justifyItems: 'flex' }}>
                 <div className="NavBar-content">
                     {data?.user?.role !== 'user' && (
                         <NavLink to="/create-event">

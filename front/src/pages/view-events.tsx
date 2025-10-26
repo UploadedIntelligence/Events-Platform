@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from '../config/client.ts';
 import { Card, CardContent, Typography, CardActions, Button, Dialog } from '@mui/material';
-import { Spinner } from './loading.tsx';
+import { Spinner } from '../components/loading.tsx';
 
 interface IEventDetails {
     id: number;
@@ -13,15 +13,15 @@ interface IEventDetails {
     imgUrl: string | null;
 }
 
-export function FetchEvents({ event_type }: { event_type: string }) {
+export function ViewEvents({ eventUrl }: { eventUrl: string }) {
     const { data, isPending, error } = useQuery({
-            queryKey: [event_type],
+            queryKey: [eventUrl],
             queryFn: () => {
-                return axios.get<Array<IEventDetails>>(event_type, { withCredentials: true });
+                return axios.get<Array<IEventDetails>>(eventUrl, { withCredentials: true });
             },
         }),
         events = data?.data;
-    console.log(events);
+
     if (isPending) {
         return <Spinner />;
     }
@@ -58,13 +58,13 @@ export function FetchEvents({ event_type }: { event_type: string }) {
                             <Typography variant="body2">{event.description}</Typography>
                             <CardActions>
                                 <Typography>Free event</Typography>
-                                {(event_type === '/upcoming-events' || event_type === '/attending') && (
+                                {(eventUrl === '/upcoming-events' || eventUrl === '/attending') && (
                                     <Button
-                                        color={event_type === '/attending' ? 'secondary' : 'primary'}
+                                        color={eventUrl === '/attending' ? 'secondary' : 'primary'}
                                         size="small"
                                         onClick={() => showDialog()}
                                     >
-                                        {event_type === '/upcoming-events' ? 'Attend' : 'Cancel Attendance'}
+                                        {eventUrl === '/upcoming-events' ? 'Attend' : 'Cancel Attendance'}
                                     </Button>
                                 )}
                             </CardActions>
