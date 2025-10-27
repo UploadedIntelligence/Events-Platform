@@ -11,7 +11,6 @@ import authClient from '../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
 import { disablePast, minDateTime } from '../utilities/validation.ts';
 
-
 export function CreateEvent() {
     const { data } = authClient.useSession();
 
@@ -39,17 +38,17 @@ export function CreateEvent() {
     const startDateTime = watch('startTime');
 
     async function createEvent(event_data: FormValues) {
-        setRequestState("Pending")
+        setRequestState('Pending');
         try {
             await axios.post('/create-event', {
                 ...event_data,
                 startTime: event_data.startTime?.toISOString(),
                 endTime: event_data.endTime?.toISOString(),
             });
-            setRequestState("Success");
+            setRequestState('Success');
             reset();
         } catch (e) {
-            setRequestState("Error");
+            setRequestState('Error');
             console.log(e);
         }
         setIsVisible(true);
@@ -136,8 +135,8 @@ export function CreateEvent() {
                             rules={{
                                 validate: {
                                     disablePast: disablePast('End time'),
-                                    minDateTime: minDateTime('startTime')
-                                }
+                                    minDateTime: minDateTime('startTime'),
+                                },
                             }}
                             render={({ field }) => {
                                 return (
@@ -165,11 +164,7 @@ export function CreateEvent() {
                             }}
                         />
                     </LocalizationProvider>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={!isValid || requestState !== 'Idle'}
-                    >
+                    <Button type="submit" variant="contained" disabled={!isValid || requestState !== 'Idle'}>
                         Submit Event
                     </Button>
                     {isVisible && (
