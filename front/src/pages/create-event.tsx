@@ -1,4 +1,4 @@
-import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
+import { TextField, Button, Alert } from '@mui/material';
 import axios from '../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -21,7 +21,6 @@ export function CreateEvent() {
         register,
         handleSubmit,
         formState: { errors, isValid },
-        reset,
         control,
         watch,
         setError,
@@ -46,7 +45,7 @@ export function CreateEvent() {
                 endTime: event_data.endTime?.toISOString(),
             });
             setRequestState('Success');
-            reset();
+            setTimeout(() => window.location.reload(), 1500);
         } catch (e) {
             setRequestState('Error');
             console.log(e);
@@ -168,22 +167,15 @@ export function CreateEvent() {
                         Submit Event
                     </Button>
                     {isVisible && (
-                        <ClickAwayListener
-                            onClickAway={() => {
-                                setIsVisible(false);
-                                setRequestState('Idle');
-                            }}
+                        <Alert
+                            variant="filled"
+                            severity={requestState === 'Success' ? 'success' : 'error'}
+                            sx={{ margin: '10px' }}
                         >
-                            <Alert
-                                variant="filled"
-                                severity={requestState === 'Success' ? 'success' : 'error'}
-                                sx={{ margin: '10px' }}
-                            >
-                                {requestState === 'Success'
-                                    ? 'Event created successfully'
-                                    : 'There was a problem with your request'}
-                            </Alert>
-                        </ClickAwayListener>
+                            {requestState === 'Success'
+                                ? 'Event created successfully'
+                                : 'There was a problem with your request'}
+                        </Alert>
                     )}
                 </form>
             ) : (
