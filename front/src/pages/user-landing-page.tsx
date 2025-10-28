@@ -3,8 +3,10 @@ import authClient from '../services/auth-client.ts';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { UserEvents } from './user-events.tsx';
 import { CreateEvent } from './create-event.tsx';
-import { UserSettings } from '../components/user-settings.tsx';
+import { UserProfile } from './user-profile.tsx';
 import { NavBar } from '../components/nav-bar.tsx';
+import { AdminSettings } from './admin-settings.tsx';
+import { UserSettings } from './user-settings.tsx';
 
 export function UserLandingPage() {
     const { data } = authClient.useSession();
@@ -19,6 +21,8 @@ export function UserLandingPage() {
                 <Route path="/upcoming-events" element={<UserEvents eventUrl={'/upcoming-events'} />} />
                 <Route path="/past-events" element={<UserEvents eventUrl={'/past-events'} />} />
                 <Route path="/attending" element={<UserEvents eventUrl={'/attending'} />} />
+                <Route path="/user-profile" element={<UserProfile />} />
+                <Route path="/admin-settings" element={<AdminSettings />} />
                 <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
         </div>
