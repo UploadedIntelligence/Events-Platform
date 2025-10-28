@@ -60,10 +60,10 @@ export function NavBar() {
                     >
                         <MenuItem
                             onClick={() => {
-                                navigate('/user-settings');
+                                navigate('/user-profile');
                             }}
                         >
-                            Settings
+                            Profile
                         </MenuItem>
                         <MenuItem onClick={logOut}>Logout</MenuItem>
                     </Menu>
