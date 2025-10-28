@@ -28,7 +28,7 @@ export function AttendOrCancelEventDialog({
         } else {
             setRequestState('Error');
         }
-        setTimeout(() => window.location.reload(), 1000);
+        setTimeout(() => window.location.reload(), 1500);
     }
 
     const handleClose = () => {
@@ -49,9 +49,11 @@ export function AttendOrCancelEventDialog({
                 aria-describedby="alert-dialog-description"
                 aria-hidden={false}
             >
-                {requestState === 'Success' ? (
-                    <Alert variant="filled" severity="success">
-                        Attendance {isAttending ? 'cancelled' : 'registered'} successfully
+                {requestState === 'Success' || requestState === 'Error' ? (
+                    <Alert variant="filled" severity={requestState === 'Success' ? 'success' : 'error'}>
+                        {requestState === 'Success'
+                            ? `Attendance ${isAttending ? 'cancelled' : 'registered'} successfully`
+                            : `Something went wrong`}
                     </Alert>
                 ) : (
                     <>
