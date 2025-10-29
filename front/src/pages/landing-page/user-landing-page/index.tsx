@@ -22,7 +22,7 @@ export function UserLandingPage() {
                 <Route path="/past-events" element={<UserEvents eventUrl={'/past-events'} />} />
                 <Route path="/attending" element={<UserEvents eventUrl={'/attending'} />} />
                 <Route path="/user-profile" element={<UserProfile />} />
-                <Route path="/admin-settings" element={<AdminSettings />} />
+                <Route path="/admin-settings/*" element={<AdminSettings />} />
                 <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
         </div>
