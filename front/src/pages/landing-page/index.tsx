@@ -1,14 +1,14 @@
-import './App.css';
+import '../../App.css';
 import { Route, Routes } from 'react-router-dom';
-import { LoginPage } from './pages/login.tsx';
+import { LoginPage } from './login.tsx';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { green, red } from '@mui/material/colors';
-import authClient from './services/auth-client.ts';
-import { RegisterPage } from './pages/register.tsx';
-import { Spinner } from './components/loading.tsx';
-import { UserLandingPage } from './pages/user-landing-page.tsx';
+import authClient from '../../services/auth-client.ts';
+import { RegisterPage } from './register.tsx';
+import { Spinner } from '../../components/loading.tsx';
+import { UserLandingPage } from './user-landing-page';
 
-function App() {
+function LandingPage() {
     const { isPending } = authClient.useSession();
 
     if (isPending) {
@@ -50,4 +50,4 @@ function App() {
     );
 }
 
-export default App;
+export default LandingPage;

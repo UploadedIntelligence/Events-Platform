@@ -1,12 +1,12 @@
-import '../styles/nav-bar.scss';
-import authClient from '../services/auth-client.ts';
+import '../../../styles/nav-bar.scss';
+import authClient from '../../../services/auth-client.ts';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { UserEvents } from './user-events.tsx';
 import { CreateEvent } from './create-event.tsx';
-import { UserProfile } from './user-profile.tsx';
-import { NavBar } from '../components/nav-bar.tsx';
-import { AdminSettings } from './admin-settings.tsx';
-import { UserSettings } from './user-settings.tsx';
+import { UserProfile } from './user-profile';
+import { NavBar } from '../../../components/nav-bar.tsx';
+import { AdminSettings } from './user-profile/admin-settings.tsx';
+import { UserSettings } from './user-profile/user-settings.tsx';
 
 export function UserLandingPage() {
     const { data } = authClient.useSession();

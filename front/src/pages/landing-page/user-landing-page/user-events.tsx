@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from '../config/client.ts';
-import { Spinner } from '../components/loading.tsx';
-import { EventList } from '../components/event-list.tsx';
-import { AttendOrCancelEventDialog } from '../components/attend-event-dialog.tsx';
+import axios from '../../../config/client.ts';
+import { Spinner } from '../../../components/loading.tsx';
+import { EventList } from '../../../components/event-list.tsx';
+import { AttendOrCancelEventDialog } from '../../../components/attend-event-dialog.tsx';
 import { useState } from 'react';
 
 export interface IUserEvents {

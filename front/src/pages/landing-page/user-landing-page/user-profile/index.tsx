@@ -1,6 +1,6 @@
 import { Card, Button, CardContent, Typography } from '@mui/material';
-import axios from '../config/client.ts';
-import authClient from '../services/auth-client.ts';
+import axios from '../../../../config/client.ts';
+import authClient from '../../../../services/auth-client.ts';
 import { Navigate, NavLink } from 'react-router-dom';
 
 export function UserProfile() {

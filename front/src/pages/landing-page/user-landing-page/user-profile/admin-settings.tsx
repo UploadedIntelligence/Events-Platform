@@ -1,4 +1,4 @@
-import authClient from '../services/auth-client.ts';
+import authClient from '../../../../services/auth-client.ts';
 import {
     Card,
     Button,
@@ -11,7 +11,7 @@ import {
     TableRow,
     TableBody,
 } from '@mui/material';
-import axios from '../config/client.ts';
+import axios from '../../../../config/client.ts';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 

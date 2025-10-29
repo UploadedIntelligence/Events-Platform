@@ -1,4 +1,4 @@
-import type { IUserEvents } from '../pages/user-events.tsx';
+import type { IUserEvents } from '../pages/landing-page/user-landing-page/user-events.tsx';
 import { Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 export function EventList({ events }: { events: Array<IUserEvents> | [] }) {

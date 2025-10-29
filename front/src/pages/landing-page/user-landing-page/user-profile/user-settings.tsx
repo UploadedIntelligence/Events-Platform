@@ -1,4 +1,4 @@
-import authClient from '../services/auth-client.ts';
+import authClient from '../../../../services/auth-client.ts';
 import { Card, Button, CardActions } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
@@ -10,9 +10,7 @@ export function UserSettings() {
             <NavLink to="/user-profile">
                 <Button>Go Back</Button>
             </NavLink>
-            <CardActions>
-
-            </CardActions>
+            <CardActions></CardActions>
         </Card>
     ) : null;
 }

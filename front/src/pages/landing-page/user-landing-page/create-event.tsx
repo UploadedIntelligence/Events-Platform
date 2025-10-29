@@ -1,15 +1,15 @@
 import { TextField, Button, Alert } from '@mui/material';
-import axios from '../config/client.ts';
+import axios from '../../../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
-import { type FormValues } from '../utilities/types.ts';
+import { type FormValues } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import authClient from '../services/auth-client.ts';
+import authClient from '../../../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
-import { disablePast, minDateTime } from '../utilities/validation.ts';
+import { disablePast, minDateTime } from '../../../utilities/validation.ts';
 
 export function CreateEvent() {
     const { data } = authClient.useSession();
