@@ -29,7 +29,6 @@ export function ApplicationTable() {
         const applications_response: { status: number; data: Array<Application> } = await axios.get('/applications', {
             withCredentials: true,
         });
-        console.log(applications_response);
         if (applications_response.status === 200) {
             setIsLoading('Success');
         } else {

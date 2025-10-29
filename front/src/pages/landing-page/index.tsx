@@ -11,10 +11,6 @@ import { UserLandingPage } from './user-landing-page';
 function LandingPage() {
     const { isPending } = authClient.useSession();
 
-    if (isPending) {
-        return <Spinner />;
-    }
-
     const theme = createTheme({
         palette: {
             mode: 'dark',
@@ -38,6 +34,11 @@ function LandingPage() {
             },
         },
     });
+
+    if (isPending) {
+        return <Spinner />;
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <h1>Events Platform</h1>
