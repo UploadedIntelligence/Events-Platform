@@ -1,11 +1,10 @@
 import { Button, AppBar, Toolbar, Menu, MenuItem } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useState, type MouseEvent } from 'react';
 import authClient from '../services/auth-client.ts';
 
 export function NavBar() {
     const { data } = authClient.useSession();
-    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -58,12 +57,10 @@ export function NavBar() {
                             },
                         }}
                     >
-                        <MenuItem
-                            onClick={() => {
-                                navigate('/user-settings');
-                            }}
-                        >
-                            Settings
+                        <MenuItem>
+                            <NavLink to="/user-profile" style={{ color: 'inherit' }}>
+                                Profile
+                            </NavLink>
                         </MenuItem>
                         <MenuItem onClick={logOut}>Logout</MenuItem>
                     </Menu>
