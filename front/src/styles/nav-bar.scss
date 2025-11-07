@@ -18,4 +18,10 @@
             flex-direction: row;
         }
     }
+
+    &-option {
+        &.active {
+            color: #646cff;
+        }
+    }
 }
