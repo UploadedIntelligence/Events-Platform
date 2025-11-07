@@ -5,7 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
-import { type FormValues } from '../../../utilities/types.ts';
+import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
 import authClient from '../../../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
@@ -22,6 +22,7 @@ export function CreateEvent() {
         handleSubmit,
         formState: { errors, isValid },
         control,
+        reset,
         watch,
         setError,
     } = useForm({
@@ -36,7 +37,7 @@ export function CreateEvent() {
     });
     const startDateTime = watch('startTime');
 
-    async function createEvent(event_data: FormValues) {
+    async function createEvent(event_data: CreateEventForm) {
         setRequestState('Pending');
         try {
             await axios.post('/create-event', {
@@ -45,7 +46,7 @@ export function CreateEvent() {
                 endTime: event_data.endTime?.toISOString(),
             });
             setRequestState('Success');
-            setTimeout(() => window.location.reload(), 1500);
+            reset();
         } catch (e) {
             setRequestState('Error');
             console.log(e);
@@ -134,7 +135,7 @@ export function CreateEvent() {
                             rules={{
                                 validate: {
                                     disablePast: disablePast('End time'),
-                                    minDateTime: minDateTime('startTime'),
+                                    minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'startTime'),
                                 },
                             }}
                             render={({ field }) => {
