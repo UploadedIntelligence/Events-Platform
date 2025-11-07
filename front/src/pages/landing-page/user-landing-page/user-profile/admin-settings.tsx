@@ -25,11 +25,13 @@ export function AdminSettings() {
                 </NavLink>
 
                 <CardActions style={{ display: 'grid' }}>
-                    <NavLink to={applicationsVisible ? '/admin-settings' : '/admin-settings/view-applications'}>
-                        <Button onClick={() => setApplicationsVisible(!applicationsVisible)}>
-                            {applicationsVisible ? 'Hide ' : 'View '}Applications
-                        </Button>
-                    </NavLink>
+                    <Button
+                        component={NavLink}
+                        to={applicationsVisible ? '/admin-settings' : '/admin-settings/view-applications'}
+                        onClick={() => setApplicationsVisible(!applicationsVisible)}
+                    >
+                        {applicationsVisible ? 'Hide ' : 'View '}Applications
+                    </Button>
                 </CardActions>
             </Card>
             <Routes>
