@@ -1,3 +1,4 @@
+import '../styles/nav-bar.scss';
 import { Button, AppBar, Toolbar, Menu, MenuItem } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useState, type MouseEvent } from 'react';
@@ -23,19 +24,19 @@ export function NavBar() {
             <Toolbar variant="dense" sx={{ display: 'inline', minHeight: 0, justifyItems: 'flex' }}>
                 <div className="NavBar-content">
                     {data?.user?.role !== 'user' && (
-                        <NavLink to="/create-event">
-                            <Button>Create an event</Button>
-                        </NavLink>
+                        <Button component={NavLink} to="/create-event" className="NavBar-option">
+                            create event
+                        </Button>
                     )}
-                    <NavLink to="/upcoming-events">
-                        <Button>upcoming events</Button>
-                    </NavLink>
-                    <NavLink to="/past-events">
-                        <Button>past events</Button>
-                    </NavLink>
-                    <NavLink to="/attending">
-                        <Button>attending</Button>
-                    </NavLink>
+                    <Button component={NavLink} to="/upcoming-events" className="NavBar-option">
+                        upcoming events
+                    </Button>
+                    <Button component={NavLink} to="/past-events" className="NavBar-option">
+                        past events
+                    </Button>
+                    <Button component={NavLink} to="/attending" className="NavBar-option">
+                        attending
+                    </Button>
 
                     <Button
                         id="basic-button"
