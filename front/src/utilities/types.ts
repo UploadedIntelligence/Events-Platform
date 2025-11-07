@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 
-export type FormValues = {
+export type CreateEventForm = {
     eventName: string;
     description: string;
     city: string;
