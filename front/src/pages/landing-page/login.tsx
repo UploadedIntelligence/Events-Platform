@@ -1,8 +1,8 @@
 import { Button, TextField, Typography } from '@mui/material';
-import authClient from '../services/auth-client.ts';
+import authClient from '../../services/auth-client.ts';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { googleSignIn } from '../services/google-sign-in.ts';
+import { googleSignIn } from '../../services/google-sign-in.ts';
 
 export function LoginPage() {
     const navigate = useNavigate();

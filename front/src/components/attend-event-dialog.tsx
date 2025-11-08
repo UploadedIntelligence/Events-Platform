@@ -1,44 +1,34 @@
 import { Button, Dialog, DialogTitle, DialogActions, Alert } from '@mui/material';
-import * as React from 'react';
 import axios from '../config/client.ts';
 import { useState } from 'react';
+import * as React from 'react';
 
 export function AttendOrCancelEventDialog({
-    setEvents,
     dialogOpen,
-    setDialogOpen,
-    selectedEvent,
     isAttending,
+    selectedEventId,
+    setDialogOpen,
 }: {
-    setEvents: React.Dispatch<React.SetStateAction<Array<any>>>;
-    selectedEvent: any;
-    isAttending: boolean;
     dialogOpen: boolean;
+    isAttending: boolean;
+    selectedEventId: number | null;
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-    const [success, setSuccess] = useState<boolean | null>(null);
+    const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
+
     async function attendOrCancelEvent() {
-        let events: any;
-        console.log('confirming attendance or cancellation...', isAttending);
+        setRequestState('Pending');
         const response = await axios.put(
             '/attend-or-cancel',
-            { event_id: selectedEvent.id, is_attending: isAttending },
+            { event_id: selectedEventId, is_attending: isAttending },
             { withCredentials: true },
         );
-        console.log('success?', response.status);
         if (response.status === 200) {
-            setSuccess(true);
-
-            if (isAttending) {
-                events = await axios.get('/attending', { withCredentials: true });
-                setEvents(events.data);
-            } else {
-                events = await axios.get('/upcoming-events', { withCredentials: true });
-                setEvents(events.data);
-            }
+            setRequestState('Success');
         } else {
-            setSuccess(false);
+            setRequestState('Error');
         }
+        setTimeout(() => window.location.reload(), 1500);
     }
 
     const handleClose = () => {
@@ -49,18 +39,21 @@ export function AttendOrCancelEventDialog({
         <div>
             <Dialog
                 open={dialogOpen}
-                onClose={() => setDialogOpen(false)}
+                onClose={handleClose}
                 slotProps={{
                     transition: {
-                        onExited: () => setSuccess(null),
+                        onExited: () => setRequestState('Idle'),
                     },
                 }}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                aria-hidden={false}
             >
-                {success ? (
-                    <Alert variant="filled" severity="success">
-                        Attendance {isAttending ? 'cancelled' : 'registered'} successfully
+                {requestState === 'Success' || requestState === 'Error' ? (
+                    <Alert variant="filled" severity={requestState === 'Success' ? 'success' : 'error'}>
+                        {requestState === 'Success'
+                            ? `Attendance ${isAttending ? 'cancelled' : 'registered'} successfully`
+                            : `Something went wrong`}
                     </Alert>
                 ) : (
                     <>

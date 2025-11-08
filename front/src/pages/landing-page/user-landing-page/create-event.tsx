@@ -1,16 +1,15 @@
-import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
-import axios from '../config/client.ts';
+import { TextField, Button, Alert } from '@mui/material';
+import axios from '../../../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
-import { type FormValues } from '../utilities/types.ts';
+import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import authClient from '../services/auth-client.ts';
+import authClient from '../../../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
-import { disablePast, minDateTime } from '../utilities/validation.ts';
-
+import { disablePast, minDateTime } from '../../../utilities/validation.ts';
 
 export function CreateEvent() {
     const { data } = authClient.useSession();
@@ -22,8 +21,8 @@ export function CreateEvent() {
         register,
         handleSubmit,
         formState: { errors, isValid },
-        reset,
         control,
+        reset,
         watch,
         setError,
     } = useForm({
@@ -38,18 +37,18 @@ export function CreateEvent() {
     });
     const startDateTime = watch('startTime');
 
-    async function createEvent(event_data: FormValues) {
-        setRequestState("Pending")
+    async function createEvent(event_data: CreateEventForm) {
+        setRequestState('Pending');
         try {
             await axios.post('/create-event', {
                 ...event_data,
                 startTime: event_data.startTime?.toISOString(),
                 endTime: event_data.endTime?.toISOString(),
             });
-            setRequestState("Success");
+            setRequestState('Success');
             reset();
         } catch (e) {
-            setRequestState("Error");
+            setRequestState('Error');
             console.log(e);
         }
         setIsVisible(true);
@@ -136,8 +135,8 @@ export function CreateEvent() {
                             rules={{
                                 validate: {
                                     disablePast: disablePast('End time'),
-                                    minDateTime: minDateTime()
-                                }
+                                    minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'startTime'),
+                                },
                             }}
                             render={({ field }) => {
                                 return (
@@ -165,30 +164,19 @@ export function CreateEvent() {
                             }}
                         />
                     </LocalizationProvider>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={!isValid || requestState !== 'Idle'}
-                    >
+                    <Button type="submit" variant="contained" disabled={!isValid || requestState !== 'Idle'}>
                         Submit Event
                     </Button>
                     {isVisible && (
-                        <ClickAwayListener
-                            onClickAway={() => {
-                                setIsVisible(false);
-                                setRequestState('Idle');
-                            }}
+                        <Alert
+                            variant="filled"
+                            severity={requestState === 'Success' ? 'success' : 'error'}
+                            sx={{ margin: '10px' }}
                         >
-                            <Alert
-                                variant="filled"
-                                severity={requestState === 'Success' ? 'success' : 'error'}
-                                sx={{ margin: '10px' }}
-                            >
-                                {requestState === 'Success'
-                                    ? 'Event created successfully'
-                                    : 'There was a problem with your request'}
-                            </Alert>
-                        </ClickAwayListener>
+                            {requestState === 'Success'
+                                ? 'Event created successfully'
+                                : 'There was a problem with your request'}
+                        </Alert>
                     )}
                 </form>
             ) : (
