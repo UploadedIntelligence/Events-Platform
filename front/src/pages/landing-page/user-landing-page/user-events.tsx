@@ -16,7 +16,7 @@ export interface IUserEvents {
         title: string;
         type: string;
         action: () => void;
-    } | null>;
+    }> | null;
 }
 
 export function UserEvents({ eventUrl }: { eventUrl: string }) {
@@ -38,18 +38,19 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                     description: event.description,
                     start: event.start,
                     end: event.end,
-                    actions: [
+                    actions:
                         eventUrl !== '/past-events'
-                            ? {
-                                  title: eventUrl === '/attending' ? 'Cancel attendance' : 'Attend',
-                                  type: eventUrl,
-                                  action: () => {
-                                      setSelectedEventId(event.id);
-                                      setDialogOpen(true);
+                            ? [
+                                  {
+                                      title: eventUrl === '/attending' ? 'Cancel attendance' : 'Attend',
+                                      type: eventUrl,
+                                      action: () => {
+                                          setSelectedEventId(event.id);
+                                          setDialogOpen(true);
+                                      },
                                   },
-                              }
+                              ]
                             : null,
-                    ],
                 };
             }) ?? [];
 
