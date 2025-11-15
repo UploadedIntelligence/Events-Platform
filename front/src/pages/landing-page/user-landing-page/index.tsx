@@ -10,8 +10,6 @@ import { UserSettings } from './user-profile/user-settings.tsx';
 
 export function UserLandingPage() {
     const { data } = authClient.useSession();
-
-
     return (
         <div>
             {data ? <NavBar /> : <Navigate to="/login" />}

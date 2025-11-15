@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { isDayjs, type Dayjs } from 'dayjs';
 import { type Message } from 'react-hook-form';
 
 export function disablePast(fieldLabel: string): (time: Dayjs | null) => Message | undefined {
@@ -12,7 +12,7 @@ export function minDateTime<TFormValue>(
     fieldName: keyof TFormValue,
 ): (value: Dayjs | null, formValues: TFormValue) => Message | undefined {
     return (fieldValue: Dayjs | null, formValues: TFormValue) => {
-        return formValues[fieldName] instanceof Dayjs && fieldValue?.isBefore(formValues[fieldName])
+        return  isDayjs(formValues[fieldName]) && fieldValue?.isBefore(formValues[fieldName])
             ? `${fieldLabel} cannot be before ${dependentFieldLabel}`
             : undefined;
     };
