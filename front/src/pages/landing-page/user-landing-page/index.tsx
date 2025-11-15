@@ -11,7 +11,6 @@ import { UserSettings } from './user-profile/user-settings.tsx';
 export function UserLandingPage() {
     const { data } = authClient.useSession();
 
-    console.log(data);
 
     return (
         <div>

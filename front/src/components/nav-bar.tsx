@@ -58,10 +58,8 @@ export function NavBar() {
                             },
                         }}
                     >
-                        <MenuItem>
-                            <NavLink to="/user-profile" style={{ color: 'inherit' }}>
-                                Profile
-                            </NavLink>
+                        <MenuItem component={NavLink} to="/user-profile">
+                            Profile
                         </MenuItem>
                         <MenuItem onClick={logOut}>Logout</MenuItem>
                     </Menu>

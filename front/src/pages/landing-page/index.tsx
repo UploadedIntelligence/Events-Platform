@@ -1,7 +1,7 @@
 import '../../App.css';
 import { Route, Routes } from 'react-router-dom';
 import { LoginPage } from './login.tsx';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import authClient from '../../services/auth-client.ts';
 import { RegisterPage } from './register.tsx';
@@ -10,10 +10,11 @@ import { UserLandingPage } from './user-landing-page';
 
 function LandingPage() {
     const { isPending } = authClient.useSession();
+    const userTheme: boolean = window.matchMedia("(prefers-color-scheme: dark)").matches
 
     const theme = createTheme({
         palette: {
-            mode: 'dark',
+            mode: userTheme ? 'dark' : 'light',
             primary: {
                 main: green[700],
             },
@@ -32,6 +33,13 @@ function LandingPage() {
                     },
                 },
             },
+            MuiAppBar: {
+                styleOverrides: {
+                    root: {
+                        background: 'inherit'
+                    }
+                }
+            }
         },
     });
 
@@ -41,6 +49,7 @@ function LandingPage() {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <h1>Events Platform</h1>
             <Routes>
                 <Route path="/*" element={<UserLandingPage />} />
