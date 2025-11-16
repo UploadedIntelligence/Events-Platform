@@ -12,7 +12,7 @@ export function minDateTime<TFormValue>(
     fieldName: keyof TFormValue,
 ): (value: Dayjs | null, formValues: TFormValue) => Message | undefined {
     return (fieldValue: Dayjs | null, formValues: TFormValue) => {
-        return  isDayjs(formValues[fieldName]) && fieldValue?.isBefore(formValues[fieldName])
+        return isDayjs(formValues[fieldName]) && fieldValue?.isBefore(formValues[fieldName])
             ? `${fieldLabel} cannot be before ${dependentFieldLabel}`
             : undefined;
     };

@@ -25,6 +25,7 @@ export function CreateEvent() {
         reset,
         watch,
         setError,
+        trigger,
     } = useForm({
         mode: 'onChange',
         defaultValues: {
@@ -36,6 +37,7 @@ export function CreateEvent() {
         },
     });
     const startDateTime = watch('startTime');
+    const endDateTime = watch('endTime');
 
     async function createEvent(event_data: CreateEventForm) {
         setRequestState('Pending');
@@ -105,12 +107,18 @@ export function CreateEvent() {
                                     disablePast: disablePast('Start time'),
                                 },
                             }}
-                            render={({ field }) => {
+                            render={({ field: { onChange, ...rest } }) => {
                                 return (
                                     <DateTimePicker
+                                        {...rest}
                                         label="Start Time"
                                         ampm={false}
                                         disablePast
+                                        maxDateTime={endDateTime ?? undefined}
+                                        onChange={(newValue) => {
+                                            onChange(newValue);
+                                            if (endDateTime) trigger('endTime');
+                                        }}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
                                                 setError('startTime', {
@@ -119,7 +127,6 @@ export function CreateEvent() {
                                                 });
                                             }
                                         }}
-                                        {...field}
                                         slotProps={{
                                             textField: {
                                                 helperText: errors.startTime?.message,
@@ -138,13 +145,18 @@ export function CreateEvent() {
                                     minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'startTime'),
                                 },
                             }}
-                            render={({ field }) => {
+                            render={({ field: { onChange, ...rest } }) => {
                                 return (
                                     <DateTimePicker
+                                        {...rest}
                                         label="End Time"
                                         ampm={false}
                                         disablePast
                                         minDateTime={startDateTime ?? undefined}
+                                        onChange={(newValue) => {
+                                            onChange(newValue);
+                                            if (startDateTime) trigger('startTime');
+                                        }}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
                                                 setError('endTime', {
@@ -158,7 +170,6 @@ export function CreateEvent() {
                                                 helperText: errors.endTime?.message,
                                             },
                                         }}
-                                        {...field}
                                     />
                                 );
                             }}

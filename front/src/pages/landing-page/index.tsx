@@ -10,7 +10,7 @@ import { UserLandingPage } from './user-landing-page';
 
 function LandingPage() {
     const { isPending } = authClient.useSession();
-    const userTheme: boolean = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const userTheme: boolean = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     const theme = createTheme({
         palette: {
@@ -36,10 +36,10 @@ function LandingPage() {
             MuiAppBar: {
                 styleOverrides: {
                     root: {
-                        background: 'inherit'
-                    }
-                }
-            }
+                        background: 'inherit',
+                    },
+                },
+            },
         },
     });
 
@@ -49,7 +49,7 @@ function LandingPage() {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
+            <CssBaseline />
             <h1>Events Platform</h1>
             <Routes>
                 <Route path="/*" element={<UserLandingPage />} />
