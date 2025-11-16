@@ -103,6 +103,7 @@ export function CreateEvent() {
                             control={control}
                             name="startTime"
                             rules={{
+                                required: true,
                                 validate: {
                                     disablePast: disablePast('Start time'),
                                 },
@@ -140,6 +141,7 @@ export function CreateEvent() {
                             control={control}
                             name="endTime"
                             rules={{
+                                required: true,
                                 validate: {
                                     disablePast: disablePast('End time'),
                                     minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'startTime'),
