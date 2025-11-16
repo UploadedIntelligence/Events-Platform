@@ -1,12 +1,15 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography, Alert, Snackbar } from '@mui/material';
 import authClient from '../../services/auth-client.ts';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { googleSignIn } from '../../services/google-sign-in.ts';
 
 export function LoginPage() {
     const navigate = useNavigate();
     const { data, error } = authClient.useSession();
+    const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false);
 
     const {
         register,
@@ -34,9 +37,15 @@ export function LoginPage() {
 
         console.log('manual sign in error:', { data, error });
         if (error) {
+            setInvalidCredentials(true);
             console.log('manual sign in error:', error);
         }
     }
+
+    const handleClose = (event: React.SyntheticEvent | Event) => {
+        if (event?.type === 'click') return;
+        setInvalidCredentials(false);
+    };
 
     return (
         <div>
@@ -64,6 +73,16 @@ export function LoginPage() {
                     </form>
                     <Button onClick={() => navigate('/register')}>Register</Button>
                     <Button onClick={googleSignIn}>Google Signup/Login</Button>
+                    <Snackbar
+                        autoHideDuration={5000}
+                        open={invalidCredentials}
+                        onClose={handleClose}
+                        sx={{ position: 'inherit' }}
+                    >
+                        <Alert variant="filled" severity="error" sx={{ width: '100%' }}>
+                            Invalid credentials.
+                        </Alert>
+                    </Snackbar>
                 </div>
             )}
         </div>
