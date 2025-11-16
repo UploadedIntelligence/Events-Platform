@@ -65,8 +65,8 @@ export function CreateEvent() {
                         {...register('eventName', {
                             required: true,
                             pattern: {
-                                value: /^.{1,30}$/,
-                                message: 'max 30 characters',
+                                value: /^.{1,40}$/,
+                                message: 'max 40 characters',
                             },
                         })}
                     />
@@ -91,8 +91,8 @@ export function CreateEvent() {
                         {...register('city', {
                             required: true,
                             pattern: {
-                                value: /^.{1,10}$/,
-                                message: 'max 30 characters',
+                                value: /^.{1,40}$/,
+                                message: 'max 40 characters',
                             },
                         })}
                     />
