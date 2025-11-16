@@ -2,6 +2,10 @@ Hosted front-end:
 
 https://clinquant-medovik-161e95.netlify.app/
 
+For testing purpose you can use these accounts: <br>
+`admin1@admin.com`, `staff1@staff.com`, `user1@user.com` <br>
+They all share the same password: `aA1!aaaa`
+
 *Since the project utilizes free services, the server, frontend or database may not be active if they have not been used for a few days
 
 If you want to run the project locally: 
