@@ -9,7 +9,7 @@ import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
 import authClient from '../../../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
-import { disablePast, minDateTime, maxDateTime } from '../../../utilities/validation.ts';
+import { disablePast, minDateTime } from '../../../utilities/validation.ts';
 
 export function CreateEvent() {
     const { data } = authClient.useSession();
@@ -25,6 +25,7 @@ export function CreateEvent() {
         reset,
         watch,
         setError,
+        trigger,
     } = useForm({
         mode: 'onChange',
         defaultValues: {
@@ -104,16 +105,20 @@ export function CreateEvent() {
                             rules={{
                                 validate: {
                                     disablePast: disablePast('Start time'),
-                                    minDateTime: maxDateTime<CreateEventForm>('Start time', 'end time', 'endTime')
                                 },
                             }}
-                            render={({ field }) => {
+                            render={({ field: { onChange, ...rest } }) => {
                                 return (
                                     <DateTimePicker
+                                        {...rest}
                                         label="Start Time"
                                         ampm={false}
                                         disablePast
                                         maxDateTime={endDateTime ?? undefined}
+                                        onChange={(newValue) => {
+                                            onChange(newValue);
+                                            if (endDateTime) trigger('endTime');
+                                        }}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
                                                 setError('startTime', {
@@ -122,7 +127,6 @@ export function CreateEvent() {
                                                 });
                                             }
                                         }}
-                                        {...field}
                                         slotProps={{
                                             textField: {
                                                 helperText: errors.startTime?.message,
@@ -141,13 +145,18 @@ export function CreateEvent() {
                                     minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'startTime'),
                                 },
                             }}
-                            render={({ field }) => {
+                            render={({ field: { onChange, ...rest } }) => {
                                 return (
                                     <DateTimePicker
+                                        {...rest}
                                         label="End Time"
                                         ampm={false}
                                         disablePast
                                         minDateTime={startDateTime ?? undefined}
+                                        onChange={(newValue) => {
+                                            onChange(newValue);
+                                            if (startDateTime) trigger('startTime');
+                                        }}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
                                                 setError('endTime', {
@@ -161,7 +170,6 @@ export function CreateEvent() {
                                                 helperText: errors.endTime?.message,
                                             },
                                         }}
-                                        {...field}
                                     />
                                 );
                             }}
