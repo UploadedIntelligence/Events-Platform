@@ -9,7 +9,7 @@ import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
 import authClient from '../../../services/auth-client.ts';
 import { Navigate } from 'react-router-dom';
-import { disablePast, minDateTime } from '../../../utilities/validation.ts';
+import { disablePast, minDateTime, maxDateTime } from '../../../utilities/validation.ts';
 
 export function CreateEvent() {
     const { data } = authClient.useSession();
@@ -36,6 +36,7 @@ export function CreateEvent() {
         },
     });
     const startDateTime = watch('startTime');
+    const endDateTime = watch('endTime');
 
     async function createEvent(event_data: CreateEventForm) {
         setRequestState('Pending');
@@ -103,6 +104,7 @@ export function CreateEvent() {
                             rules={{
                                 validate: {
                                     disablePast: disablePast('Start time'),
+                                    minDateTime: maxDateTime<CreateEventForm>('Start time', 'end time', 'endTime')
                                 },
                             }}
                             render={({ field }) => {
@@ -111,6 +113,7 @@ export function CreateEvent() {
                                         label="Start Time"
                                         ampm={false}
                                         disablePast
+                                        maxDateTime={endDateTime ?? undefined}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
                                                 setError('startTime', {
