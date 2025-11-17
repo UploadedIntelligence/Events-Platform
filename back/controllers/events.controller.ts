@@ -72,7 +72,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             const client = new google.auth.OAuth2(
                 process.env.GOOGLE_CLIENT_ID,
                 process.env.GOOGLE_CLIENT_SECRET,
-                'http://localhost:7000/api/auth/callback/google',
+                process.env.GOOGLE_REDIRECT_URI,
             );
 
             client.setCredentials({
