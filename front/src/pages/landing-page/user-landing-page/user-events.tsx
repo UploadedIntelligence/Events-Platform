@@ -6,7 +6,7 @@ import { AttendOrCancelEventDialog } from '../../../components/attend-event-dial
 import { useState } from 'react';
 
 export interface IUserEvents {
-    id: number;
+    id: string;
     name: string;
     location: string;
     description: string;
@@ -21,12 +21,12 @@ export interface IUserEvents {
 
 export function UserEvents({ eventUrl }: { eventUrl: string }) {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+    const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
     const { data, isPending, error } = useQuery({
             queryKey: [eventUrl],
             queryFn: () => {
-                return axios.get<Array<IUserEvents>>(eventUrl, { withCredentials: true });
+                return axios.get<Array<IUserEvents>>(eventUrl);
             },
         }),
         events =

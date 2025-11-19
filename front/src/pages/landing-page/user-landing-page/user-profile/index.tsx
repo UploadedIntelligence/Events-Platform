@@ -7,7 +7,7 @@ export function UserProfile() {
     const { data } = authClient.useSession();
 
     async function applyStaff() {
-        await axios.get('/apply-staff', { withCredentials: true });
+        await axios.post('/apply-staff', { role: 'staff' });
     }
 
     return (
