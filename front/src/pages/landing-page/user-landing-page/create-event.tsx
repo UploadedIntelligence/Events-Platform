@@ -13,7 +13,6 @@ import { disablePast, minDateTime } from '../../../utilities/validation.ts';
 
 export function CreateEvent() {
     const { data } = authClient.useSession();
-
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
