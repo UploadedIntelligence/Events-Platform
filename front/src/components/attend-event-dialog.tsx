@@ -11,18 +11,14 @@ export function AttendOrCancelEventDialog({
 }: {
     dialogOpen: boolean;
     isAttending: boolean;
-    selectedEventId: number | null;
+    selectedEventId: string | null;
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
     async function attendOrCancelEvent() {
         setRequestState('Pending');
-        const response = await axios.put(
-            '/attend-or-cancel',
-            { event_id: selectedEventId, is_attending: isAttending },
-            { withCredentials: true },
-        );
+        const response = await axios.put('/attend-or-cancel', { event_id: selectedEventId, is_attending: isAttending });
         if (response.status === 200) {
             setRequestState('Success');
         } else {
