@@ -9,10 +9,6 @@ export default createAuthClient({
                 role: {
                     type: 'string',
                 },
-                staffApplication: {
-                    type: 'boolean',
-                    defaultValue: false,
-                },
             },
         }),
         adminClient(),
