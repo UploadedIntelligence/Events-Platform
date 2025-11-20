@@ -26,17 +26,21 @@ export function ApplicationTable() {
 
     async function fetchApplications(): Promise<void> {
         setIsLoading('Loading');
-        const applications_response: { status: number; data: Array<Application> } = await axios.get('/applications');
-        if (applications_response.status === 200) {
+        const applicationsResponse: { status: number; data: Array<Application> } = await axios.get('/applications');
+        if (applicationsResponse.status === 200) {
             setIsLoading('Success');
         } else {
             setIsLoading('Error');
         }
 
-        setApplications(applications_response.data);
+        setApplications(applicationsResponse.data);
     }
 
-    async function applicationResponse(applicant_email: string, response: 'approved' | 'rejected', role: 'staff' | 'admin'): Promise<void> {
+    async function applicationResponse(
+        applicant_email: string,
+        response: 'approved' | 'rejected',
+        role: 'staff' | 'admin',
+    ): Promise<void> {
         await axios.put('/application-response', { applicant_email, response, role });
         await fetchApplications();
     }
@@ -67,13 +71,19 @@ export function ApplicationTable() {
                                         <Typography>{application.role}</Typography>
                                     </TableCell>
                                     <TableCell sx={{ justifySelf: 'flex-end' }} align="center">
-                                        <Button onClick={() => applicationResponse(application.userEmail, 'approved', application.role)}>
+                                        <Button
+                                            onClick={() =>
+                                                applicationResponse(application.userEmail, 'approved', application.role)
+                                            }
+                                        >
                                             Approve
                                         </Button>
                                         <Button
                                             sx={{ marginLeft: '8px' }}
                                             color="secondary"
-                                            onClick={() => applicationResponse(application.userEmail, 'rejected', application.role)}
+                                            onClick={() =>
+                                                applicationResponse(application.userEmail, 'rejected', application.role)
+                                            }
                                         >
                                             Reject
                                         </Button>
