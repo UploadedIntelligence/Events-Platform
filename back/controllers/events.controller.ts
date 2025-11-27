@@ -95,7 +95,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             await createGoogleEventService(google_calendar_event, session, event_id);
         }
 
-        return res.status(200).json({ message: 'Your attendance successfully recorded' });
+        return res.status(200).json({ message: 'Your attendance successfully updated' });
     } catch (e) {
         console.log(e);
     }

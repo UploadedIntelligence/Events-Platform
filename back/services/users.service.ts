@@ -1,6 +1,8 @@
 import prisma from '../lib/prisma';
 import { UserSession } from '../utilities/user-session';
 import { google } from 'googleapis';
+import { Prisma } from '@prisma/client/extension';
+import PrismaPromise = Prisma.PrismaPromise;
 
 export interface IUserThirdPartyAccount {
     id: string;
@@ -16,6 +18,20 @@ export interface IUserThirdPartyAccount {
     password?: string | null;
     createdAt: Date;
     updatedAt: Date;
+}
+
+export type AdminResponse = 'approved' | 'rejected';
+
+export type Role = 'user' | 'staff' | 'admin';
+
+export interface IRoleRequest {
+    id: string;
+    userEmail: string;
+    role: Role;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+    rejectedAt?: Date | null;
 }
 
 export async function getUserAccountService(
@@ -41,4 +57,56 @@ export function getUserGoogleClientService(userAccount: IUserThirdPartyAccount) 
         refresh_token: userAccount.refreshToken ?? null,
     });
     return client;
+}
+
+export function userHasRoleRequestService(session: UserSession): PrismaPromise<IRoleRequest | null> {
+    return prisma.roleRequest.findFirst({
+        where: {
+            userEmail: session!.user.email,
+        },
+    });
+}
+
+export function userCreateRoleRequestService(session: UserSession, role: Role): PrismaPromise<IRoleRequest> {
+    return prisma.roleRequest.create({
+        data: {
+            userEmail: session.user.email,
+            role: role,
+        },
+    });
+}
+
+export function adminShowRoleRequestsService(): PrismaPromise<Array<IRoleRequest>> {
+    return prisma.roleRequest.findMany({
+        orderBy: [
+            {
+                createdAt: 'desc',
+            },
+        ],
+    });
+}
+
+export function updateUserRoleRequestService(
+    applicant_email: string,
+    response: AdminResponse,
+): PrismaPromise<IRoleRequest> {
+    return prisma.roleRequest.update({
+        where: {
+            userEmail: applicant_email,
+        },
+        data: {
+            status: response,
+        },
+    });
+}
+
+export function updateUserRoleService(applicant_email: string, role: Role): PrismaPromise<UserSession['user']> {
+    return prisma.user.update({
+        where: {
+            email: applicant_email,
+        },
+        data: {
+            role: role,
+        },
+    });
 }
