@@ -1,33 +1,27 @@
 import { Request, Response } from 'express';
-import prisma from '../lib/prisma';
-import { fromNodeHeaders } from 'better-auth/node';
-import { auth } from '../lib/auth';
+import { currentSession } from '../utilities/user-session';
+import {
+    adminShowRoleRequestsService,
+    updateUserRoleRequestService,
+    updateUserRoleService,
+    userCreateRoleRequestService,
+    userHasRoleRequestService,
+} from '../services/users.service';
 
 export async function roleRequest(req: Request, res: Response) {
     const { role } = req.body;
-    const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers),
-    });
+    const session = await currentSession(req);
 
-    if (!session?.user.id) {
+    if (!session) {
         return res.status(401).json('Not authenticated');
     }
 
-    const has_application = await prisma.roleRequest.findFirst({
-        where: {
-            userEmail: session!.user.email,
-        },
-    });
+    const has_application = await userHasRoleRequestService(session);
 
     if (has_application) {
-        return res.status(400).json('You cannot send more than 1 applications');
-    } else if (session!.user.role === 'user') {
-        await prisma.roleRequest.create({
-            data: {
-                userEmail: session!.user.email,
-                role: role,
-            },
-        });
+        return res.status(400).json('You cannot send more than 1 application');
+    } else if (session.user.role === 'user') {
+        await userCreateRoleRequestService(session, role);
 
         return res.status(200).json('Application successfully sent');
     } else {
@@ -36,23 +30,14 @@ export async function roleRequest(req: Request, res: Response) {
 }
 
 export async function fetchApplications(req: Request, res: Response) {
-    const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers),
-    });
+    const session = await currentSession(req);
 
     if (session?.user.role !== 'admin') {
         return res.status(401).json('Forbidden');
     }
 
     try {
-        const applications = await prisma.roleRequest.findMany({
-            orderBy: [
-                {
-                    createdAt: 'desc',
-                },
-            ],
-        });
-        console.log(applications);
+        const applications = await adminShowRoleRequestsService();
         return res.status(200).json(applications);
     } catch (e) {
         return console.log(e);
@@ -60,10 +45,7 @@ export async function fetchApplications(req: Request, res: Response) {
 }
 
 export async function applicationResponse(req: Request, res: Response) {
-    const session = await auth.api.getSession({
-        headers: fromNodeHeaders(req.headers),
-    });
-
+    const session = await currentSession(req);
     const { applicant_email, role, response } = req.body;
 
     if (session?.user.role !== 'admin') {
@@ -71,24 +53,10 @@ export async function applicationResponse(req: Request, res: Response) {
     }
 
     try {
-        await prisma.roleRequest.update({
-            where: {
-                userEmail: applicant_email,
-            },
-            data: {
-                status: response,
-            },
-        });
+        await updateUserRoleRequestService(applicant_email, response);
 
         if (response === 'approved') {
-            await prisma.user.update({
-                where: {
-                    email: applicant_email,
-                },
-                data: {
-                    role: role,
-                },
-            });
+            await updateUserRoleService(applicant_email, role);
         }
 
         res.status(200).json('Application status successfully updated');
