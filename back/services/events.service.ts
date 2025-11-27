@@ -2,7 +2,6 @@ import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
 import { UserSession } from '../utilities/user-session';
 import type { calendar_v3 } from 'googleapis';
-import { GaxiosResponseWithHTTP2 } from 'googleapis-common';
 
 export interface EventInfo {
     name: string;
@@ -17,6 +16,12 @@ export interface UserGoogleEvent {
     googleId: string;
     userId: string;
     eventId: string;
+}
+
+export interface GoogleCalendarEvent {
+    data: {
+        id?: string | null;
+    } | void;
 }
 
 export function createEventService(data: EventInfo): PrismaPromise<EventInfo> {
@@ -44,8 +49,10 @@ export function fetchPastEventsService(today: Date): PrismaPromise<Array<EventIn
     });
 }
 
-export function fetchUpcomingEventsService(today: Date, session: UserSession):
-    PrismaPromise<Array<EventInfo> | undefined> {
+export function fetchUpcomingEventsService(
+    today: Date,
+    session: UserSession,
+): PrismaPromise<Array<EventInfo> | undefined> {
     return prisma.event.findMany({
         where: {
             start: {
@@ -59,8 +66,10 @@ export function fetchUpcomingEventsService(today: Date, session: UserSession):
     });
 }
 
-export function fetchAttendingEventsService(today: Date, session: UserSession):
-    PrismaPromise<Array<EventInfo> | undefined> {
+export function fetchAttendingEventsService(
+    today: Date,
+    session: UserSession,
+): PrismaPromise<Array<EventInfo> | undefined> {
     return prisma.event.findMany({
         where: {
             start: {
@@ -133,8 +142,10 @@ export function getUserGoogleEventService(
     });
 }
 
-export function insertGoogleCalendarEventService(calendar: calendar_v3.Calendar, event: EventInfo):
-    Promise<GaxiosResponseWithHTTP2<calendar_v3.Schema$Event>> {
+export function insertGoogleCalendarEventService(
+    calendar: calendar_v3.Calendar,
+    event: EventInfo,
+): Promise<GoogleCalendarEvent> {
     return calendar?.events.insert({
         calendarId: 'primary',
         requestBody: {
@@ -149,7 +160,7 @@ export function insertGoogleCalendarEventService(calendar: calendar_v3.Calendar,
 export function deleteGoogleCalendarEventService(
     calendar: calendar_v3.Calendar,
     google_event: UserGoogleEvent | null,
-): Promise<GaxiosResponseWithHTTP2<void>> {
+): Promise<GoogleCalendarEvent> {
     return calendar?.events.delete({
         calendarId: 'primary',
         eventId: google_event!.googleId,
@@ -171,13 +182,13 @@ export function deleteGoogleEventService(
 }
 
 export function createGoogleEventService(
-    google_calendar_event: GaxiosResponseWithHTTP2<calendar_v3.Schema$Event>,
+    google_calendar_event: GoogleCalendarEvent,
     session: UserSession,
     event_id: string,
 ) {
     return prisma.userGoogleEvent.create({
         data: {
-            googleId: google_calendar_event.data.id!,
+            googleId: google_calendar_event.data!.id!,
             userId: session.user.id,
             eventId: event_id,
         },
