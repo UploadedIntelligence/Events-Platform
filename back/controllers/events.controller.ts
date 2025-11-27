@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import {
-    createEventService, createGoogleEventService, deleteGoogleEventService,
+    createEventService,
+    createGoogleEventService,
+    deleteGoogleCalendarEventService,
+    deleteGoogleEventService,
     fetchAttendingEventsService,
     fetchPastEventsService,
     fetchUpcomingEventsService,
     getUserGoogleEventService,
-    handleGoogleCalendarActionService,
+    insertGoogleCalendarEventService,
     updateEventService,
 } from '../services/events.service';
 import { google } from 'googleapis';
@@ -15,6 +18,11 @@ import { getUserAccountService, getUserGoogleClientService, IUserThirdPartyAccou
 
 export async function createEvent(req: Request, res: Response) {
     const { eventName, description, city, startTime, endTime, imgUrl } = req.body;
+    const session: UserSession | null = await currentSession(req);
+
+    if (!session || session.user.role === 'user') {
+        return res.status(401).json('Not authenticated');
+    }
 
     try {
         await createEventService({
@@ -76,18 +84,15 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
         const updated_event = await updateEventService(event_id, is_attending, session);
         const google_event = await getUserGoogleEventService(session, event_id);
 
-        if (is_attending && googleAccount && google_event) {
-            await handleGoogleCalendarActionService(calendar, google_event, 'delete')
+        if (is_attending && googleAccount && google_event && calendar) {
+            await deleteGoogleCalendarEventService(calendar, google_event);
             await deleteGoogleEventService(google_event, session, event_id);
-
-        } else if (googleAccount) {
-            const google_calendar_event = await handleGoogleCalendarActionService(
-                calendar,
-                google_event,
-                'insert',
-                updated_event,
-            );
-            await createGoogleEventService(google_calendar_event, session, event_id)
+        } else if (googleAccount && calendar) {
+            const google_calendar_event = await insertGoogleCalendarEventService(calendar, updated_event);
+            if (!google_calendar_event) {
+                return res.status(401).json('Not authenticated');
+            }
+            await createGoogleEventService(google_calendar_event, session, event_id);
         }
 
         return res.status(200).json({ message: 'Your attendance successfully recorded' });
