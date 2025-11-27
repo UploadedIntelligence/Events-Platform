@@ -2,7 +2,7 @@ import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
 import { UserSession } from '../utilities/user-session';
 import type { calendar_v3 } from 'googleapis';
-import type { GaxiosResponse } from "gaxios"
+import { GaxiosResponseWithHTTP2 } from 'googleapis-common';
 
 export interface EventInfo {
     name: string;
@@ -31,7 +31,7 @@ export function createEventService(data: EventInfo): PrismaPromise<EventInfo> {
     });
 }
 
-export function fetchPastEventsService(today: Date) {
+export function fetchPastEventsService(today: Date): PrismaPromise<Array<EventInfo> | undefined> {
     return prisma.event.findMany({
         where: {
             start: {
@@ -44,7 +44,8 @@ export function fetchPastEventsService(today: Date) {
     });
 }
 
-export function fetchUpcomingEventsService(today: Date, session: UserSession) {
+export function fetchUpcomingEventsService(today: Date, session: UserSession):
+    PrismaPromise<Array<EventInfo> | undefined> {
     return prisma.event.findMany({
         where: {
             start: {
@@ -58,7 +59,8 @@ export function fetchUpcomingEventsService(today: Date, session: UserSession) {
     });
 }
 
-export function fetchAttendingEventsService(today: Date, session: UserSession): PrismaPromise<Array<EventInfo>> {
+export function fetchAttendingEventsService(today: Date, session: UserSession):
+    PrismaPromise<Array<EventInfo> | undefined> {
     return prisma.event.findMany({
         where: {
             start: {
@@ -131,32 +133,34 @@ export function getUserGoogleEventService(
     });
 }
 
-export function handleGoogleCalendarActionService(
-    calendar: calendar_v3.Calendar | undefined,
-    google_event: UserGoogleEvent | null,
-    action: 'delete' | 'insert',
-    event?: EventInfo,
-) {
-    if (action === 'delete') {
-        return calendar?.events.delete({
-            calendarId: 'primary',
-            eventId: google_event!.googleId,
-        });
-    } else if (action === 'insert' && event) {
-        return calendar?.events.insert({
-            calendarId: 'primary',
-            requestBody: {
-                summary: event.name,
-                description: event.description,
-                start: { dateTime: event.start.toISOString() },
-                end: { dateTime: event.end.toISOString() },
-            },
-        });
-    }
+export function insertGoogleCalendarEventService(calendar: calendar_v3.Calendar, event: EventInfo):
+    Promise<GaxiosResponseWithHTTP2<calendar_v3.Schema$Event>> {
+    return calendar?.events.insert({
+        calendarId: 'primary',
+        requestBody: {
+            summary: event.name,
+            description: event.description,
+            start: { dateTime: event.start.toISOString() },
+            end: { dateTime: event.end.toISOString() },
+        },
+    });
 }
 
+export function deleteGoogleCalendarEventService(
+    calendar: calendar_v3.Calendar,
+    google_event: UserGoogleEvent | null,
+): Promise<GaxiosResponseWithHTTP2<void>> {
+    return calendar?.events.delete({
+        calendarId: 'primary',
+        eventId: google_event!.googleId,
+    });
+}
 
-export function deleteGoogleEventService(google_event: UserGoogleEvent, session: UserSession, event_id: string): PrismaPromise<UserGoogleEvent> {
+export function deleteGoogleEventService(
+    google_event: UserGoogleEvent,
+    session: UserSession,
+    event_id: string,
+): PrismaPromise<UserGoogleEvent> {
     return prisma.userGoogleEvent.delete({
         where: {
             googleId: google_event!.googleId,
@@ -166,12 +170,16 @@ export function deleteGoogleEventService(google_event: UserGoogleEvent, session:
     });
 }
 
-export function createGoogleEventService(google_calendar_event:  any, session: UserSession, event_id: string) {
+export function createGoogleEventService(
+    google_calendar_event: GaxiosResponseWithHTTP2<calendar_v3.Schema$Event>,
+    session: UserSession,
+    event_id: string,
+) {
     return prisma.userGoogleEvent.create({
         data: {
-            googleId: google_calendar_event.data.id,
+            googleId: google_calendar_event.data.id!,
             userId: session.user.id,
-            eventId: event_id
-        }
-    })
+            eventId: event_id,
+        },
+    });
 }
