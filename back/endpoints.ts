@@ -4,7 +4,7 @@ import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
 import { createEvent, fetchEvents, attendOrCancelEvent } from './controllers/events.controller';
-import { applicationResponse, fetchApplications, roleRequest } from './controllers/users.controller';
+import { applicationResponse, fetchApplications, roleRequest, deleteAccount } from './controllers/users.controller';
 
 const app = express();
 
@@ -22,11 +22,12 @@ app.use(express.json());
 app.get('/', (req, res) => res.status(200).send('Root route working'));
 
 app.get('/applications', fetchApplications);
-app.get(['/upcoming-events', '/past-events', '/attending'], fetchEvents);
+app.get(['/upcoming-events', '/past-events', '/attending', '/user-history'], fetchEvents);
 app.post('/apply-staff', roleRequest);
 app.post('/create-event', createEvent);
 app.put('/attend-or-cancel', attendOrCancelEvent);
 app.put('/application-response', applicationResponse);
+app.delete('/delete-account', deleteAccount);
 
 app.listen(process.env.APP_PORT, () => {
     console.log(`Now listening port ${process.env.APP_PORT}`);
