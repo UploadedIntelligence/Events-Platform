@@ -32,14 +32,13 @@ export function ApplicationTable() {
         } else {
             setIsLoading('Error');
         }
-
         setApplications(applicationsResponse.data);
     }
 
     async function applicationResponse(
         applicant_email: string,
         response: 'approved' | 'rejected',
-        role: 'staff' | 'admin',
+        role: 'staff' | 'admin' | 'user',
     ): Promise<void> {
         await axios.put('/application-response', { applicant_email, response, role });
         await fetchApplications();
