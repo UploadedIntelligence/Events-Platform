@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { currentSession } from '../utilities/user-session';
 import {
     adminShowRoleRequestsService,
+    deleteUserService,
     updateUserRoleRequestService,
     updateUserRoleService,
     userCreateRoleRequestService,
@@ -38,6 +39,7 @@ export async function fetchApplications(req: Request, res: Response) {
 
     try {
         const applications = await adminShowRoleRequestsService();
+        console.log(applications);
         return res.status(200).json(applications);
     } catch (e) {
         return console.log(e);
@@ -53,14 +55,24 @@ export async function applicationResponse(req: Request, res: Response) {
     }
 
     try {
-        await updateUserRoleRequestService(applicant_email, response);
-
-        if (response === 'approved') {
-            await updateUserRoleService(applicant_email, role);
-        }
-
-        res.status(200).json('Application status successfully updated');
+        await updateUserRoleRequestService(applicant_email, role);
+        await updateUserRoleService(applicant_email, role, response);
+        return res.status(200).json('Application status successfully updated');
     } catch (e) {
         return res.status(401).json('Forbidden');
+    }
+}
+
+export async function deleteAccount(req: Request, res: Response) {
+    const session = await currentSession(req);
+
+    if (!session) {
+        return res.status(401).json('Not authenticated');
+    }
+    try {
+        await deleteUserService(session);
+        return res.status(200).json('User successfully deleted');
+    } catch (e) {
+        return res.status(401).json('Something went wrong');
     }
 }
