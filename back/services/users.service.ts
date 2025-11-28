@@ -102,7 +102,7 @@ export function updateUserRoleRequestService(
 export function updateUserRoleService(
     applicant_email: string,
     role: Role,
-    response: 'rejected' | 'approved',
+    response: AdminResponse,
 ): PrismaPromise<UserSession['user']> {
     return prisma.user.update({
         where: {
