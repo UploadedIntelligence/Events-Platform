@@ -4,6 +4,8 @@ import { Spinner } from '../../../components/loading.tsx';
 import { EventList } from '../../../components/event-list.tsx';
 import { AttendOrCancelEventDialog } from '../../../components/attend-event-dialog.tsx';
 import { useState } from 'react';
+import { NavLink } from "react-router-dom";
+import { Button } from '@mui/material';
 
 export interface IUserEvents {
     id: string;
@@ -39,7 +41,7 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                     start: event.start,
                     end: event.end,
                     actions:
-                        eventUrl !== '/past-events'
+                        eventUrl !== '/past-events' && eventUrl !== '/user-history'
                             ? [
                                   {
                                       title: eventUrl === '/attending' ? 'Cancel attendance' : 'Attend',
@@ -63,7 +65,17 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
     }
 
     return (
-        <>
+        <div>
+            {eventUrl === '/user-history' ?
+                (
+                    <NavLink to='/user-profile' >
+                        <Button style={{ margin: '0.5em' }}>
+                            Go Back
+                        </Button>
+                    </NavLink>
+                )
+                : null
+            }
             <EventList events={events} />
             <AttendOrCancelEventDialog
                 dialogOpen={dialogOpen}
@@ -71,6 +83,6 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                 isAttending={eventUrl === '/attending'}
                 setDialogOpen={setDialogOpen}
             />
-        </>
+        </div>
     );
 }

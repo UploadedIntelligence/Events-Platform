@@ -10,6 +10,7 @@ import {
     getUserGoogleEventService,
     insertGoogleCalendarEventService,
     updateEventService,
+    fetchUserHistoryService,
 } from '../services/events.service';
 import { google } from 'googleapis';
 import { currentSession } from '../utilities/user-session';
@@ -55,8 +56,10 @@ export async function fetchEvents(req: Request, res: Response) {
             events = await fetchUpcomingEventsService(today, session);
         } else if (req.path === '/attending') {
             events = await fetchAttendingEventsService(today, session);
+        } else if (req.path === '/user-history') {
+            events = await fetchUserHistoryService(today, session);
         } else {
-            res.status(400).json({ message: 'Something went wrong, please try again later.' });
+            return res.status(400).json({ message: 'Something went wrong, please try again later.' });
         }
         return res.status(200).send(events);
     } catch (e) {

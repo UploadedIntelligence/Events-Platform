@@ -4,6 +4,9 @@ import { google } from 'googleapis';
 import { Prisma } from '@prisma/client/extension';
 import PrismaPromise = Prisma.PrismaPromise;
 
+export type AdminResponse = 'approved' | 'rejected';
+export type Role = 'user' | 'staff' | 'admin';
+
 export interface IUserThirdPartyAccount {
     id: string;
     accountId: string;
@@ -19,10 +22,6 @@ export interface IUserThirdPartyAccount {
     createdAt: Date;
     updatedAt: Date;
 }
-
-export type AdminResponse = 'approved' | 'rejected';
-
-export type Role = 'user' | 'staff' | 'admin';
 
 export interface IRoleRequest {
     id: string;
@@ -100,13 +99,25 @@ export function updateUserRoleRequestService(
     });
 }
 
-export function updateUserRoleService(applicant_email: string, role: Role): PrismaPromise<UserSession['user']> {
+export function updateUserRoleService(
+    applicant_email: string,
+    role: Role,
+    response: AdminResponse,
+): PrismaPromise<UserSession['user']> {
     return prisma.user.update({
         where: {
             email: applicant_email,
         },
         data: {
-            role: role,
+            role: response === 'approved' ? role : 'user',
+        },
+    });
+}
+
+export function deleteUserService(session: UserSession): PrismaPromise<UserSession['user']> {
+    return prisma.user.delete({
+        where: {
+            email: session.user.email,
         },
     });
 }
