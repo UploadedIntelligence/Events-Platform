@@ -55,7 +55,7 @@ export async function applicationResponse(req: Request, res: Response) {
     }
 
     try {
-        await updateUserRoleRequestService(applicant_email, role);
+        await updateUserRoleRequestService(applicant_email, response);
         await updateUserRoleService(applicant_email, role, response);
         return res.status(200).json('Application status successfully updated');
     } catch (e) {
