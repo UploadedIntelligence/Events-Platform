@@ -7,7 +7,7 @@ import { useState } from 'react';
 export interface Application {
     userEmail: string;
     status: 'pending' | 'approved' | 'rejected';
-    role: 'staff' | 'admin';
+    role: 'staff' | 'admin' | 'user';
 }
 
 export function AdminSettings() {
