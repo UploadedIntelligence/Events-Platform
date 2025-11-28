@@ -83,7 +83,7 @@ export function fetchAttendingEventsService(
     });
 }
 
-export function fetchAttendanceHistory(today: Date, session: UserSession): PrismaPromise<Array<EventInfo>> {
+export function fetchUserHistoryService(today: Date, session: UserSession): PrismaPromise<Array<EventInfo>> {
     return prisma.event.findMany({
         where: {
             start: {
