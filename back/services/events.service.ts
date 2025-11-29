@@ -32,6 +32,7 @@ export function createEventService(data: EventInfo): PrismaPromise<EventInfo> {
             location: data.location,
             start: data.start,
             end: data.end,
+            imgUrl: data.imgUrl ?? null
         },
     });
 }

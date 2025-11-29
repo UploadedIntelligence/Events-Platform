@@ -1,4 +1,4 @@
-import { TextField, Button, Alert } from '@mui/material';
+import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
 import axios from '../../../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -28,23 +28,23 @@ export function CreateEvent() {
     } = useForm({
         mode: 'onChange',
         defaultValues: {
-            eventName: '',
+            name: '',
             description: '',
-            city: '',
-            startTime: null,
-            endTime: null,
+            location: '',
+            start: null,
+            end: null,
         },
     });
-    const startDateTime = watch('startTime');
-    const endDateTime = watch('endTime');
+    const startDateTime = watch('start');
+    const endDateTime = watch('end');
 
     async function createEvent(event_data: CreateEventForm) {
         setRequestState('Pending');
         try {
             await axios.post('/create-event', {
                 ...event_data,
-                startTime: event_data.startTime?.toISOString(),
-                endTime: event_data.endTime?.toISOString(),
+                start: event_data.start?.toISOString(),
+                end: event_data.end?.toISOString(),
             });
             setRequestState('Success');
             reset();
@@ -61,9 +61,9 @@ export function CreateEvent() {
                 <form className="create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"
-                        error={!!errors.eventName}
-                        helperText={errors.eventName?.message}
-                        {...register('eventName', {
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                        {...register('name', {
                             required: true,
                             pattern: {
                                 value: /^.{1,40}$/,
@@ -87,9 +87,9 @@ export function CreateEvent() {
                     />
                     <TextField
                         label="Location"
-                        error={!!errors.city}
-                        helperText={errors.city?.message}
-                        {...register('city', {
+                        error={!!errors.location}
+                        helperText={errors.location?.message}
+                        {...register('location', {
                             required: true,
                             pattern: {
                                 value: /^.{1,40}$/,
@@ -100,7 +100,7 @@ export function CreateEvent() {
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                         <Controller
                             control={control}
-                            name="startTime"
+                            name="start"
                             rules={{
                                 required: true,
                                 validate: {
@@ -117,11 +117,11 @@ export function CreateEvent() {
                                         maxDateTime={endDateTime ?? undefined}
                                         onChange={(newValue) => {
                                             onChange(newValue);
-                                            if (endDateTime) trigger('endTime');
+                                            if (endDateTime) trigger('end');
                                         }}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
-                                                setError('startTime', {
+                                                setError('start', {
                                                     type: error,
                                                     message: 'Invalid start time',
                                                 });
@@ -129,7 +129,7 @@ export function CreateEvent() {
                                         }}
                                         slotProps={{
                                             textField: {
-                                                helperText: errors.startTime?.message,
+                                                helperText: errors.start?.message,
                                             },
                                         }}
                                     />
@@ -138,12 +138,12 @@ export function CreateEvent() {
                         />
                         <Controller
                             control={control}
-                            name="endTime"
+                            name="end"
                             rules={{
                                 required: true,
                                 validate: {
                                     disablePast: disablePast('End time'),
-                                    minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'startTime'),
+                                    minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'start'),
                                 },
                             }}
                             render={({ field: { onChange, ...rest } }) => {
@@ -156,11 +156,11 @@ export function CreateEvent() {
                                         minDateTime={startDateTime ?? undefined}
                                         onChange={(newValue) => {
                                             onChange(newValue);
-                                            if (startDateTime) trigger('startTime');
+                                            if (startDateTime) trigger('start');
                                         }}
                                         onError={(error) => {
                                             if (error === 'invalidDate') {
-                                                setError('endTime', {
+                                                setError('end', {
                                                     type: error,
                                                     message: 'Invalid end time',
                                                 });
@@ -168,7 +168,7 @@ export function CreateEvent() {
                                         }}
                                         slotProps={{
                                             textField: {
-                                                helperText: errors.endTime?.message,
+                                                helperText: errors.end?.message,
                                             },
                                         }}
                                     />
@@ -180,15 +180,17 @@ export function CreateEvent() {
                         Submit Event
                     </Button>
                     {isVisible && (
-                        <Alert
-                            variant="filled"
-                            severity={requestState === 'Success' ? 'success' : 'error'}
-                            sx={{ margin: '10px' }}
-                        >
-                            {requestState === 'Success'
-                                ? 'Event created successfully'
-                                : 'There was a problem with your request'}
-                        </Alert>
+                        <ClickAwayListener onClickAway={() => {setRequestState('Idle'); setIsVisible(false)}}>
+                            <Alert
+                                variant="filled"
+                                severity={requestState === 'Success' ? 'success' : 'error'}
+                                sx={{ margin: '10px' }}
+                            >
+                                {requestState === 'Success'
+                                    ? 'Event created successfully'
+                                    : 'There was a problem with your request'}
+                            </Alert>
+                        </ClickAwayListener>
                     )}
                 </form>
             ) : (
