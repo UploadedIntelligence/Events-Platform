@@ -1,9 +1,9 @@
-import authClient from '../../../../../services/auth-client.ts';
 import { Card, Button, CardActions } from '@mui/material';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
 import type { Role } from '../../../../../utilities/types.ts';
 import { ViewApplications } from './view-applications.tsx';
+import {getSession} from "../../../../../utilities/user-permissions.ts";
 
 export interface Application {
     userEmail: string;
@@ -12,10 +12,10 @@ export interface Application {
 }
 
 export function AdminSettings() {
-    const { data } = authClient.useSession();
+    const user = getSession();
     const [applicationsVisible, setApplicationsVisible] = useState<boolean>(false);
 
-    if (data?.user?.role !== 'admin') {
+    if (user?.role !== 'admin') {
         return <div>Forbidden</div>;
     }
 
