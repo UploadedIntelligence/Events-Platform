@@ -2,16 +2,24 @@ import { Button, Typography, TableContainer, Table, TableHead, TableCell, TableR
 import { type Application } from '../pages/landing-page/user-landing-page/user-profile/admin-settings';
 import axios from '../config/client.ts';
 import type { Role } from '../utilities/types.ts';
-import * as React from "react";
+import * as React from 'react';
 
-export function ApplicationTable({ applications, setRefresh, refresh }: { applications: Array<Application> | undefined, setRefresh:  React.Dispatch<React.SetStateAction<boolean>>, refresh: boolean }) {
+export function ApplicationTable({
+    applications,
+    setRefresh,
+    refresh,
+}: {
+    applications: Array<Application> | undefined;
+    setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+    refresh: boolean;
+}) {
     async function applicationResponse(
         applicant_email: string,
         response: 'approved' | 'rejected',
         role: Role,
     ): Promise<void> {
         await axios.put('/application-response', { applicant_email, response, role });
-        setRefresh(!refresh)
+        setRefresh(!refresh);
     }
 
     return (
