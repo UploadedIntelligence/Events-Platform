@@ -18,7 +18,6 @@ import { UserSession } from '../utilities/user-session';
 import { getUserAccountService, getUserGoogleClientService, IUserThirdPartyAccount } from '../services/users.service';
 
 export async function createEvent(req: Request, res: Response) {
-    const { eventName, description, city, startTime, endTime, imgUrl } = req.body;
     const session: UserSession | null = await currentSession(req);
 
     if (!session || session.user.role === 'user') {
@@ -26,14 +25,7 @@ export async function createEvent(req: Request, res: Response) {
     }
 
     try {
-        await createEventService({
-            name: eventName,
-            description: description,
-            location: city,
-            start: startTime,
-            end: endTime,
-            imgUrl: imgUrl,
-        });
+        await createEventService(req.body);
         return res.status(200).json('Event successfully created');
     } catch (e) {
         return res.status(400).json(e);

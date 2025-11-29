@@ -39,7 +39,6 @@ export async function fetchApplications(req: Request, res: Response) {
 
     try {
         const applications = await adminShowRoleRequestsService();
-        console.log(applications);
         return res.status(200).json(applications);
     } catch (e) {
         return console.log(e);
