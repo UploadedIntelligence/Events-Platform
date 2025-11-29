@@ -1,5 +1,5 @@
 import { Button, Snackbar, Alert } from '@mui/material';
-import { useState } from "react";
+import { useState } from 'react';
 import axios from '../config/client.ts';
 import * as React from 'react';
 
@@ -26,7 +26,12 @@ export function RoleApplication() {
     return (
         <>
             <Button onClick={applyStaff}>Become staff member</Button>
-            <Snackbar autoHideDuration={5000} open={openAlert} onClose={handleClose} sx={{ position: 'inherit', justifyContent: 'center' }}>
+            <Snackbar
+                autoHideDuration={5000}
+                open={openAlert}
+                onClose={handleClose}
+                sx={{ position: 'inherit', justifyContent: 'center' }}
+            >
                 <Alert
                     variant="filled"
                     severity={applicationStatus === 'Success' ? 'success' : 'error'}
@@ -36,5 +41,5 @@ export function RoleApplication() {
                 </Alert>
             </Snackbar>
         </>
-    )
+    );
 }
