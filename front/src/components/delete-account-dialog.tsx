@@ -1,11 +1,20 @@
-import { Button, Alert, Snackbar, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
-import axios from '../config/client'
-import { useState } from "react";
+import {
+    Button,
+    Alert,
+    Snackbar,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+} from '@mui/material';
+import axios from '../config/client';
+import { useState } from 'react';
 
 export function DeleteAccount() {
     const [open, setOpen] = useState<boolean>(false);
     const [openAlert, setOpenAlert] = useState<boolean>(false);
-    const [status, setStatus] = useState<'Idle' | 'Loading' | 'Success' | 'Error'>('Idle')
+    const [status, setStatus] = useState<'Idle' | 'Loading' | 'Success' | 'Error'>('Idle');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -16,17 +25,17 @@ export function DeleteAccount() {
     };
 
     function confirmDelete() {
-        setStatus('Loading')
+        setStatus('Loading');
         try {
-            axios.delete('/delete-account')
-            setStatus('Success')
+            axios.delete('/delete-account');
+            setStatus('Success');
             setTimeout(() => window.location.reload(), 2500);
         } catch (e) {
-            setStatus('Error')
-            console.log(e)
+            setStatus('Error');
+            console.log(e);
         }
-        setOpenAlert(true)
-        setOpen(false)
+        setOpenAlert(true);
+        setOpen(false);
     }
 
     return (
@@ -38,28 +47,27 @@ export function DeleteAccount() {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {"Delete account?"}
-                </DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'Delete account?'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Deleting your account is irreversible.
-                        Your Google Calendar events will be unaffected.
-                        Confirm delete?
+                        Deleting your account is irreversible. Your Google Calendar events will be unaffected. Confirm
+                        delete?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={confirmDelete}>Delete</Button>
-                    <Button onClick={handleClose}>
-                        Cancel
-                    </Button>
+                    <Button onClick={handleClose}>Cancel</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar open={openAlert} onClose={handleClose} sx={{ position: 'inherit', justifyContent: 'center' }}>
-                <Alert variant='filled' severity={status === 'Success' ? 'success' : 'error'} sx={{ minWidth: '50%', justifyContent: 'center'}}>
+                <Alert
+                    variant="filled"
+                    severity={status === 'Success' ? 'success' : 'error'}
+                    sx={{ minWidth: '50%', justifyContent: 'center' }}
+                >
                     {status === 'Success' ? 'Account deletion successful!' : 'Something went wrong!'}
                 </Alert>
             </Snackbar>
         </>
-    )
+    );
 }

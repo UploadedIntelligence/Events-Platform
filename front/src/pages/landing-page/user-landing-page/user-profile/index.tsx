@@ -1,21 +1,19 @@
-import { Card, Button, CardContent, Typography} from '@mui/material';
-import authClient from '../../../../services/auth-client.ts';
+import { Card, Button, CardContent, Typography } from '@mui/material';
 import { Navigate, NavLink } from 'react-router-dom';
 import { RoleApplication } from '../../../../components/role-application.tsx';
-import { DeleteAccount } from "../../../../components/delete-account-dialog.tsx";
+import { DeleteAccount } from '../../../../components/delete-account-dialog.tsx';
+import { getSession } from "../../../../utilities/user-permissions.ts";
 
 export function UserProfile() {
-    const { data } = authClient.useSession();
+    const user = getSession();
     return (
         <div>
-            {data ? (
+            {user ? (
                 <Card>
                     <CardContent>
-                        <Typography>
-                            Hello, {data.user.name}
-                        </Typography>
+                        <Typography>Hello, {user.name}</Typography>
                         <div style={{ display: 'grid' }}>
-                            {data.user.role === 'admin' && (
+                            {user.role === 'admin' && (
                                 <NavLink to="/admin-settings">
                                     <Button>Admin settings</Button>
                                 </NavLink>
@@ -23,9 +21,7 @@ export function UserProfile() {
                             <NavLink to="/user-settings">
                                 <Button>User settings</Button>
                             </NavLink>
-                            {data.user.role === 'user' && (
-                                <RoleApplication/>
-                            )}
+                            {user.role === 'user' && <RoleApplication />}
                             <NavLink to="/user-history">
                                 <Button>History</Button>
                             </NavLink>

@@ -7,12 +7,12 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
 import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import authClient from '../../../services/auth-client.ts';
+import { getSession } from "../../../utilities/user-permissions.ts";
 import { Navigate } from 'react-router-dom';
 import { disablePast, minDateTime } from '../../../utilities/validation.ts';
 
 export function CreateEvent() {
-    const { data } = authClient.useSession();
+    const user = getSession();
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
@@ -57,7 +57,7 @@ export function CreateEvent() {
 
     return (
         <div>
-            {data?.user?.role === 'staff' || data?.user?.role === 'admin' ? (
+            {user?.role === 'staff' || user?.role === 'admin' ? (
                 <form className="create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"

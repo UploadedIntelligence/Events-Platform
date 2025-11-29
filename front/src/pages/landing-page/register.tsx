@@ -4,10 +4,11 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { googleSignIn } from '../../services/google-sign-in.ts';
+import { getSession } from "../../utilities/user-permissions.ts";
 
 export function RegisterPage() {
     const navigate = useNavigate();
-    const { data, error } = authClient.useSession();
+    const user = getSession();
     const [strength, setStrength] = useState<number>(0);
     const {
         register,
@@ -27,10 +28,6 @@ export function RegisterPage() {
     useEffect(() => {
         trigger(['password', 'name']);
     }, [name, password]);
-
-    if (error) {
-        console.log('authClient error:', error);
-    }
 
     const password_tooltip =
         'A strong password contains:\nAt least 8 characters\nOne upper case and one lower case letter\n' +
@@ -66,7 +63,7 @@ export function RegisterPage() {
 
     return (
         <div>
-            {data ? (
+            {user ? (
                 <Navigate to="/" />
             ) : (
                 <div className="register">

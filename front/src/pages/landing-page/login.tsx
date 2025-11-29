@@ -5,10 +5,11 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { googleSignIn } from '../../services/google-sign-in.ts';
+import {getSession} from "../../utilities/user-permissions.ts";
 
 export function LoginPage() {
     const navigate = useNavigate();
-    const { data, error } = authClient.useSession();
+    const user = getSession();
     const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false);
 
     const {
@@ -21,10 +22,6 @@ export function LoginPage() {
             password: '',
         },
     });
-
-    if (error) {
-        console.log('authClient error:', error);
-    }
 
     let user_email = watch('email');
     let user_password = watch('password');
@@ -49,7 +46,7 @@ export function LoginPage() {
 
     return (
         <div>
-            {data ? (
+            {user ? (
                 <Navigate to="/" />
             ) : (
                 <div className="login">

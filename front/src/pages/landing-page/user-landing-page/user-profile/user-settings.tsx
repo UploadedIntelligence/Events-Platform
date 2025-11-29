@@ -1,11 +1,11 @@
-import authClient from '../../../../services/auth-client.ts';
 import { Card, Button, CardActions } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import {getSession} from "../../../../utilities/user-permissions.ts";
 
 export function UserSettings() {
-    const { data } = authClient.useSession();
+    const user = getSession();
 
-    return data?.user?.role !== 'user' ? (
+    return user?.role !== 'user' ? (
         <Card>
             <NavLink to="/user-profile">
                 <Button>Go Back</Button>

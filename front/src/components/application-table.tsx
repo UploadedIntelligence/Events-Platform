@@ -1,47 +1,25 @@
 import { Button, Typography, TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from '@mui/material';
-import { type Application } from '../pages/landing-page/user-landing-page/user-profile/admin-settings.tsx';
+import { type Application } from '../pages/landing-page/user-landing-page/user-profile/admin-settings';
 import axios from '../config/client.ts';
-import { useEffect, useState } from 'react';
-import authClient from '../services/auth-client.ts';
-import { Spinner } from './loading.tsx';
+import type { Role } from '../utilities/types.ts';
+import * as React from 'react';
 
-export function ApplicationTable() {
-    const { data } = authClient.useSession();
-    const [applications, setApplications] = useState<Array<Application> | null>(null);
-    const [isLoading, setIsLoading] = useState<'Loading' | 'Success' | 'Error'>('Loading');
-
-    if (data?.user?.role !== 'admin') {
-        return <div>Forbidden</div>;
-    }
-
-    useEffect(() => {
-        fetchApplications();
-    }, []);
-
-    if (isLoading === 'Loading') {
-        return <Spinner />;
-    } else if (isLoading === 'Error') {
-        return <>Something went wrong</>;
-    }
-
-    async function fetchApplications(): Promise<void> {
-        setIsLoading('Loading');
-        const applicationsResponse: { status: number; data: Array<Application> } = await axios.get('/applications');
-        if (applicationsResponse.status === 200) {
-            setIsLoading('Success');
-        } else {
-            setIsLoading('Error');
-        }
-        setApplications(applicationsResponse.data);
-    }
-
+export function ApplicationTable({
+    applications,
+    setRefresh,
+    refresh,
+}: {
+    applications: Array<Application> | undefined;
+    setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+    refresh: boolean;
+}) {
     async function applicationResponse(
         applicant_email: string,
         response: 'approved' | 'rejected',
-        role: 'staff' | 'admin' | 'user',
+        role: Role,
     ): Promise<void> {
         await axios.put('/application-response', { applicant_email, response, role });
-        await fetchApplications();
+        setRefresh(!refresh);
     }
 
     return (
