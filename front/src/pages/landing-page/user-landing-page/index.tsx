@@ -5,7 +5,7 @@ import { UserEvents } from './user-events.tsx';
 import { CreateEvent } from './create-event.tsx';
 import { UserProfile } from './user-profile';
 import { NavBar } from '../../../components/nav-bar.tsx';
-import { AdminSettings } from './user-profile/admin-settings.tsx';
+import { AdminSettings } from './user-profile/admin-settings';
 import { UserSettings } from './user-profile/user-settings.tsx';
 
 export function UserLandingPage() {
@@ -18,7 +18,7 @@ export function UserLandingPage() {
                 <Route path="/upcoming-events" element={<UserEvents eventUrl={'/upcoming-events'} />} />
                 <Route path="/past-events" element={<UserEvents eventUrl={'/past-events'} />} />
                 <Route path="/attending" element={<UserEvents eventUrl={'/attending'} />} />
-                <Route path="/user-history" element={<UserEvents eventUrl={'/user-history'} />}/>
+                <Route path="/user-history" element={<UserEvents eventUrl={'/user-history'} />} />
                 <Route path="/user-profile" element={<UserProfile />} />
                 <Route path="/admin-settings/*" element={<AdminSettings />} />
                 <Route path="/user-settings" element={<UserSettings />} />
