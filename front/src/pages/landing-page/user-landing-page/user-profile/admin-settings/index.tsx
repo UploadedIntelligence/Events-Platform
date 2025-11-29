@@ -1,13 +1,14 @@
-import authClient from '../../../../services/auth-client.ts';
+import authClient from '../../../../../services/auth-client.ts';
 import { Card, Button, CardActions } from '@mui/material';
 import { NavLink, Route, Routes } from 'react-router-dom';
-import { ApplicationTable } from '../../../../components/application-table.tsx';
 import { useState } from 'react';
+import type { Role } from '../../../../../utilities/types.ts';
+import { ViewApplications } from './view-applications.tsx';
 
 export interface Application {
     userEmail: string;
     status: 'pending' | 'approved' | 'rejected';
-    role: 'staff' | 'admin' | 'user';
+    role: Role;
 }
 
 export function AdminSettings() {
@@ -36,7 +37,7 @@ export function AdminSettings() {
                 </CardActions>
             </Card>
             <Routes>
-                <Route path="/view-applications" element={<ApplicationTable />} />
+                <Route path="/view-applications" element={<ViewApplications />} />
             </Routes>
         </div>
     );
