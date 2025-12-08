@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { googleSignIn } from '../../services/google-sign-in.ts';
-import { getSession } from "../../utilities/user-permissions.ts";
+import { getSession } from '../../utilities/user-permissions.ts';
 
 export function RegisterPage() {
     const navigate = useNavigate();

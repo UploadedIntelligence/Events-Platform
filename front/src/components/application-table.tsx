@@ -2,25 +2,31 @@ import { Button, Typography, TableContainer, Table, TableHead, TableCell, TableR
 import { type Application } from '../pages/landing-page/user-landing-page/user-profile/admin-settings';
 import axios from '../config/client.ts';
 import type { Role } from '../utilities/types.ts';
-import * as React from 'react';
+import { useMutation } from '@tanstack/react-query';
+import QueryClient from '../services/tanstack-query-client.ts'
 
-export function ApplicationTable({
-    applications,
-    setRefresh,
-    refresh,
-}: {
-    applications: Array<Application> | undefined;
-    setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
-    refresh: boolean;
-}) {
-    async function applicationResponse(
-        applicant_email: string,
-        response: 'approved' | 'rejected',
-        role: Role,
-    ): Promise<void> {
-        await axios.put('/application-response', { applicant_email, response, role });
-        setRefresh(!refresh);
-    }
+export function ApplicationTable({ applications }: { applications: Array<Application> | undefined }) {
+    // async function applicationResponse(
+    //     applicant_email: string,
+    //     response: 'approved' | 'rejected',
+    //     role: Role,
+    // ): Promise<void> {
+    //     await axios.put('/application-response', { applicant_email, response, role });
+    // }
+    const { mutate } = useMutation({
+        mutationFn: (variables: { applicant_email: string; response: 'approved' | 'rejected'; role: Role }) => {
+            return axios.put('/application-response', {
+                applicant_email: variables.applicant_email,
+                response: variables.response,
+                role: variables.role,
+            });
+        },
+        onSuccess: async () => {
+            await QueryClient.invalidateQueries({
+                queryKey: ['applications']
+            })
+        }
+    });
 
     return (
         <TableContainer>
@@ -50,7 +56,11 @@ export function ApplicationTable({
                                     <TableCell sx={{ justifySelf: 'flex-end' }} align="center">
                                         <Button
                                             onClick={() =>
-                                                applicationResponse(application.userEmail, 'approved', application.role)
+                                                mutate({
+                                                    applicant_email: application.userEmail,
+                                                    response: 'approved',
+                                                    role: application.role,
+                                                })
                                             }
                                         >
                                             Approve
@@ -59,7 +69,11 @@ export function ApplicationTable({
                                             sx={{ marginLeft: '8px' }}
                                             color="secondary"
                                             onClick={() =>
-                                                applicationResponse(application.userEmail, 'rejected', application.role)
+                                                mutate({
+                                                    applicant_email: application.userEmail,
+                                                    response: 'rejected',
+                                                    role: application.role,
+                                                })
                                             }
                                         >
                                             Reject

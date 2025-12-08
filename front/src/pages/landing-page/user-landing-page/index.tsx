@@ -6,7 +6,7 @@ import { UserProfile } from './user-profile';
 import { NavBar } from '../../../components/nav-bar.tsx';
 import { AdminSettings } from './user-profile/admin-settings';
 import { UserSettings } from './user-profile/user-settings.tsx';
-import { getSession } from "../../../utilities/user-permissions.ts";
+import { getSession } from '../../../utilities/user-permissions.ts';
 
 export function UserLandingPage() {
     const user = getSession();

@@ -7,7 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
 import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import { getSession } from "../../../utilities/user-permissions.ts";
+import { getSession } from '../../../utilities/user-permissions.ts';
 import { Navigate } from 'react-router-dom';
 import { disablePast, minDateTime } from '../../../utilities/validation.ts';
 
@@ -180,7 +180,12 @@ export function CreateEvent() {
                         Submit Event
                     </Button>
                     {isVisible && (
-                        <ClickAwayListener onClickAway={() => {setRequestState('Idle'); setIsVisible(false)}}>
+                        <ClickAwayListener
+                            onClickAway={() => {
+                                setRequestState('Idle');
+                                setIsVisible(false);
+                            }}
+                        >
                             <Alert
                                 variant="filled"
                                 severity={requestState === 'Success' ? 'success' : 'error'}

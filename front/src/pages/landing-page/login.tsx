@@ -5,7 +5,7 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { googleSignIn } from '../../services/google-sign-in.ts';
-import {getSession} from "../../utilities/user-permissions.ts";
+import { getSession } from '../../utilities/user-permissions.ts';
 
 export function LoginPage() {
     const navigate = useNavigate();
