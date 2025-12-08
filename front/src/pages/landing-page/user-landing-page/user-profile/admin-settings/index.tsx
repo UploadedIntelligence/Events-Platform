@@ -3,7 +3,7 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
 import type { Role } from '../../../../../utilities/types.ts';
 import { ViewApplications } from './view-applications.tsx';
-import {getSession} from "../../../../../utilities/user-permissions.ts";
+import { getSession } from '../../../../../utilities/user-permissions.ts';
 
 export interface Application {
     userEmail: string;
