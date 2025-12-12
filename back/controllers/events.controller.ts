@@ -7,15 +7,26 @@ import {
     fetchAttendingEventsService,
     fetchPastEventsService,
     fetchUpcomingEventsService,
+    fetchUserHistoryService,
     getUserGoogleEventService,
     insertGoogleCalendarEventService,
+    updateEventAttendanceService,
     updateEventService,
-    fetchUserHistoryService,
 } from '../services/events.service';
 import { google } from 'googleapis';
-import { currentSession } from '../utilities/user-session';
-import { UserSession } from '../utilities/user-session';
+import { currentSession, UserSession } from '../utilities/user-session';
 import { getUserAccountService, getUserGoogleClientService, IUserThirdPartyAccount } from '../services/users.service';
+import * as z from 'zod';
+import { ZodError } from 'zod';
+
+export const zEventInfo = z.object({
+    name: z.string(),
+    description: z.string(),
+    location: z.string(),
+    start: z.string().transform((value) => new Date(value)),
+    end: z.string().transform((value) => new Date(value)),
+    imgUrl: z.nullish(z.string()),
+});
 
 export async function createEvent(req: Request, res: Response) {
     const session: UserSession | null = await currentSession(req);
@@ -24,13 +35,29 @@ export async function createEvent(req: Request, res: Response) {
         return res.status(401).json('Not authenticated');
     }
 
+    const eventInfo = zEventInfo.parse(req.body);
+
     try {
-        await createEventService(req.body);
+        await createEventService(eventInfo);
         return res.status(200).json('Event successfully created');
     } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json(e.issues);
+        }
         return res.status(400).json(e);
     }
 }
+
+// export async function updateEvent(req: Request, res: Response) {
+//     const session: UserSession | null = await currentSession(req);
+//
+//     if (!session || session.user.role === 'user') {
+//         return res.status(401).json('Not authenticated');
+//     }
+//
+//     await updateEventService(req.body, req.params.event_id!);
+//     return res.status(200).json('Response')
+// }
 
 export async function fetchEvents(req: Request, res: Response) {
     const today = new Date();
@@ -76,7 +103,7 @@ export async function attendOrCancelEvent(req: Request, res: Response) {
             calendar = google.calendar({ version: 'v3', auth: client });
         }
 
-        const updated_event = await updateEventService(event_id, is_attending, session);
+        const updated_event = await updateEventAttendanceService(event_id, is_attending, session);
         const google_event = await getUserGoogleEventService(session, event_id);
 
         if (is_attending && googleAccount && google_event && calendar) {

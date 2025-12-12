@@ -2,15 +2,10 @@ import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
 import { UserSession } from '../utilities/user-session';
 import type { calendar_v3 } from 'googleapis';
+import { zEventInfo } from '../controllers/events.controller';
+import * as z from 'zod';
 
-export interface EventInfo {
-    name: string;
-    description: string;
-    location: string;
-    start: Date;
-    end: Date;
-    imgUrl?: string | null;
-}
+export type EventInfo = z.infer<typeof zEventInfo>;
 
 export interface UserGoogleEvent {
     googleId: string;
@@ -32,7 +27,7 @@ export function createEventService(data: EventInfo): PrismaPromise<EventInfo> {
             location: data.location,
             start: data.start,
             end: data.end,
-            imgUrl: data.imgUrl ?? null
+            imgUrl: data.imgUrl ?? null,
         },
     });
 }
@@ -98,7 +93,23 @@ export function fetchUserHistoryService(today: Date, session: UserSession): Pris
     });
 }
 
-export function updateEventService(
+export function updateEventService(data: EventInfo, event_id: string) {
+    return prisma.event.update({
+        where: {
+            id: event_id,
+        },
+        data: {
+            name: data.name,
+            description: data.description,
+            location: data.location,
+            start: data.start,
+            end: data.end,
+            imgUrl: data.imgUrl ?? null,
+        },
+    });
+}
+
+export function updateEventAttendanceService(
     event_id: string,
     is_attending: boolean,
     session: UserSession,
