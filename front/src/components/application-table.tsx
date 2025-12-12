@@ -3,7 +3,7 @@ import { type Application } from '../pages/landing-page/user-landing-page/user-p
 import axios from '../config/client.ts';
 import type { Role } from '../utilities/types.ts';
 import { useMutation } from '@tanstack/react-query';
-import QueryClient from '../services/tanstack-query-client.ts'
+import QueryClient from '../services/tanstack-query-client.ts';
 
 export function ApplicationTable({ applications }: { applications: Array<Application> | undefined }) {
     // async function applicationResponse(
@@ -23,9 +23,9 @@ export function ApplicationTable({ applications }: { applications: Array<Applica
         },
         onSuccess: async () => {
             await QueryClient.invalidateQueries({
-                queryKey: ['applications']
-            })
-        }
+                queryKey: ['applications'],
+            });
+        },
     });
 
     return (

@@ -25,6 +25,7 @@ app.get('/applications', fetchApplications);
 app.get(['/upcoming-events', '/past-events', '/attending', '/user-history'], fetchEvents);
 app.post('/apply-staff', roleRequest);
 app.post('/create-event', createEvent);
+// app.put('/update-event/:event_id', updateEvent)
 app.put('/attend-or-cancel', attendOrCancelEvent);
 app.put('/application-response', applicationResponse);
 app.delete('/delete-account', deleteAccount);
