@@ -3,35 +3,7 @@ import { UserSession } from '../utilities/user-session';
 import { google } from 'googleapis';
 import { Prisma } from '@prisma/client/extension';
 import PrismaPromise = Prisma.PrismaPromise;
-
-export type AdminResponse = 'approved' | 'rejected';
-export type Role = 'user' | 'staff' | 'admin';
-
-export interface IUserThirdPartyAccount {
-    id: string;
-    accountId: string;
-    providerId: string;
-    userId: string;
-    accessToken?: string | null;
-    refreshToken?: string | null;
-    idToken?: string | null;
-    accessTokenExpiresAt?: Date | null;
-    refreshTokenExpiresAt?: Date | null;
-    scope?: string | null;
-    password?: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface IRoleRequest {
-    id: string;
-    userEmail: string;
-    role: Role;
-    status: string;
-    createdAt: Date;
-    updatedAt: Date;
-    rejectedAt?: Date | null;
-}
+import { IRoleRequest, IUserThirdPartyAccount, type Role, type AdminResponse } from '../utilities/types';
 
 export async function getUserAccountService(
     session: UserSession,
