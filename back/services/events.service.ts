@@ -1,6 +1,6 @@
 import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
-import { UserSession } from '../utilities/user-session';
+import { IUserSession } from '../utilities/types';
 import type { calendar_v3 } from 'googleapis';
 import { EventInfoDO, UserGoogleEventDO, GoogleCalendarEventDO } from '../utilities/types';
 
@@ -32,7 +32,7 @@ export function fetchPastEventsService(today: Date): PrismaPromise<Array<EventIn
 
 export function fetchUpcomingEventsService(
     today: Date,
-    session: UserSession,
+    session: IUserSession,
 ): PrismaPromise<Array<EventInfoDO> | undefined> {
     return prisma.event.findMany({
         where: {
@@ -49,7 +49,7 @@ export function fetchUpcomingEventsService(
 
 export function fetchAttendingEventsService(
     today: Date,
-    session: UserSession,
+    session: IUserSession,
 ): PrismaPromise<Array<EventInfoDO> | undefined> {
     return prisma.event.findMany({
         where: {
@@ -64,7 +64,7 @@ export function fetchAttendingEventsService(
     });
 }
 
-export function fetchUserHistoryService(today: Date, session: UserSession): PrismaPromise<Array<EventInfoDO>> {
+export function fetchUserHistoryService(today: Date, session: IUserSession): PrismaPromise<Array<EventInfoDO>> {
     return prisma.event.findMany({
         where: {
             start: {
@@ -97,7 +97,7 @@ export function updateEventService(data: EventInfoDO, event_id: string) {
 export function updateEventAttendanceService(
     event_id: string,
     is_attending: boolean,
-    session: UserSession,
+    session: IUserSession,
 ): PrismaPromise<EventInfoDO> {
     if (is_attending) {
         return prisma.event.update({
@@ -128,7 +128,7 @@ export function updateEventAttendanceService(
 }
 
 export function getUserGoogleEventService(
-    session: UserSession,
+    session: IUserSession,
     event_id: string,
 ): PrismaPromise<UserGoogleEventDO | null> {
     return prisma.userGoogleEvent.findFirst({
@@ -166,7 +166,7 @@ export function deleteGoogleCalendarEventService(
 
 export function deleteGoogleEventService(
     google_event: UserGoogleEventDO,
-    session: UserSession,
+    session: IUserSession,
     event_id: string,
 ): PrismaPromise<UserGoogleEventDO> {
     return prisma.userGoogleEvent.delete({
@@ -180,7 +180,7 @@ export function deleteGoogleEventService(
 
 export function createGoogleEventService(
     google_calendar_event: GoogleCalendarEventDO,
-    session: UserSession,
+    session: IUserSession,
     event_id: string,
 ) {
     return prisma.userGoogleEvent.create({
