@@ -14,10 +14,10 @@ import {
     updateEventService,
 } from '../services/events.service';
 import { google } from 'googleapis';
-import { currentSession, UserSession } from '../utilities/user-session';
+import { currentSession } from '../utilities/user-session';
 import { getUserAccountService, getUserGoogleClientService } from '../services/users.service';
 import { ZodError } from 'zod';
-import { EventInfoDO, IUserThirdPartyAccount, Role } from '../utilities/types';
+import { EventInfoDO, IUserThirdPartyAccount, Role, IUserSession } from '../utilities/types';
 import * as z from 'zod';
 
 const zEventInfo = z.object({
@@ -29,17 +29,21 @@ const zEventInfo = z.object({
     imgUrl: z.string().optional(),
 });
 
-export async function createEvent(req: Request, res: Response) {
-    const session: UserSession | null = await currentSession(req);
-    const authorizedEventCreatorRoles: Array<Role> = ['admin', 'staff'];
+const zIsDateValid = z.date().min(new Date());
 
-    if (!session || !authorizedEventCreatorRoles.includes(session.user.role as Role)) {
+const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff'])
+
+export async function createEvent(req: Request, res: Response) {
+    const session: IUserSession | null = await currentSession(req);
+
+    if (!session || !zAuthorizedEventCreatorRoles.safeParse(session.user.role).success) {
         return res.status(401).json('Not authenticated');
     }
 
     const eventInfo: EventInfoDO = zEventInfo.parse(req.body);
 
     try {
+        zIsDateValid.parse(eventInfo.start);
         await createEventService(eventInfo);
         return res.status(200).json('Event successfully created');
     } catch (e) {
@@ -63,7 +67,7 @@ export async function createEvent(req: Request, res: Response) {
 
 export async function fetchEvents(req: Request, res: Response) {
     const today = new Date();
-    const session: UserSession | null = await currentSession(req);
+    const session: IUserSession | null = await currentSession(req);
 
     if (!session) {
         return res.status(401).json('Not authenticated');
@@ -90,7 +94,7 @@ export async function fetchEvents(req: Request, res: Response) {
 
 export async function attendOrCancelEvent(req: Request, res: Response) {
     const { event_id, is_attending } = req.body;
-    const session: UserSession | null = await currentSession(req);
+    const session: IUserSession | null = await currentSession(req);
 
     if (!session) {
         return res.status(401).json('Not authenticated');
