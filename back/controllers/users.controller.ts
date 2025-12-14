@@ -8,9 +8,14 @@ import {
     userCreateRoleRequestService,
     userHasRoleRequestService,
 } from '../services/users.service';
+import * as z from 'zod';
+import { type Role } from '../utilities/types';
+
+const zRole = z.enum(['user', 'staff', 'admin']);
 
 export async function roleRequest(req: Request, res: Response) {
     const { role } = req.body;
+    const userRole: Role = zRole.parse(role);
     const session = await currentSession(req);
 
     if (!session) {
@@ -22,7 +27,7 @@ export async function roleRequest(req: Request, res: Response) {
     if (has_application) {
         return res.status(400).json('You cannot send more than 1 application');
     } else if (session.user.role === 'user') {
-        await userCreateRoleRequestService(session, role);
+        await userCreateRoleRequestService(session, userRole);
 
         return res.status(200).json('Application successfully sent');
     } else {

@@ -15,27 +15,29 @@ import {
 } from '../services/events.service';
 import { google } from 'googleapis';
 import { currentSession, UserSession } from '../utilities/user-session';
-import { getUserAccountService, getUserGoogleClientService, IUserThirdPartyAccount } from '../services/users.service';
-import * as z from 'zod';
+import { getUserAccountService, getUserGoogleClientService } from '../services/users.service';
 import { ZodError } from 'zod';
+import { EventInfoDO, IUserThirdPartyAccount, Role } from '../utilities/types';
+import * as z from 'zod';
 
-export const zEventInfo = z.object({
+const zEventInfo = z.object({
     name: z.string(),
     description: z.string(),
     location: z.string(),
     start: z.string().transform((value) => new Date(value)),
     end: z.string().transform((value) => new Date(value)),
-    imgUrl: z.nullish(z.string()),
+    imgUrl: z.string().optional(),
 });
 
 export async function createEvent(req: Request, res: Response) {
     const session: UserSession | null = await currentSession(req);
+    const authorizedEventCreatorRoles: Array<Role> = ['admin', 'staff'];
 
-    if (!session || session.user.role === 'user') {
+    if (!session || !authorizedEventCreatorRoles.includes(session.user.role as Role)) {
         return res.status(401).json('Not authenticated');
     }
 
-    const eventInfo = zEventInfo.parse(req.body);
+    const eventInfo: EventInfoDO = zEventInfo.parse(req.body);
 
     try {
         await createEventService(eventInfo);
