@@ -73,9 +73,9 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
             ) : null}
             <EventList events={events} />
             <AttendOrCancelEventDialog
+                eventUrl={eventUrl}
                 dialogOpen={dialogOpen}
                 selectedEventId={selectedEventId}
-                isAttending={eventUrl === '/attending'}
                 setDialogOpen={setDialogOpen}
             />
         </div>
