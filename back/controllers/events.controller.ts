@@ -31,7 +31,7 @@ const zEventInfo = z.object({
 
 const zIsDateValid = z.date().min(new Date());
 
-const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff'])
+const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff']);
 
 export async function createEvent(req: Request, res: Response) {
     const session: IUserSession | null = await currentSession(req);
