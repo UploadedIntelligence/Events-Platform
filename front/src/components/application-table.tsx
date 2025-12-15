@@ -6,13 +6,6 @@ import { useMutation } from '@tanstack/react-query';
 import QueryClient from '../services/tanstack-query-client.ts';
 
 export function ApplicationTable({ applications }: { applications: Array<Application> | undefined }) {
-    // async function applicationResponse(
-    //     applicant_email: string,
-    //     response: 'approved' | 'rejected',
-    //     role: Role,
-    // ): Promise<void> {
-    //     await axios.put('/application-response', { applicant_email, response, role });
-    // }
     const { mutate } = useMutation({
         mutationFn: (variables: { applicant_email: string; response: 'approved' | 'rejected'; role: Role }) => {
             return axios.put('/application-response', {
