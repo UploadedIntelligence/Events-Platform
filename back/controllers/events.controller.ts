@@ -17,7 +17,7 @@ import { google } from 'googleapis';
 import { currentSession } from '../utilities/user-session';
 import { getUserAccountService, getUserGoogleClientService } from '../services/users.service';
 import { ZodError } from 'zod';
-import { EventInfoDO, IUserThirdPartyAccount, Role, IUserSession } from '../utilities/types';
+import { EventInfoDO, IUserThirdPartyAccount, IUserSession } from '../utilities/types';
 import * as z from 'zod';
 
 const zEventInfo = z.object({
