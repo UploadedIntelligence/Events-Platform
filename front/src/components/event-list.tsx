@@ -27,7 +27,7 @@ export function EventList({ events }: { events: Array<IUserEvents> | [] }) {
                             return (
                                 <Button
                                     key={index}
-                                    color={action?.type === '/attending' ? 'secondary' : 'primary'}
+                                    color={action?.type === '/attending' ? 'error' : 'success'}
                                     size="small"
                                     onClick={() => action?.action()}
                                 >
