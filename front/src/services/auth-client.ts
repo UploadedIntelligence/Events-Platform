@@ -8,7 +8,7 @@ export default createAuthClient({
             user: {
                 role: {
                     type: 'string',
-                    defaultValue: 'user'
+                    defaultValue: 'user',
                 },
             },
         }),
