@@ -9,8 +9,8 @@ import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
 import { getSession } from '../../../utilities/user-permissions.ts';
 import { Navigate } from 'react-router-dom';
-import { disablePast, minDateTime } from '../../../utilities/validation.ts';
-
+import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
+// passing a sequence of invalid dates causes the error message to flicker
 export function CreateEvent() {
     const user = getSession();
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -58,7 +58,7 @@ export function CreateEvent() {
     return (
         <div>
             {user?.role === 'staff' || user?.role === 'admin' ? (
-                <form className="create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
+                <form className="Create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"
                         error={!!errors.name}
@@ -105,6 +105,7 @@ export function CreateEvent() {
                                 required: true,
                                 validate: {
                                     disablePast: disablePast('Start time'),
+                                    isValidDate: isValidDateTime(),
                                 },
                             }}
                             render={({ field: { onChange, ...rest } }) => {
@@ -116,7 +117,7 @@ export function CreateEvent() {
                                         disablePast
                                         maxDateTime={endDateTime ?? undefined}
                                         onChange={(newValue) => {
-                                            onChange(newValue);
+                                            onChange(newValue ?? null);
                                             if (endDateTime) trigger('end');
                                         }}
                                         onError={(error) => {
@@ -129,6 +130,7 @@ export function CreateEvent() {
                                         }}
                                         slotProps={{
                                             textField: {
+                                                error: !!errors.start,
                                                 helperText: errors.start?.message,
                                             },
                                         }}
@@ -143,6 +145,7 @@ export function CreateEvent() {
                                 required: true,
                                 validate: {
                                     disablePast: disablePast('End time'),
+                                    isValidDate: isValidDateTime(),
                                     minDateTime: minDateTime<CreateEventForm>('End time', 'start time', 'start'),
                                 },
                             }}
@@ -155,7 +158,7 @@ export function CreateEvent() {
                                         disablePast
                                         minDateTime={startDateTime ?? undefined}
                                         onChange={(newValue) => {
-                                            onChange(newValue);
+                                            onChange(newValue ?? null);
                                             if (startDateTime) trigger('start');
                                         }}
                                         onError={(error) => {
@@ -168,6 +171,7 @@ export function CreateEvent() {
                                         }}
                                         slotProps={{
                                             textField: {
+                                                error: !!errors.end,
                                                 helperText: errors.end?.message,
                                             },
                                         }}
@@ -176,7 +180,13 @@ export function CreateEvent() {
                             }}
                         />
                     </LocalizationProvider>
-                    <Button type="submit" variant="contained" disabled={!isValid || requestState !== 'Idle'}>
+                    <Button
+                        className="Create-event-submit-button"
+                        type="submit"
+                        variant="contained"
+                        disabled={!isValid || requestState !== 'Idle'}
+                        color="success"
+                    >
                         Submit Event
                     </Button>
                     {isVisible && (

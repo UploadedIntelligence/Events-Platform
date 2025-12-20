@@ -6,6 +6,10 @@ export function disablePast(fieldLabel: string): (time: Dayjs | null) => Message
         fieldValue && fieldValue.isBefore(dayjs()) ? `${fieldLabel} cannot be in the past` : undefined;
 }
 
+export function isValidDateTime(): (time: Dayjs | null) => boolean | Message {
+    return (fieldValue: Dayjs | null) => !!(fieldValue && fieldValue.isValid());
+}
+
 export function minDateTime<TFormValue>(
     fieldLabel: string,
     dependentFieldLabel: string,
