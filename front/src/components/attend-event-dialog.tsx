@@ -71,8 +71,8 @@ export function AttendOrCancelEventDialog({
                             Confirm {isAttending ? 'cancellation' : 'attendance'}?
                         </DialogTitle>
                         <DialogActions>
-                            <Button onClick={attendOrCancelEvent}>Yes</Button>
-                            <Button onClick={handleClose}>No</Button>
+                            <Button onClick={attendOrCancelEvent} color='success'>Yes</Button>
+                            <Button onClick={handleClose} color='error'>No</Button>
                         </DialogActions>
                     </>
                 )}

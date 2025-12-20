@@ -65,10 +65,10 @@ export function RegisterPage() {
             {user ? (
                 <Navigate to="/" />
             ) : (
-                <div className="register">
+                <div className="Register">
                     <Typography>Register</Typography>
                     <form
-                        className="register"
+                        className="Register"
                         onSubmit={(event) => {
                             event.preventDefault();
                             emailRegister();

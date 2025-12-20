@@ -2,7 +2,7 @@ import '../../App.css';
 import { Route, Routes } from 'react-router-dom';
 import { LoginPage } from './login.tsx';
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
-import { green, red } from '@mui/material/colors';
+import { red, grey } from '@mui/material/colors';
 import authClient from '../../services/auth-client.ts';
 import { RegisterPage } from './register.tsx';
 import { Spinner } from '../../components/loading.tsx';
@@ -16,7 +16,7 @@ function LandingPage() {
         palette: {
             mode: userTheme ? 'dark' : 'light',
             primary: {
-                main: green[700],
+                main: grey[600],
             },
             secondary: {
                 main: red[500],

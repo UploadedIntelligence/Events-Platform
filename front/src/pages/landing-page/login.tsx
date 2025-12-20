@@ -49,9 +49,9 @@ export function LoginPage() {
             {user ? (
                 <Navigate to="/" />
             ) : (
-                <div className="login">
+                <div className="Login">
                     <Typography>Log In</Typography>
-                    <form className="login" action={emailSingIn}>
+                    <form className="Login" action={emailSingIn}>
                         <TextField
                             label="Email"
                             error={!!errors.email?.message}

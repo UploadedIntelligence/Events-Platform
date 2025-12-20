@@ -4,8 +4,8 @@
     &-main {
         border-radius: 8px;
         background: none;
-        border-top: 1px solid red;
-        border-bottom: 1px solid red;
+        border-top: 1px solid #565656;
+        border-bottom: 1px solid #565656;
         margin-bottom: 8px;
     }
 
@@ -23,5 +23,11 @@
         &.active {
             color: #646cff;
         }
+    }
+}
+
+.Create-event {
+    &-submit-button {
+        background: green;
     }
 }

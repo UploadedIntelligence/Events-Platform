@@ -2,13 +2,13 @@
     min-height: 100vh;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
 }
 
-.login,
-.register,
-.create-event {
+.Login,
+.Register,
+.Create-event {
     display: inline-grid;
     gap: 10px;
 }
