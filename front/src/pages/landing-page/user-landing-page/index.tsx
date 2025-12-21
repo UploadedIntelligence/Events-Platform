@@ -1,4 +1,5 @@
 import '../../../styles/nav-bar.scss';
+import '../../../App.css';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { UserEvents } from './user-events.tsx';
 import { CreateEvent } from './create-event.tsx';
@@ -7,11 +8,12 @@ import { NavBar } from '../../../components/nav-bar.tsx';
 import { AdminSettings } from './user-profile/admin-settings';
 import { UserSettings } from './user-profile/user-settings.tsx';
 import { getSession } from '../../../utilities/user-permissions.ts';
+import { Paper } from '@mui/material';
 
 export function UserLandingPage() {
     const user = getSession();
     return (
-        <div>
+        <Paper>
             {user ? <NavBar /> : <Navigate to="/login" />}
             <Routes>
                 <Route path="/create-event" element={<CreateEvent />} />
@@ -23,6 +25,6 @@ export function UserLandingPage() {
                 <Route path="/admin-settings/*" element={<AdminSettings />} />
                 <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
-        </div>
+        </Paper>
     );
 }
