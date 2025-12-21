@@ -3,8 +3,8 @@ import authClient from '../../services/auth-client.ts';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { googleSignIn } from '../../services/google-sign-in.ts';
 import { getSession } from '../../utilities/user-permissions.ts';
+import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -120,12 +120,19 @@ export function RegisterPage() {
                             <Typography sx={{ width: 'fit-content', justifySelf: 'center' }}>ℹ️ Strength: </Typography>
                         </Tooltip>
                         <LinearProgress variant="determinate" value={strength}></LinearProgress>
-                        <Button type="submit" disabled={!(isValid && strength === 100)} variant="contained">
+                        <Button
+                            type="submit"
+                            disabled={!(isValid && strength === 100)}
+                            variant="contained"
+                            color="success"
+                        >
                             Submit
                         </Button>
                     </form>
-                    <Button onClick={googleSignIn}>Google Signup/Login</Button>
-                    <Button onClick={() => navigate('/')}>Login with password</Button>
+                    <Button onClick={() => navigate('/')} color="success">
+                        Login with password
+                    </Button>
+                    <SocialMediaIconButtons />
                 </div>
             )}
         </div>

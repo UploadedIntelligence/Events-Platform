@@ -4,8 +4,8 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { googleSignIn } from '../../services/google-sign-in.ts';
 import { getSession } from '../../utilities/user-permissions.ts';
+import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -64,12 +64,14 @@ export function LoginPage() {
                             helperText={errors.password?.message}
                             {...register('password', { required: 'Field required' })}
                         />
-                        <Button type="submit" disabled={!isValid} variant="contained">
+                        <Button type="submit" disabled={!isValid} variant="contained" color="success">
                             Submit
                         </Button>
                     </form>
-                    <Button onClick={() => navigate('/register')}>Register</Button>
-                    <Button onClick={googleSignIn}>Google Signup/Login</Button>
+                    <Button onClick={() => navigate('/register')} color="success">
+                        Register
+                    </Button>
+                    <SocialMediaIconButtons />
                     <Snackbar
                         autoHideDuration={5000}
                         open={invalidCredentials}
