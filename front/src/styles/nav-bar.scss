@@ -3,9 +3,8 @@
 .NavBar {
     &-main {
         border-radius: 8px;
-        background: none;
-        border-top: 1px solid #565656;
-        border-bottom: 1px solid #565656;
+        border-top: 2px solid #565656;
+        border-bottom: 2px solid #565656;
         margin-bottom: 8px;
     }
 
@@ -21,13 +20,7 @@
 
     &-option {
         &.active {
-            color: #646cff;
+            color: #5159f6;
         }
-    }
-}
-
-.Create-event {
-    &-submit-button {
-        background: green;
     }
 }

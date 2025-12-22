@@ -21,23 +21,20 @@ export function NavBar() {
     }
     return (
         <AppBar className="NavBar-main" position="static">
-            <Toolbar
-                variant="dense"
-                sx={{ display: 'inline', minHeight: 0, justifyItems: 'flex', background: 'black' }}
-            >
+            <Toolbar variant="dense" sx={{ display: 'inline', minHeight: 0, justifyItems: 'flex' }}>
                 <div className="NavBar-content">
                     {data?.user?.role !== 'user' && (
-                        <Button component={NavLink} to="/create-event" className="NavBar-option">
+                        <Button component={NavLink} to="/create-event" className="NavBar-option" variant="outlined">
                             create event
                         </Button>
                     )}
-                    <Button component={NavLink} to="/upcoming-events" className="NavBar-option">
+                    <Button component={NavLink} to="/upcoming-events" className="NavBar-option" variant="outlined">
                         upcoming events
                     </Button>
-                    <Button component={NavLink} to="/past-events" className="NavBar-option">
+                    <Button component={NavLink} to="/past-events" className="NavBar-option" variant="outlined">
                         past events
                     </Button>
-                    <Button component={NavLink} to="/attending" className="NavBar-option">
+                    <Button component={NavLink} to="/attending" className="NavBar-option" variant="outlined">
                         attending
                     </Button>
 
@@ -47,6 +44,7 @@ export function NavBar() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                         onClick={handleClick}
+                        variant="outlined"
                     >
                         Dashboard
                     </Button>

@@ -8,12 +8,12 @@ import { NavBar } from '../../../components/nav-bar.tsx';
 import { AdminSettings } from './user-profile/admin-settings';
 import { UserSettings } from './user-profile/user-settings.tsx';
 import { getSession } from '../../../utilities/user-permissions.ts';
-import { Paper } from '@mui/material';
+import { BackgroundPaper } from '../../../mui-styled-components';
 
 export function UserLandingPage() {
     const user = getSession();
     return (
-        <Paper>
+        <BackgroundPaper>
             {user ? <NavBar /> : <Navigate to="/login" />}
             <Routes>
                 <Route path="/create-event" element={<CreateEvent />} />
@@ -25,6 +25,6 @@ export function UserLandingPage() {
                 <Route path="/admin-settings/*" element={<AdminSettings />} />
                 <Route path="/user-settings" element={<UserSettings />} />
             </Routes>
-        </Paper>
+        </BackgroundPaper>
     );
 }

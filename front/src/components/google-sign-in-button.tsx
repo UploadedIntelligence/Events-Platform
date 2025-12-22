@@ -2,8 +2,14 @@ import '../styles/google-signin-button.scss';
 import { googleSignIn } from '../services/google-sign-in.ts';
 
 export function GoogleSignInButton() {
+    const userTheme: boolean = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
     return (
-        <button className="gsi-material-button" onClick={googleSignIn}>
+        <button
+            className="gsi-material-button"
+            onClick={googleSignIn}
+            style={{ background: userTheme ? '#131314' : 'white', color: userTheme ? '#e3e3e3' : 'black' }}
+        >
             <div className="gsi-material-button-state"></div>
             <div className="gsi-material-button-content-wrapper">
                 <div className="gsi-material-button-icon">

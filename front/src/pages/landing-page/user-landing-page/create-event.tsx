@@ -184,7 +184,6 @@ export function CreateEvent() {
                         />
                     </LocalizationProvider>
                     <Button
-                        className="Create-event-submit-button"
                         type="submit"
                         variant="contained"
                         disabled={!isValid || requestState !== 'Idle'}

@@ -3,21 +3,14 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     -webkit-appearance: none;
-    background-color: #131314;
-    background-image: none;
     border: 1px solid #747775;
     -webkit-border-radius: 20px;
     border-radius: 5px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #e3e3e3;
     cursor: pointer;
     font-family: 'Roboto', arial, sans-serif;
     font-size: 14px;
     height: 40px;
     letter-spacing: 0.25px;
-    outline: none;
-    overflow: hidden;
     padding: 0 12px;
     position: relative;
     text-align: center;
@@ -34,7 +27,6 @@
     width: auto;
     max-width: 400px;
     min-width: min-content;
-    border-color: #8e918f;
 }
 
 .gsi-material-button .gsi-material-button-icon {
