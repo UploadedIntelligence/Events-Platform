@@ -1,11 +1,12 @@
-import { Button, TextField, Typography, Alert, Snackbar } from '@mui/material';
+import { Button, TextField, Typography, Alert, Snackbar, Paper } from '@mui/material';
 import authClient from '../../services/auth-client.ts';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { googleSignIn } from '../../services/google-sign-in.ts';
 import { getSession } from '../../utilities/user-permissions.ts';
+import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
+import { StyledPaper } from '../../mui-styled-components';
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -30,12 +31,12 @@ export function LoginPage() {
         const { data, error } = await authClient.signIn.email({
             email: user_email,
             password: user_password,
+            callbackURL: '/upcoming-events',
         });
 
-        console.log('manual sign in error:', { data, error });
-        if (error) {
+        if (error !== null) {
             setInvalidCredentials(true);
-            console.log('manual sign in error:', error);
+            console.log('manual sign in error:', { data, error });
         }
     }
 
@@ -45,11 +46,11 @@ export function LoginPage() {
     };
 
     return (
-        <div>
+        <StyledPaper>
             {user ? (
                 <Navigate to="/" />
             ) : (
-                <div className="Login">
+                <Paper className="Login" sx={{ boxShadow: 'none' }}>
                     <Typography>Log In</Typography>
                     <form className="Login" action={emailSingIn}>
                         <TextField
@@ -64,12 +65,14 @@ export function LoginPage() {
                             helperText={errors.password?.message}
                             {...register('password', { required: 'Field required' })}
                         />
-                        <Button type="submit" disabled={!isValid} variant="contained">
+                        <Button type="submit" disabled={!isValid} variant="contained" color="success">
                             Submit
                         </Button>
                     </form>
-                    <Button onClick={() => navigate('/register')}>Register</Button>
-                    <Button onClick={googleSignIn}>Google Signup/Login</Button>
+                    <Button onClick={() => navigate('/register')} color="success">
+                        Register
+                    </Button>
+                    <SocialMediaIconButtons />
                     <Snackbar
                         autoHideDuration={5000}
                         open={invalidCredentials}
@@ -80,8 +83,8 @@ export function LoginPage() {
                             Invalid credentials.
                         </Alert>
                     </Snackbar>
-                </div>
+                </Paper>
             )}
-        </div>
+        </StyledPaper>
     );
 }

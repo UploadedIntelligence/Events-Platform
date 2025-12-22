@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { Role } from '../../../../../utilities/types.ts';
 import { ViewApplications } from './view-applications.tsx';
 import { getSession } from '../../../../../utilities/user-permissions.ts';
+import { StyledPaper } from '../../../../../mui-styled-components';
 
 export interface Application {
     userEmail: string;
@@ -20,7 +21,7 @@ export function AdminSettings() {
     }
 
     return (
-        <div>
+        <StyledPaper>
             <Card>
                 <NavLink to="/user-profile">
                     <Button>Go Back</Button>
@@ -39,6 +40,6 @@ export function AdminSettings() {
             <Routes>
                 <Route path="/view-applications" element={<ViewApplications />} />
             </Routes>
-        </div>
+        </StyledPaper>
     );
 }

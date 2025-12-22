@@ -1,3 +1,4 @@
+import '../../../App.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from '../../../config/client.ts';
 import { Spinner } from '../../../components/loading.tsx';
@@ -6,6 +7,7 @@ import { AttendOrCancelEventDialog } from '../../../components/attend-event-dial
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
+import { StyledPaper } from '../../../mui-styled-components';
 
 export interface IUserEvents {
     id: string;
@@ -65,7 +67,7 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
     }
 
     return (
-        <div>
+        <StyledPaper>
             {eventUrl === '/user-history' ? (
                 <NavLink to="/user-profile">
                     <Button style={{ margin: '0.5em' }}>Go Back</Button>
@@ -78,6 +80,6 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                 selectedEventId={selectedEventId}
                 setDialogOpen={setDialogOpen}
             />
-        </div>
+        </StyledPaper>
     );
 }

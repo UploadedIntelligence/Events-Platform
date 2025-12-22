@@ -10,7 +10,10 @@ import 'dayjs/locale/en-gb';
 import { getSession } from '../../../utilities/user-permissions.ts';
 import { Navigate } from 'react-router-dom';
 import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
+import { StyledPaper } from '../../../mui-styled-components';
+
 // passing a sequence of invalid dates causes the error message to flicker
+
 export function CreateEvent() {
     const user = getSession();
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -56,7 +59,7 @@ export function CreateEvent() {
     }
 
     return (
-        <div>
+        <StyledPaper>
             {user?.role === 'staff' || user?.role === 'admin' ? (
                 <form className="Create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
@@ -181,7 +184,6 @@ export function CreateEvent() {
                         />
                     </LocalizationProvider>
                     <Button
-                        className="Create-event-submit-button"
                         type="submit"
                         variant="contained"
                         disabled={!isValid || requestState !== 'Idle'}
@@ -211,6 +213,6 @@ export function CreateEvent() {
             ) : (
                 <Navigate to="/" />
             )}
-        </div>
+        </StyledPaper>
     );
 }

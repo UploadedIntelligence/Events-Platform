@@ -7,7 +7,17 @@ export function EventList({ events }: { events: Array<IUserEvents> | [] }) {
             return new Date(date).toLocaleString('en-GB');
         };
         return (
-            <Card key={index} variant="outlined" sx={{ border: '1px solid grey', marginBottom: '8px' }}>
+            <Card
+                key={index}
+                variant="outlined"
+                sx={{
+                    border: '1px solid grey',
+                    marginBottom: '8px',
+                    width: '100%',
+                    justifySelf: 'center',
+                    maxWidth: '1280px',
+                }}
+            >
                 <CardContent>
                     <Typography variant="h5" component="div">
                         {event.name}
