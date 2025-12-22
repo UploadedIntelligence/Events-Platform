@@ -1,10 +1,11 @@
-import { Button, LinearProgress, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, LinearProgress, TextField, Tooltip, Typography, Paper } from '@mui/material';
 import authClient from '../../services/auth-client.ts';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { getSession } from '../../utilities/user-permissions.ts';
 import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
+import { StyledPaper } from '../../mui-styled-components';
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -53,19 +54,26 @@ export function RegisterPage() {
     }
 
     async function emailRegister() {
-        await authClient.signUp.email({
-            name: name,
-            email: email,
-            password: password,
-        });
+        await authClient.signUp.email(
+            {
+                name: name,
+                email: email,
+                password: password,
+            },
+            {
+                onSuccess: () => {
+                    navigate('/upcoming-events');
+                },
+            },
+        );
     }
 
     return (
-        <div>
+        <StyledPaper>
             {user ? (
                 <Navigate to="/" />
             ) : (
-                <div className="Register">
+                <Paper className="Register" sx={{ boxShadow: 'none' }}>
                     <Typography>Register</Typography>
                     <form
                         className="Register"
@@ -133,8 +141,8 @@ export function RegisterPage() {
                         Login with password
                     </Button>
                     <SocialMediaIconButtons />
-                </div>
+                </Paper>
             )}
-        </div>
+        </StyledPaper>
     );
 }
