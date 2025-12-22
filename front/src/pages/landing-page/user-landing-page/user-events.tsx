@@ -69,9 +69,9 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
     return (
         <StyledPaper>
             {eventUrl === '/user-history' ? (
-                <NavLink to="/user-profile">
-                    <Button style={{ margin: '0.5em' }}>Go Back</Button>
-                </NavLink>
+                <Button component={NavLink} to="/user-profile" variant="outlined" style={{ margin: '0.5em' }}>
+                    Go Back
+                </Button>
             ) : null}
             <EventList events={events} />
             <AttendOrCancelEventDialog

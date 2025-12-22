@@ -1,5 +1,5 @@
 import '../../../../App.css';
-import { Card, Button, CardContent, Typography } from '@mui/material';
+import { Card, Button, CardContent, Typography, Paper } from '@mui/material';
 import { Navigate, NavLink } from 'react-router-dom';
 import { RoleApplication } from '../../../../components/role-application.tsx';
 import { DeleteAccount } from '../../../../components/delete-account-dialog.tsx';
@@ -14,21 +14,36 @@ export function UserProfile() {
                 <Card>
                     <CardContent>
                         <Typography>Hello, {user.name}</Typography>
-                        <div style={{ display: 'grid' }}>
+                        <Paper sx={{ display: 'grid' }}>
                             {user.role === 'admin' && (
-                                <Button component={NavLink} to="/admin-settings" className="UserProfile-option">
+                                <Button
+                                    component={NavLink}
+                                    to="/admin-settings"
+                                    className="UserProfile-option"
+                                    variant="outlined"
+                                >
                                     Admin settings
                                 </Button>
                             )}
-                            <Button component={NavLink} to="/user-settings" className="UserProfile-option">
+                            <Button
+                                component={NavLink}
+                                to="/user-settings"
+                                className="UserProfile-option"
+                                variant="outlined"
+                            >
                                 User settings
                             </Button>
                             {user.role === 'user' && <RoleApplication />}
-                            <Button component={NavLink} to="/user-history" className="UserProfile-option">
+                            <Button
+                                component={NavLink}
+                                to="/user-history"
+                                className="UserProfile-option"
+                                variant="outlined"
+                            >
                                 History
                             </Button>
                             <DeleteAccount />
-                        </div>
+                        </Paper>
                     </CardContent>
                 </Card>
             ) : (

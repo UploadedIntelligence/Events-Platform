@@ -24,7 +24,9 @@ export function AdminSettings() {
         <StyledPaper>
             <Card>
                 <NavLink to="/user-profile">
-                    <Button>Go Back</Button>
+                    <Button variant="outlined" sx={{ margin: '0.5em' }}>
+                        Go Back
+                    </Button>
                 </NavLink>
 
                 <CardActions style={{ display: 'grid' }}>
@@ -32,6 +34,7 @@ export function AdminSettings() {
                         component={NavLink}
                         to={applicationsVisible ? '/admin-settings' : '/admin-settings/view-applications'}
                         onClick={() => setApplicationsVisible(!applicationsVisible)}
+                        variant="outlined"
                     >
                         {applicationsVisible ? 'Hide ' : 'View '}Applications
                     </Button>
