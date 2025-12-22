@@ -40,7 +40,9 @@ export function DeleteAccount() {
 
     return (
         <>
-            <Button onClick={handleClickOpen}>Delete Account</Button>
+            <Button onClick={handleClickOpen} variant="outlined">
+                Delete Account
+            </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
