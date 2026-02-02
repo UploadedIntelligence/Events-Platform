@@ -46,7 +46,6 @@ export function LoginPage() {
         setInvalidCredentials(false);
     };
 
-    // @ts-ignore
     return (
         <StyledPaper>
             {user ? (
