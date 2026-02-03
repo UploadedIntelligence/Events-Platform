@@ -5,7 +5,7 @@ const userTheme: boolean = window.matchMedia('(prefers-color-scheme: dark)').mat
 
 export const StyledPaper = styled(Paper)(() => ({
     padding: '10px',
-    width: '90%',
+    width: '100vw',
     justifySelf: 'center',
     background: 'transparent',
     height: '100%',
@@ -14,5 +14,8 @@ export const StyledPaper = styled(Paper)(() => ({
 }));
 
 export const BackgroundPaper = styled(Paper)(() => ({
-    background: userTheme ? '#212830' : '#f4f4f4',
+    background: userTheme ? 'rgb(10 12 16)' : '#f4f4f4',
+    minHeight: '90vh',
+    display: 'flex',
 }));
+
