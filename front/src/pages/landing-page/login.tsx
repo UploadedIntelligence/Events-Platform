@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { getSession } from '../../utilities/user-permissions.ts';
 import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
 import { StyledPaper } from '../../components/background-parent-components/background-parent-components.tsx';
-import { CustomButton } from "../../components/button/button.tsx";
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -73,9 +72,6 @@ export function LoginPage() {
                     <Button onClick={() => navigate('/register')} color="success">
                         Register
                     </Button>
-                    <CustomButton variant='primary'>Primary Button</CustomButton>
-                    <CustomButton variant='secondary'>Secondary Button</CustomButton>
-                    <CustomButton variant='ghost'>Ghost button</CustomButton>
                     <SocialMediaIconButtons />
                     <Snackbar
                         autoHideDuration={5000}

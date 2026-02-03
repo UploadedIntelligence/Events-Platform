@@ -31,7 +31,6 @@ export function CreateEvent() {
     } = useForm({
         mode: 'onChange',
         defaultValues: {
-            image: undefined,
             name: '',
             description: '',
             location: '',
@@ -41,13 +40,11 @@ export function CreateEvent() {
     });
     const startDateTime = watch('start');
     const endDateTime = watch('end');
-    const image = watch('image');
 
     async function createEvent(event_data: CreateEventForm) {
         setRequestState('Pending');
         try {
             await axios.post('/create-event', {
-                image: image,
                 ...event_data,
                 start: event_data.start?.toISOString(),
                 end: event_data.end?.toISOString(),
@@ -64,7 +61,7 @@ export function CreateEvent() {
     return (
         <StyledPaper>
             {user?.role === 'staff' || user?.role === 'admin' ? (
-                <form className="Create-event-form" onSubmit={handleSubmit(createEvent)}>
+                <form className="Create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
                     <TextField
                         label="Event Name"
                         error={!!errors.name}

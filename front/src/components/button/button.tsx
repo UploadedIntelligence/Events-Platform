@@ -6,7 +6,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant: 'primary' | 'secondary' | 'ghost';
 }
 
-export function CustomButton({ children, ...remainingProps }: ButtonProps) {
+export function EpButton({ children, ...remainingProps }: ButtonProps) {
     return (
         <button className={`EpButton EpButton--${remainingProps.variant}`} {...remainingProps}>
             {children}
