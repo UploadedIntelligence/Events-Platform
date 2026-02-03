@@ -1,7 +1,7 @@
 import { Button, CardActions, Card } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { getSession } from '../../../../utilities/user-permissions.ts';
-import { StyledPaper } from '../../../../mui-styled-components';
+import { StyledPaper } from "../../../../components/background-parent-components/background-parent-components.tsx";
 
 export function UserSettings() {
     const user = getSession();

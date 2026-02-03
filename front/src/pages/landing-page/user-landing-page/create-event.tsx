@@ -1,4 +1,3 @@
-import '../../../styles/events-display.scss';
 import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
 import axios from '../../../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
@@ -45,7 +44,6 @@ export function CreateEvent() {
     const image = watch('image');
 
     async function createEvent(event_data: CreateEventForm) {
-        console.log(event_data.image);
         setRequestState('Pending');
         try {
             await axios.post('/create-event', {

@@ -7,7 +7,7 @@ import { AttendOrCancelEventDialog } from '../../../components/attend-event-dial
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { StyledPaper } from '../../../mui-styled-components';
+import { StyledPaper} from "../../../components/background-parent-components/background-parent-components.tsx";
 
 export interface IUserEvents {
     id: string;
