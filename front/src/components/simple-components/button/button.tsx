@@ -1,4 +1,4 @@
-import './button-styles.scss';
+import './button.scss';
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -8,7 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function CustomButton({ children, ...remainingProps }: ButtonProps) {
     return (
-        <button className={`${remainingProps.variant}-button`} {...remainingProps}>
+        <button className={`EpButton EpButton--${remainingProps.variant}`} {...remainingProps}>
             {children}
         </button>
     );

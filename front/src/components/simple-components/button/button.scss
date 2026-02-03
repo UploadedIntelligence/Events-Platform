@@ -1,13 +1,19 @@
-.primary-button {
+.EpButton {
+  font-weight: 600;
+  font-family: sans-serif;
+}
+
+.EpButton--primary {
     background: #0d7ff2;
-    font-family: sans-serif;
-    font-weight: 600;
+
     &:hover {
         background: #0d7ff2e6;
     }
+
     &:disabled {
         background: #ffffff1f;
         color: #ffffff4d;
+
         &:hover {
             background: #ffffff1f;
             color: #ffffff4d;
@@ -15,16 +21,17 @@
     }
 }
 
-.secondary-button {
+.EpButton--secondary {
     background: #1e293b;
-    font-family: sans-serif;
-    font-weight: 600;
+
     &:hover {
         background: #334155;
     }
+
     &:disabled {
         background: #ffffff1f;
         color: #ffffff4d;
+
         &:hover {
             background: #ffffff1f;
             color: #ffffff4d;
@@ -32,32 +39,10 @@
     }
 }
 
-.ghost-button {
+.EpButton--ghost {
     background: none;
+
     &:active {
-        background: rgba(0, 0, 0, 0.2);
+        background: #00000033;
     }
 }
-
-.Icon-button {
-  background: none;
-  position: absolute;
-  top: 35px;
-  left: 35px;
-  &:hover {
-    background: #626060;
-  }
-}
-
-//.Toggle-button-container {
-//  background: #1e293b;
-//  display: flex;
-//  justify-content: space-evenly;
-//}
-//
-//.Toggle-button {
-//  background: none;
-//  &:active {
-//    background: #101922;
-//  }
-//}
