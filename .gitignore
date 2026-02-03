@@ -7,7 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+front/node_modules
+back/node_modules
+back/generated/prisma
 dist
 dist-ssr
 *.local

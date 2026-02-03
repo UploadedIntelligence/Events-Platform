@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { Role } from '../../../../../utilities/types.ts';
 import { ViewApplications } from './view-applications.tsx';
 import { getSession } from '../../../../../utilities/user-permissions.ts';
-import { StyledPaper } from '../../../../../mui-styled-components';
+import { StyledPaper } from "../../../../../components/background-parent-components/background-parent-components.tsx";
 
 export interface Application {
     userEmail: string;

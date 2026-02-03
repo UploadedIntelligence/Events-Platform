@@ -1,0 +1,48 @@
+.EpButton {
+  font-weight: 600;
+  font-family: sans-serif;
+}
+
+.EpButton--primary {
+    background: #0d7ff2;
+
+    &:hover {
+        background: #0d7ff2e6;
+    }
+
+    &:disabled {
+        background: #ffffff1f;
+        color: #ffffff4d;
+
+        &:hover {
+            background: #ffffff1f;
+            color: #ffffff4d;
+        }
+    }
+}
+
+.EpButton--secondary {
+    background: #1e293b;
+
+    &:hover {
+        background: #334155;
+    }
+
+    &:disabled {
+        background: #ffffff1f;
+        color: #ffffff4d;
+
+        &:hover {
+            background: #ffffff1f;
+            color: #ffffff4d;
+        }
+    }
+}
+
+.EpButton--ghost {
+    background: none;
+
+    &:active {
+        background: #00000033;
+    }
+}

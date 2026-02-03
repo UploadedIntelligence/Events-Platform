@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { getSession } from '../../utilities/user-permissions.ts';
 import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
-import { StyledPaper } from '../../mui-styled-components';
+import { StyledPaper } from '../../components/background-parent-components/background-parent-components.tsx';
 
 export function LoginPage() {
     const navigate = useNavigate();
