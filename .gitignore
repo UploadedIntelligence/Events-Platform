@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 front/node_modules
+front/.env
 back/node_modules
 back/generated/prisma
 back/config/.env
