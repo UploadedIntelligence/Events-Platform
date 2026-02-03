@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { getSession } from '../../utilities/user-permissions.ts';
 import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
-import { StyledPaper } from '../../mui-styled-components';
+import { StyledPaper } from '../../components/simple-components/background-parent-components/background-parent-components.tsx';
 
 export function RegisterPage() {
     const navigate = useNavigate();

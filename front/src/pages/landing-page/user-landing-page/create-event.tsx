@@ -1,3 +1,4 @@
+import '../../../styles/events-display.scss';
 import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
 import axios from '../../../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,7 +11,7 @@ import 'dayjs/locale/en-gb';
 import { getSession } from '../../../utilities/user-permissions.ts';
 import { Navigate } from 'react-router-dom';
 import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
-import { StyledPaper } from '../../../mui-styled-components';
+import { StyledPaper } from '../../../components/simple-components/background-parent-components/background-parent-components.tsx';
 
 // passing a sequence of invalid dates causes the error message to flicker
 
@@ -31,6 +32,7 @@ export function CreateEvent() {
     } = useForm({
         mode: 'onChange',
         defaultValues: {
+            image: undefined,
             name: '',
             description: '',
             location: '',
@@ -40,11 +42,14 @@ export function CreateEvent() {
     });
     const startDateTime = watch('start');
     const endDateTime = watch('end');
+    const image = watch('image');
 
     async function createEvent(event_data: CreateEventForm) {
+        console.log(event_data.image);
         setRequestState('Pending');
         try {
             await axios.post('/create-event', {
+                image: image,
                 ...event_data,
                 start: event_data.start?.toISOString(),
                 end: event_data.end?.toISOString(),
@@ -61,7 +66,7 @@ export function CreateEvent() {
     return (
         <StyledPaper>
             {user?.role === 'staff' || user?.role === 'admin' ? (
-                <form className="Create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
+                <form className="Create-event-form" onSubmit={handleSubmit(createEvent)}>
                     <TextField
                         label="Event Name"
                         error={!!errors.name}
