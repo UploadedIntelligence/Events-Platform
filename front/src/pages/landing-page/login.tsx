@@ -6,8 +6,8 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { getSession } from '../../utilities/user-permissions.ts';
 import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
-import { StyledPaper } from '../../mui-styled-components';
-import { GhostButton, PrimaryButton, SecondaryButton } from '../../mui-styled-components/buttons/buttons.tsx';
+import { StyledPaper } from '../../components/simple-components/background-parent-components/background-parent-components.tsx';
+import { CustomButton } from '../../components/simple-components/buttons/buttons.tsx';
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -46,7 +46,6 @@ export function LoginPage() {
         setInvalidCredentials(false);
     };
 
-    // @ts-ignore
     return (
         <StyledPaper>
             {user ? (
@@ -74,9 +73,9 @@ export function LoginPage() {
                     <Button onClick={() => navigate('/register')} color="success">
                         Register
                     </Button>
-                    <PrimaryButton>Primary Button</PrimaryButton>
-                    <SecondaryButton>Secondary Button</SecondaryButton>
-                    <GhostButton>Ghost button</GhostButton>
+                    <CustomButton variant='primary'>Primary Button</CustomButton>
+                    <CustomButton variant='secondary'>Secondary Button</CustomButton>
+                    <CustomButton variant='ghost'>Ghost button</CustomButton>
                     <SocialMediaIconButtons />
                     <Snackbar
                         autoHideDuration={5000}
