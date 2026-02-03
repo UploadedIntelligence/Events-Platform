@@ -10,6 +10,7 @@ lerna-debug.log*
 front/node_modules
 back/node_modules
 back/generated/prisma
+back/config/.env
 dist
 dist-ssr
 *.local
