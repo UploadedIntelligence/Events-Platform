@@ -6,8 +6,8 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { getSession } from '../../utilities/user-permissions.ts';
 import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
-import { StyledPaper } from '../../components/simple-components/background-parent-components/background-parent-components.tsx';
-import { CustomButton } from '../../components/simple-components/buttons/buttons.tsx';
+import { StyledPaper } from '../../components/background-parent-components/background-parent-components.tsx';
+import { CustomButton } from "../../components/button/button.tsx";
 
 export function LoginPage() {
     const navigate = useNavigate();
