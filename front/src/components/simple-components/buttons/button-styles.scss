@@ -1,4 +1,4 @@
-.Primary-button {
+.primary-button {
     background: #0d7ff2;
     font-family: sans-serif;
     font-weight: 600;
@@ -15,7 +15,7 @@
     }
 }
 
-.Secondary-button {
+.secondary-button {
     background: #1e293b;
     font-family: sans-serif;
     font-weight: 600;
@@ -32,11 +32,21 @@
     }
 }
 
-.Ghost-button {
+.ghost-button {
     background: none;
-    &:hover {
+    &:active {
         background: rgba(0, 0, 0, 0.2);
     }
+}
+
+.Icon-button {
+  background: none;
+  position: absolute;
+  top: 35px;
+  left: 35px;
+  &:hover {
+    background: #626060;
+  }
 }
 
 //.Toggle-button-container {
