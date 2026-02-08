@@ -1,41 +1,41 @@
 .EpButton {
-  font-weight: 600;
-  font-family: sans-serif;
+    color: var(--Ep-primaryTextColor);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    padding: 0.35em 0.7em;
+    font-size: 1em;
+    font-weight: 600;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+
+    &:disabled {
+        background: var(--Ep-disabledButtonBackgroundColor);
+        color: var(--Ep-disabledButtonColor);
+
+        &:hover {
+            background: var(--Ep-disabledButtonBackgroundColor);
+            color: var(--Ep-disabledButtonColor);
+        }
+    }
 }
 
 .EpButton--primary {
-    background: #0d7ff2;
+    background: var(--Ep-primaryBlue);
 
     &:hover {
-        background: #0d7ff2e6;
+        background: var(--Ep-primaryBlueOnHover);
     }
 
-    &:disabled {
-        background: #ffffff1f;
-        color: #ffffff4d;
 
-        &:hover {
-            background: #ffffff1f;
-            color: #ffffff4d;
-        }
-    }
 }
 
 .EpButton--secondary {
-    background: #1e293b;
+    background: var(--Ep-secondaryBlue);
 
     &:hover {
-        background: #334155;
-    }
-
-    &:disabled {
-        background: #ffffff1f;
-        color: #ffffff4d;
-
-        &:hover {
-            background: #ffffff1f;
-            color: #ffffff4d;
-        }
+        background: var(--Ep-secondaryBlueOnHover);
     }
 }
 
@@ -43,6 +43,11 @@
     background: none;
 
     &:active {
-        background: #00000033;
+        background: var(--Ep-ghostButtonBackgroundActive);
+    }
+
+    &:hover {
+        color: var(--Ep-primaryBlueOnHover);
+        border-color: transparent;
     }
 }
