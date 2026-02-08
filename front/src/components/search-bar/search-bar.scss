@@ -1,0 +1,20 @@
+.EpSearchBar {
+    display: flex;
+    align-items: center;
+    background: var(--Ep-inputBackground);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    height: 100%;
+}
+
+.EpInputField {
+    color: var(--Ep-primaryTextColor);
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 14px;
+
+    &:hover {
+        outline: var(--Ep-primaryBlueOnHover);
+    }
+}
