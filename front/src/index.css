@@ -1,16 +1,27 @@
 :root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
+    --Ep-primaryTextFont: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --Ep-primaryTextFontSize: 1em;
+    --Ep-secondaryTextFontSize: 0.875rem;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+    --Ep-primaryBlue: #0d7ff2;
+    --Ep-primaryBlueOnHover: #0d7ff2e6;
+    --Ep-secondaryBlue: #1e293b;
+    --Ep-secondaryBlueOnHover: #334155;
+    --Ep-ghostButtonBackgroundActive: #00000033;
+    --Ep-disabledButtonColor: #ffffff4d;
+    --Ep-disabledButtonBackgroundColor: #ffffff1f;
+    --Ep-inputBackground: #283039;
 
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @media (prefers-color-scheme: dark) {
+        --Ep-backgroundColor: #0a0c10;
+        --Ep-headerBackgroundColor: #191a1f;
+        --Ep-primaryTextColor: #f4f4f4;
+    }
+
+    @media (prefers-color-scheme: light) {
+        --Ep-backgroundColor: #f4f4f4;
+        --Ep-primaryTextColor: #191a1f;
+    }
 }
 
 a {
@@ -24,32 +35,11 @@ a:hover {
 
 button {
     border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
+    border: 2px solid transparent;
+    padding: 0.35em 0.7em;
     font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.25s;
-}
-button:hover {
-    border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-}
 
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
-    }
-    a:hover {
-        color: #747bff;
-    }
-    button {
-        background-color: #f9f9f9;
+    &:hover {
+        border-color: #646cff;
     }
 }
