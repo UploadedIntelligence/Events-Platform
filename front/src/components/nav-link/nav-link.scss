@@ -1,0 +1,13 @@
+.EpLinkComponent {
+    color: var(--Ep-primaryTextColor);
+    font-size: var(--Ep-secondaryTextFontSize);
+    display: flex;
+    align-items: center;
+    padding: 0.5em 0.5em 0 0.5em ;
+    border-bottom: 2px solid transparent;
+
+    &.active {
+        color: var(--Ep-primaryBlue);
+        border-bottom: 2px solid var(--Ep-primaryBlue);
+    }
+}

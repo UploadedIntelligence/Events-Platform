@@ -1,0 +1,11 @@
+.EpInputField {
+    color: var(--Ep-primaryTextColor);
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 14px;
+
+    &:hover {
+        outline: var(--Ep-primaryBlueOnHover);
+    }
+}

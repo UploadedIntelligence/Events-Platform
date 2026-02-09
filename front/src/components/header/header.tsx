@@ -7,6 +7,8 @@ import { Menu, MenuItem } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 import authClient from '../../services/auth-client.ts';
 import { SearchBar } from '../search-bar/search-bar.tsx';
+import { EpNavLink } from '../nav-link/nav-link.tsx';
+import { EpProfileImage } from "../profile-image/profile-image.tsx";
 
 export function Header({
     isVisible,
@@ -55,18 +57,18 @@ export function Header({
             {user ? (
                 <div className="EpHeaderOptions">
                     {/*buttons need to be toggleable*/}
-                    <EpButton variant="ghost" style={{ fontWeight: '200' }}>
+                    <EpNavLink to='/discover'>
                         Discover
-                    </EpButton>
-                    <EpButton variant="ghost" style={{ fontWeight: '200' }}>
+                    </EpNavLink>
+                    <EpNavLink to='/manage-events'>
                         Manage Events
-                    </EpButton>
-                    <EpButton variant="ghost" style={{ fontWeight: '200' }}>
+                    </EpNavLink>
+                    <EpNavLink to="/calendar">
                         Calendar
-                    </EpButton>
+                    </EpNavLink>
                     <SearchBar />
                     <EpButton onClick={handleClick} variant="ghost">
-                        Profile
+                        <EpProfileImage />
                     </EpButton>
                     <Menu
                         id="basic-menu"
