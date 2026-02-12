@@ -1,5 +1,5 @@
 .EpButton {
-    color: var(--Ep-primaryTextColor);
+    color: var(--Ep-primaryText-color);
     border-radius: 8px;
     border: 2px solid transparent;
     padding: 0.35em 0.7em;
@@ -8,34 +8,33 @@
     font-family: sans-serif;
     display: flex;
     align-items: center;
-    gap: 0.25em;
+    justify-self: center;
+    gap: 0.5em;
 
     &:disabled {
-        background: var(--Ep-disabledButtonBackgroundColor);
-        color: var(--Ep-disabledButtonColor);
+        background: var(--Ep-button-background-color--disabled);
+        color: var(--Ep-button-color--disabled);
 
         &:hover {
-            background: var(--Ep-disabledButtonBackgroundColor);
-            color: var(--Ep-disabledButtonColor);
+            background: var(--Ep-button-background-color--disabled);
+            color: var(--Ep-button-color--disabled);
         }
     }
 }
 
 .EpButton--primary {
-    background: var(--Ep-primaryBlue);
+    background: var(--Ep-blue);
 
     &:hover {
-        background: var(--Ep-primaryBlueOnHover);
+        background: var(--Ep-blue--hover);
     }
-
-
 }
 
 .EpButton--secondary {
     background: var(--Ep-secondaryBlue);
 
     &:hover {
-        background: var(--Ep-secondaryBlueOnHover);
+        background: var(--Ep-secondaryBlue--hover);
     }
 }
 
@@ -43,11 +42,11 @@
     background: none;
 
     &:active {
-        background: var(--Ep-ghostButtonBackgroundActive);
+        background: var(--Ep-ghostButton-background--active);
     }
 
     &:hover {
-        color: var(--Ep-primaryBlueOnHover);
+        color: var(--Ep-blue--hover);
         border-color: transparent;
     }
 }

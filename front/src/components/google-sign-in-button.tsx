@@ -1,16 +1,10 @@
 import '../styles/google-signin-button.scss';
 import { googleSignIn } from '../services/google-sign-in.ts';
+import { EpButton } from './button/button.tsx';
 
 export function GoogleSignInButton() {
-    const userTheme: boolean = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
     return (
-        <button
-            className="gsi-material-button"
-            onClick={googleSignIn}
-            style={{ background: userTheme ? '#131314' : 'white', color: userTheme ? '#e3e3e3' : 'black' }}
-        >
-            <div className="gsi-material-button-state"></div>
+        <EpButton variant="ghost" onClick={googleSignIn}>
             <div className="gsi-material-button-content-wrapper">
                 <div className="gsi-material-button-icon">
                     <svg
@@ -38,8 +32,8 @@ export function GoogleSignInButton() {
                         <path fill="none" d="M0 0h48v48H0z"></path>
                     </svg>
                 </div>
-                <span className="gsi-material-button-contents">Sign in with Google</span>
+                <span className="gsi-material-button-contents">Continue with Google</span>
             </div>
-        </button>
+        </EpButton>
     );
 }
