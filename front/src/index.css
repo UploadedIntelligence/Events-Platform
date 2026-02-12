@@ -1,45 +1,38 @@
 :root {
-    --Ep-primaryTextFont: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    --Ep-primaryTextFontSize: 1em;
-    --Ep-secondaryTextFontSize: 0.875rem;
+    --Ep-primaryText-font: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --Ep-primaryText-font-size: 1em;
+    --Ep-secondaryText-font-size: 0.875rem;
 
-    --Ep-primaryBlue: #0d7ff2;
-    --Ep-primaryBlueOnHover: #0d7ff2e6;
+    --Ep-blue: #0d7ff2;
+    --Ep-blue--hover: #0d7ff2e6;
     --Ep-secondaryBlue: #1e293b;
-    --Ep-secondaryBlueOnHover: #334155;
-    --Ep-ghostButtonBackgroundActive: #00000033;
-    --Ep-disabledButtonColor: #ffffff4d;
-    --Ep-disabledButtonBackgroundColor: #ffffff1f;
-    --Ep-inputBackground: #283039;
+    --Ep-secondaryBlue--hover: #334155;
+    --Ep-ghostButton-background--active: #00000033;
+    --Ep-dataInput-background: #1e293b80;
+    --Ep-dataInput-border-color: #334155;
+    --Ep-searchInput-background: #283039;
+    --Ep-button-color--disabled: #ffffff4d;
+    --Ep-button-background-color--disabled: #ffffff1f;
 
     @media (prefers-color-scheme: dark) {
-        --Ep-backgroundColor: #0a0c10;
-        --Ep-headerBackgroundColor: #191a1f;
-        --Ep-primaryTextColor: #f4f4f4;
+        --Ep-background-color: #0a0c10;
+        --Ep-secondaryBackground-color: #101922ff;
+        --Ep-header-background-color: #191a1f;
+        --Ep-primaryText-color: #f4f4f4;
     }
 
     @media (prefers-color-scheme: light) {
-        --Ep-backgroundColor: #f4f4f4;
-        --Ep-primaryTextColor: #191a1f;
+        --Ep-background-color: #f4f4f4;
+        --Ep-primaryText-color: #191a1f;
     }
 }
 
-a {
-    font-weight: 500;
-    color: #646cff;
-    text-decoration: inherit;
-}
-a:hover {
-    color: #535bf2;
+html {
+    width: 100%;
+    height: 100%;
 }
 
-button {
-    border-radius: 8px;
-    border: 2px solid transparent;
-    padding: 0.35em 0.7em;
-    font-size: 1em;
-
-    &:hover {
-        border-color: #646cff;
-    }
+body {
+    width: 100%;
+    height: 100%;
 }
