@@ -1,0 +1,11 @@
+.EpUserDataInput {
+    display: flex;
+    flex-direction: column;
+}
+
+.EpInputFieldContainer {
+    border-radius: 8px;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--Ep-dataInput-border-color);
+    background: var(--Ep-dataInput-background);
+}
