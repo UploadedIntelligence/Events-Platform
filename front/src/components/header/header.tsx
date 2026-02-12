@@ -85,8 +85,10 @@ export function Header({
                 </div>
             ) : (
                 <div className="EpHeader-options">
-                    <EpButton onClick={() => navigate('/login')}>Sign In</EpButton>
-                    <EpButton onClick={() => navigate('/register')}>Sign Up</EpButton>
+                    <div className="EpHeader-options EpHeader-options--positionRight">
+                        <EpButton onClick={() => navigate('/login')}>Sign In</EpButton>
+                        <EpButton onClick={() => navigate('/register')}>Sign Up</EpButton>
+                    </div>
                 </div>
             )}
         </div>

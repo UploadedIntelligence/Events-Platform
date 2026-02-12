@@ -13,11 +13,10 @@
     display: flex;
     flex: 1;
     gap: 0.5em;
-
-    &.EpHeader-options--positionRight {
-        flex: 0;
-        margin-left: auto;
-    }
 }
 
-
+.EpHeader-options--positionRight {
+    flex: 0;
+    margin-left: auto;
+    white-space: nowrap;
+}
