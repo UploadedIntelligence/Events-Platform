@@ -1,13 +1,10 @@
 import './input-field.scss';
 import React from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    children?: React.ReactNode;
-}
-
-export function EpInputField({ children, ...remainingProps }: InputProps) {
+export function EpInputField({ children, ...remainingProps }: React.ComponentPropsWithRef<'input'>) {
     return (
-        <input className='EpInputField' {...remainingProps}>
+        <input className="EpInputField" {...remainingProps}>
             {children}
-        </input>);
+        </input>
+    );
 }
