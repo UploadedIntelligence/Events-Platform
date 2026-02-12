@@ -1,7 +1,7 @@
 .EpHeader {
     display: flex;
     flex-direction: row;
-    background: var(--Ep-headerBackgroundColor);
+    background: var(--Ep-header-background-color);
     border-radius: 8px 8px 0 0;
     align-items: center;
     gap: 5px;
@@ -9,13 +9,15 @@
     border-bottom: 1px solid grey;
 }
 
-.EpHeaderOptions {
+.EpHeader-options {
     display: flex;
-    align-items: center;
     flex: 1;
     gap: 0.5em;
 
-    > :nth-last-child(2) {
+    &.EpHeader-options--positionRight {
+        flex: 0;
         margin-left: auto;
     }
 }
+
+

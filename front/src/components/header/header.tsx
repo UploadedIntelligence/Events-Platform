@@ -8,7 +8,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import authClient from '../../services/auth-client.ts';
 import { SearchBar } from '../search-bar/search-bar.tsx';
 import { EpNavLink } from '../nav-link/nav-link.tsx';
-import { EpProfileImage } from "../profile-image/profile-image.tsx";
+import { EpProfileImage } from '../profile-image/profile-image.tsx';
 
 export function Header({
     isVisible,
@@ -40,7 +40,7 @@ export function Header({
     }
     return (
         <div className="EpHeader">
-            <div className="EpDashboardButton">
+            <div className="EpHeader-dashboard-button">
                 <EpButton variant="ghost" onClick={changeVisibility}>
                     <EventAvailableIcon
                         sx={{
@@ -55,40 +55,36 @@ export function Header({
                 </EpButton>
             </div>
             {user ? (
-                <div className="EpHeaderOptions">
+                <div className="EpHeader-options">
                     {/*buttons need to be toggleable*/}
-                    <EpNavLink to='/discover'>
-                        Discover
-                    </EpNavLink>
-                    <EpNavLink to='/manage-events'>
-                        Manage Events
-                    </EpNavLink>
-                    <EpNavLink to="/calendar">
-                        Calendar
-                    </EpNavLink>
-                    <SearchBar />
-                    <EpButton onClick={handleClick} variant="ghost">
-                        <EpProfileImage />
-                    </EpButton>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        slotProps={{
-                            list: {
-                                'aria-labelledby': 'basic-button',
-                            },
-                        }}
-                    >
-                        <MenuItem component={NavLink} to="/user-profile">
-                            Settings
-                        </MenuItem>
-                        <MenuItem onClick={logOut}>Logout</MenuItem>
-                    </Menu>
+                    <EpNavLink to="/discover">Discover</EpNavLink>
+                    <EpNavLink to="/manage-events">Manage Events</EpNavLink>
+                    <EpNavLink to="/calendar">Calendar</EpNavLink>
+                    <div className="EpHeader-options EpHeader-options--positionRight">
+                        <SearchBar />
+                        <EpButton onClick={handleClick} variant="ghost">
+                            <EpProfileImage />
+                        </EpButton>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            slotProps={{
+                                list: {
+                                    'aria-labelledby': 'basic-button',
+                                },
+                            }}
+                        >
+                            <MenuItem component={NavLink} to="/user-profile">
+                                Settings
+                            </MenuItem>
+                            <MenuItem onClick={logOut}>Logout</MenuItem>
+                        </Menu>
+                    </div>
                 </div>
             ) : (
-                <div className="EpHeaderOptions">
+                <div className="EpHeader-options">
                     <EpButton onClick={() => navigate('/login')}>Sign In</EpButton>
                     <EpButton onClick={() => navigate('/register')}>Sign Up</EpButton>
                 </div>
