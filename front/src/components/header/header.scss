@@ -1,0 +1,23 @@
+.EpHeader {
+    display: flex;
+    flex-direction: row;
+    background: var(--Ep-header-background-color);
+    border-radius: 8px 8px 0 0;
+    align-items: center;
+    gap: 5px;
+    padding: 0.5em;
+    border-bottom: 1px solid grey;
+}
+
+.EpHeader-options {
+    display: flex;
+    flex: 1;
+    gap: 0.5em;
+
+    &.EpHeader-options--positionRight {
+        flex: 0;
+        margin-left: auto;
+    }
+}
+
+
