@@ -1,15 +1,17 @@
-import { Button, LinearProgress, TextField, Tooltip, Typography, Paper } from '@mui/material';
+import { LinearProgress, Tooltip, Typography } from '@mui/material';
 import authClient from '../../services/auth-client.ts';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { getSession } from '../../utilities/user-permissions.ts';
-import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
-import { StyledPaper } from '../../components/background-parent-components/background-parent-components.tsx';
+import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons/social-media-icon-buttons.tsx';
+import { EpCredentialsPageContent } from '../../components/credentials-page-content/credentials-page-content.tsx';
+import { EpUserCredentialsForm } from '../../components/user-credentials-form/user-credentials-form.tsx';
+import { EpUserDataInput } from '../../components/user-data-input/user-data-input.tsx';
+import { EpButton } from '../../components/button/button.tsx';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 export function RegisterPage() {
     const navigate = useNavigate();
-    const user = getSession();
     const [strength, setStrength] = useState<number>(0);
     const {
         register,
@@ -69,80 +71,68 @@ export function RegisterPage() {
     }
 
     return (
-        <StyledPaper>
-            {user ? (
-                <Navigate to="/" />
-            ) : (
-                <Paper className="Register" sx={{ boxShadow: 'none' }}>
-                    <Typography>Register</Typography>
-                    <form
-                        className="Register"
-                        onSubmit={(event) => {
-                            event.preventDefault();
-                            emailRegister();
-                        }}
-                    >
-                        <TextField
-                            label="Name"
-                            error={!!errors.name?.message && dirtyFields.name}
-                            helperText={errors.name?.message}
-                            {...register('name', {
-                                required: true,
-                                pattern: {
-                                    value: /^\w+$/,
-                                    message: 'Only letters and numbers',
-                                },
-                            })}
-                        />
-                        <TextField
-                            label="Email"
-                            error={!!errors.email?.message && dirtyFields.email}
-                            helperText={errors.email?.message}
-                            {...register('email', {
-                                required: true,
-                                pattern: {
-                                    value: /^[\w.-]+@[\w-]+\.[\w.-]+$/,
-                                    message: 'Invalid email format',
-                                },
-                            })}
-                            onBlur={() => trigger('email')}
-                        />
-                        <TextField
-                            label="Password"
-                            error={!!errors.password?.message && dirtyFields.password}
-                            helperText={errors.password?.message}
-                            {...register('password', {
-                                required: true,
-                                validate: passwordValidation,
-                            })}
-                        />
-                        <Tooltip
-                            placement="bottom"
-                            title={password_tooltip.split('\n').map((line) => (
-                                <Typography fontSize="14px">
-                                    {line}
-                                    <br />
-                                </Typography>
-                            ))}
-                        >
-                            <Typography sx={{ width: 'fit-content', justifySelf: 'center' }}>ℹ️ Strength: </Typography>
-                        </Tooltip>
-                        <LinearProgress variant="determinate" value={strength}></LinearProgress>
-                        <Button
-                            type="submit"
-                            disabled={!(isValid && strength === 100)}
-                            variant="contained"
-                            color="success"
-                        >
-                            Submit
-                        </Button>
-                    </form>
-                    <Button onClick={() => navigate('/')} color="success">
-                        Login with password
-                    </Button>
-                    <SocialMediaIconButtons />
-                </Paper>
-            )}
-        </StyledPaper>
+        <EpCredentialsPageContent>
+            <h3>Register</h3>
+            <SocialMediaIconButtons />
+            <EpUserCredentialsForm
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    emailRegister();
+                }}
+            >
+                <EpUserDataInput
+                    label="Name"
+                    placeholder="JoeBloggs112"
+                    error={!!errors.name && dirtyFields.name}
+                    helperText={errors.name?.message}
+                    {...register('name', {
+                        required: true,
+                        pattern: {
+                            value: /^\w+$/,
+                            message: 'Only letters and numbers',
+                        },
+                    })}
+                />
+                <EpUserDataInput
+                    label="Email"
+                    error={!!errors.email && dirtyFields.email}
+                    helperText={errors.email?.message}
+                    placeholder="name@company.com"
+                    {...register('email', {
+                        required: true,
+                        pattern: {
+                            value: /^[\w.-]+@[\w-]+\.[\w.-]+$/,
+                            message: 'Invalid email format',
+                        },
+                    })}
+                    onBlur={() => trigger('email')}
+                />
+                <EpUserDataInput
+                    label="Password"
+                    placeholder="••••••••"
+                    error={!!errors.password && dirtyFields.password}
+                    helperText={errors.password?.message}
+                    {...register('password', {
+                        required: true,
+                        validate: passwordValidation,
+                    })}
+                />
+                <Tooltip
+                    placement="bottom"
+                    title={password_tooltip.split('\n').map((line) => (
+                        <Typography fontSize="14px">
+                            {line}
+                            <br />
+                        </Typography>
+                    ))}
+                >
+                    <Typography sx={{ width: 'fit-content', justifySelf: 'center' }}>ℹ️ Strength: </Typography>
+                </Tooltip>
+                <LinearProgress variant="determinate" value={strength}></LinearProgress>
+                <EpButton type="submit" disabled={!(isValid && strength === 100)}>
+                    Register <ArrowForwardIcon style={{ fontSize: '1.25em' }} />
+                </EpButton>
+            </EpUserCredentialsForm>
+        </EpCredentialsPageContent>
     );
 }

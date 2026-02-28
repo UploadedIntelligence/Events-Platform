@@ -1,19 +1,29 @@
-import '../../App.css';
 import { Route, Routes } from 'react-router-dom';
 import { LoginPage } from './login.tsx';
 import { RegisterPage } from './register.tsx';
 import { UserLandingPage } from './user-landing-page';
-import { Paper } from '@mui/material';
+import { Header } from '../../components/header/header.tsx';
+import { useState } from 'react';
+import { Dashboard } from '../../components/dashboard/dashboard.tsx';
+import { MainBackground } from '../../components/main-background/main-background.tsx';
+import { EpSecondaryBackground } from '../../components/secondary-background/secondary-background.tsx';
+import { EpFooter } from '../../components/footer/footer.tsx';
 
 export function LandingPage() {
+    const [isVisible, setIsVisible] = useState<boolean>(true);
+
     return (
-        <Paper>
-            <h1>Events Platform</h1>
-            <Routes>
-                <Route path="/*" element={<UserLandingPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-            </Routes>
-        </Paper>
+        <MainBackground>
+            <Header isVisible={isVisible} setIsVisible={setIsVisible} />
+            <EpSecondaryBackground>
+                {isVisible && <Dashboard />}
+                <Routes>
+                    <Route path="/*" element={<UserLandingPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                </Routes>
+            </EpSecondaryBackground>
+            <EpFooter />
+        </MainBackground>
     );
 }
