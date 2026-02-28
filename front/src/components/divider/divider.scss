@@ -1,0 +1,15 @@
+.EpDivider {
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    color: var(--Ep-dividerText-color);
+    gap: 0.75em;
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1 1 0;
+        border-bottom: 1px solid var(--Ep-border-color);
+    }
+}
