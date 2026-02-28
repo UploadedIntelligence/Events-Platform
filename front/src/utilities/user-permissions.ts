@@ -17,3 +17,11 @@ export interface IUser {
 export function getSession(): IUser | undefined {
     return authClient.useSession()?.data?.user;
 }
+
+export function canCreateEvent(): boolean {
+    const user: IUser | undefined = getSession();
+    if (!user) {
+        return false;
+    }
+    return user.role === 'admin' || user.role === 'staff';
+}
