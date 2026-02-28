@@ -1,0 +1,7 @@
+.EpSecondaryBackground {
+    display: flex;
+    flex: 1;
+    background: var(--Ep-secondaryBackground-color);
+    color: var(--Ep-primaryText-color);
+    border-bottom: 1px solid var(--Ep-border-color);
+}
