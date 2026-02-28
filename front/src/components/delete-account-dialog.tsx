@@ -7,6 +7,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogActions,
+    Paper,
 } from '@mui/material';
 import axios from '../config/client';
 import { useState } from 'react';
@@ -39,8 +40,8 @@ export function DeleteAccount() {
     }
 
     return (
-        <>
-            <Button onClick={handleClickOpen} variant="outlined">
+        <Paper sx={{ justifySelf: 'center' }}>
+            <Button onClick={handleClickOpen} variant="text">
                 Delete Account
             </Button>
             <Dialog
@@ -70,6 +71,6 @@ export function DeleteAccount() {
                     {status === 'Success' ? 'Account deletion successful!' : 'Something went wrong!'}
                 </Alert>
             </Snackbar>
-        </>
+        </Paper>
     );
 }
