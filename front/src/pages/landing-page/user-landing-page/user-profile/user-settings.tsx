@@ -1,13 +1,12 @@
 import { Button, CardActions, Card } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { getSession } from '../../../../utilities/user-permissions.ts';
-import { StyledPaper } from "../../../../components/background-parent-components/background-parent-components.tsx";
 
 export function UserSettings() {
     const user = getSession();
 
-    return user?.role !== 'user' ? (
-        <StyledPaper>
+    return user ? (
+        <div>
             <Card>
                 <NavLink to="/user-profile">
                     <Button variant="outlined" sx={{ margin: '10px' }}>
@@ -17,6 +16,6 @@ export function UserSettings() {
 
                 <CardActions></CardActions>
             </Card>
-        </StyledPaper>
+        </div>
     ) : null;
 }
