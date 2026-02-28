@@ -1,7 +1,7 @@
 import type { Application } from './index.tsx';
 import axios from '../../../../../config/client.ts';
 import { ApplicationTable } from '../../../../../components/application-table.tsx';
-import { Spinner } from '../../../../../components/loading.tsx';
+import { Spinner } from '../../../../../components/spinner/spinner.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { getSession, type IUser } from '../../../../../utilities/user-permissions.ts';
 

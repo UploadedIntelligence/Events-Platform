@@ -1,22 +1,23 @@
-import { Button, TextField, Typography, Alert, Snackbar, Paper } from '@mui/material';
+import { Alert, Snackbar } from '@mui/material';
 import authClient from '../../services/auth-client.ts';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { getSession } from '../../utilities/user-permissions.ts';
-import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons.tsx';
-import { StyledPaper } from '../../components/background-parent-components/background-parent-components.tsx';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons/social-media-icon-buttons.tsx';
+import { EpUserDataInput } from '../../components/user-data-input/user-data-input.tsx';
+import { EpButton } from '../../components/button/button.tsx';
+import { EpCredentialsPageContent } from '../../components/credentials-page-content/credentials-page-content.tsx';
+import { EpDivider } from '../../components/divider/divider.tsx';
+import { EpUserCredentialsForm } from '../../components/user-credentials-form/user-credentials-form.tsx';
 
 export function LoginPage() {
-    const navigate = useNavigate();
-    const user = getSession();
     const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false);
 
     const {
         register,
         watch,
-        formState: { errors, isValid },
+        formState: { isValid },
     } = useForm({
         defaultValues: {
             email: '',
@@ -46,45 +47,35 @@ export function LoginPage() {
     };
 
     return (
-        <StyledPaper>
-            {user ? (
-                <Navigate to="/" />
-            ) : (
-                <Paper className="Login" sx={{ boxShadow: 'none' }}>
-                    <Typography>Log In</Typography>
-                    <form className="Login" action={emailSingIn}>
-                        <TextField
-                            label="Email"
-                            error={!!errors.email?.message}
-                            helperText={errors.email?.message}
-                            {...register('email', { required: 'Field required' })}
-                        />
-                        <TextField
-                            label="Password"
-                            error={!!errors.password?.message}
-                            helperText={errors.password?.message}
-                            {...register('password', { required: 'Field required' })}
-                        />
-                        <Button type="submit" disabled={!isValid} variant="contained" color="success">
-                            Submit
-                        </Button>
-                    </form>
-                    <Button onClick={() => navigate('/register')} color="success">
-                        Register
-                    </Button>
-                    <SocialMediaIconButtons />
-                    <Snackbar
-                        autoHideDuration={5000}
-                        open={invalidCredentials}
-                        onClose={handleClose}
-                        sx={{ position: 'inherit' }}
-                    >
-                        <Alert variant="filled" severity="error" sx={{ width: '100%' }}>
-                            Invalid credentials.
-                        </Alert>
-                    </Snackbar>
-                </Paper>
-            )}
-        </StyledPaper>
+        <EpCredentialsPageContent>
+            <h3>Log In</h3>
+            <SocialMediaIconButtons />
+            <EpDivider>Or continue with email</EpDivider>
+            <EpUserCredentialsForm action={emailSingIn}>
+                <EpUserDataInput
+                    label="Email"
+                    placeholder="name@company.com"
+                    {...register('email', { required: true })}
+                />
+                <EpUserDataInput
+                    label="Password"
+                    placeholder="••••••••"
+                    {...register('password', { required: true })}
+                />
+                <EpButton disabled={!isValid}>
+                    Sign In <ArrowForwardIcon style={{ fontSize: '1.25em' }} />
+                </EpButton>
+            </EpUserCredentialsForm>
+            <Snackbar
+                autoHideDuration={5000}
+                open={invalidCredentials}
+                onClose={handleClose}
+                sx={{ position: 'inherit' }}
+            >
+                <Alert variant="filled" severity="error" sx={{ width: '100%' }}>
+                    Invalid credentials.
+                </Alert>
+            </Snackbar>
+        </EpCredentialsPageContent>
     );
 }

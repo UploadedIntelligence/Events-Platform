@@ -6,6 +6,7 @@ import {
     deleteGoogleEventService,
     fetchAttendingEventsService,
     fetchPastEventsService,
+    fetchSpecificEventService,
     fetchUpcomingEventsService,
     fetchUserHistoryService,
     getUserGoogleEventService,
@@ -32,6 +33,25 @@ const zEventInfo = z.object({
 const zIsDateValid = z.date().min(new Date());
 
 const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff']);
+
+export async function getEvent(req: Request, res: Response) {
+    const session: IUserSession | null = await currentSession(req);
+    const { event_id } = req.params;
+
+    if (!session || !event_id || !zAuthorizedEventCreatorRoles.safeParse(session.user.role).success) {
+        return res.status(401).json('Not authenticated');
+    }
+
+    try {
+        const event_details = await fetchSpecificEventService(event_id);
+        return res.status(200).json(event_details);
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json(e.issues);
+        }
+        return res.status(400).json(e);
+    }
+}
 
 export async function createEvent(req: Request, res: Response) {
     const session: IUserSession | null = await currentSession(req);

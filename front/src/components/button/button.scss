@@ -1,15 +1,19 @@
 .EpButton {
+    display: flex;
+    flex-grow: 1;
     color: var(--Ep-primaryText-color);
     border-radius: 8px;
-    border: 2px solid transparent;
+    border: none;
     padding: 0.35em 0.7em;
     font-size: 1em;
     font-weight: 600;
-    font-family: sans-serif;
-    display: flex;
     align-items: center;
-    justify-self: center;
+    justify-content: center;
     gap: 0.5em;
+
+    &:hover {
+        cursor: pointer;
+    }
 
     &:disabled {
         background: var(--Ep-button-background-color--disabled);
@@ -20,33 +24,32 @@
             color: var(--Ep-button-color--disabled);
         }
     }
-}
 
-.EpButton--primary {
-    background: var(--Ep-blue);
+    &--primary {
+        background: var(--Ep-blue);
 
-    &:hover {
-        background: var(--Ep-blue--hover);
-    }
-}
-
-.EpButton--secondary {
-    background: var(--Ep-secondaryBlue);
-
-    &:hover {
-        background: var(--Ep-secondaryBlue--hover);
-    }
-}
-
-.EpButton--ghost {
-    background: none;
-
-    &:active {
-        background: var(--Ep-ghostButton-background--active);
+        &:hover {
+            background: var(--Ep-blue--hover);
+        }
     }
 
-    &:hover {
-        color: var(--Ep-blue--hover);
-        border-color: transparent;
+    &--secondary {
+        background: var(--Ep-secondaryBlue);
+
+        &:hover {
+            background: var(--Ep-border-color);
+        }
+    }
+
+    &--ghost {
+        background: none;
+
+        &:active {
+            background: var(--Ep-ghostButton-background--active);
+        }
+
+        &:hover {
+            background: var(--Ep-border-color);
+        }
     }
 }

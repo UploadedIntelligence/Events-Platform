@@ -1,0 +1,14 @@
+.EpEventGrid {
+    display: grid;
+    background: transparent;
+    gap: 10px;
+    min-height: 0;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+
+    @container EpEventContainer (width >= 830px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @container EpEventContainer (width >= 1200px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}

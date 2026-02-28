@@ -1,0 +1,13 @@
+.EpSocialMedia-loginsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    gap: 0.5em;
+}
+
+.EpSocialMedia-loginsContainer--option {
+    display: flex;
+    border-radius: 8px;
+    border: 1px solid var(--Ep-border-color);
+    background: var(--Ep-secondaryBlue);
+}

@@ -1,0 +1,103 @@
+.EpEventCard {
+    display: flex;
+    flex-direction: column;
+    color: var(--Ep-primaryText-color);
+    border: 1px solid var(--Ep-border-color);
+    border-radius: 8px;
+    padding: 0.75em;
+    gap: 0.75em;
+
+    &-imageContainer {
+        position: relative;
+        display: flex;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    &-image {
+        flex: 1;
+        max-width: 100%;
+        max-height: 100%;
+        transition-duration: 350ms;
+        object-fit: cover;
+        aspect-ratio: 16/9;
+    }
+
+    &-category {
+        text-transform: uppercase;
+        position: absolute;
+        background: var(--Ep-button-background-transparentColor--disabled);
+        border-radius: 8px;
+        font-size: 0.75em;
+        font-weight: 600;
+        padding: 0.2em 0.75em;
+        top: 0.75em;
+        left: 0.75em;
+        z-index: 1;
+    }
+
+    &-price {
+        position: absolute;
+        background: var(--Ep-blue);
+        border-radius: 8px;
+        font-size: 0.75em;
+        font-weight: 600;
+        padding: 0.2em 0.75em;
+        bottom: 0.75em;
+        right: 0.75em;
+        z-index: 1;
+    }
+
+    &-start {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        display: flex;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.75em;
+        font-weight: 600;
+        margin: 0;
+        color: var(--Ep-blue);
+        gap: 0.5em;
+    }
+
+    &-eventName {
+        margin: 0;
+        font-size: 1.15em;
+        font-weight: 700;
+        color: var(--Ep-primaryText-color);
+    }
+
+    &-eventLocation {
+        display: flex;
+        margin: 0;
+        font-size: 0.9em;
+        color: var(--Ep-grey);
+        gap: 0.25em;
+    }
+
+    &-eventLocationIcon {
+        display: inline-block;
+        margin-top: 0.25em;
+    }
+
+    &-buttonContainer {
+        margin-top: auto;
+        display: flex;
+    }
+
+    &:hover {
+        border: 1px solid var(--Ep-secondaryBlue--hover);
+
+        .EpEventCard-button {
+            background: var(--Ep-blue--hover);
+        }
+
+        .EpEventCard-eventName {
+            color: var(--Ep-blue--hover);
+        }
+
+        .EpEventCard-image {
+            scale: 1.1;
+        }
+    }
+}

@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
-import { createEvent, fetchEvents, attendOrCancelEvent } from './controllers/events.controller';
+import { createEvent, fetchEvents, attendOrCancelEvent, getEvent } from './controllers/events.controller';
 import { applicationResponse, fetchApplications, roleRequest, deleteAccount } from './controllers/users.controller';
 
 const app = express();
@@ -23,6 +23,7 @@ app.get('/', (req, res) => res.status(200).send('Root route working'));
 
 app.get('/applications', fetchApplications);
 app.get(['/upcoming-events', '/past-events', '/attending', '/user-history'], fetchEvents);
+app.get('/event-details/:event_id', getEvent);
 app.post('/apply-staff', roleRequest);
 app.post('/create-event', createEvent);
 // app.put('/update-event/:event_id', updateEvent)

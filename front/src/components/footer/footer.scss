@@ -1,0 +1,11 @@
+.EpFooter {
+    display: flex;
+    background: var(--Ep-secondaryBackground-color);
+    border-radius: 0 0 8px 8px;
+    padding: 0.25em 1em;
+
+    &-copyright {
+        font-size: 0.75em;
+        color: var(--Ep-dividerText-color);
+    }
+}

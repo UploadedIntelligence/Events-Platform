@@ -1,18 +1,18 @@
 import './user-data-input.scss';
-import { EpInputField } from '../input-field/input-field.tsx';
-import React from "react";
+import { type ICustomInputField, EpInputField } from '../input-field/input-field.tsx';
+import React from 'react';
 
-interface IUserDataInput extends React.ComponentPropsWithRef<'input'> {
-    label: string;
+interface IUserDataInput extends React.ComponentPropsWithRef<'input'>, ICustomInputField {
+    label?: string;
+    multiline?: boolean;
+    rows?: number;
 }
 
-export function EpUserDataInput({ label, ...props } : IUserDataInput ) {
+export function EpUserDataInput({ label, multiline = false, rows, ...props }: IUserDataInput) {
     return (
         <div className="EpUserDataInput">
-            <label>{label}</label>
-            <div className="EpInputFieldContainer">
-                <EpInputField {...props} />
-            </div>
+            <label className="EpUserDataInput-label">{label}</label>
+            <EpInputField multiline={multiline} rows={rows} {...props} />
         </div>
     );
 }

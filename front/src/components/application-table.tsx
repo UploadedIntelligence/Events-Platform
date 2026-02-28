@@ -48,6 +48,7 @@ export function ApplicationTable({ applications }: { applications: Array<Applica
                                     </TableCell>
                                     <TableCell sx={{ justifySelf: 'flex-end' }} align="center">
                                         <Button
+                                            color="success"
                                             onClick={() =>
                                                 mutate({
                                                     applicant_email: application.userEmail,
@@ -60,7 +61,7 @@ export function ApplicationTable({ applications }: { applications: Array<Applica
                                         </Button>
                                         <Button
                                             sx={{ marginLeft: '8px' }}
-                                            color="secondary"
+                                            color="error"
                                             onClick={() =>
                                                 mutate({
                                                     applicant_email: application.userEmail,

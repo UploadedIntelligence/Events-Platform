@@ -1,6 +1,6 @@
-import '../styles/google-signin-button.scss';
-import { googleSignIn } from '../services/google-sign-in.ts';
-import { EpButton } from './button/button.tsx';
+import './google-signin-button.scss';
+import { googleSignIn } from '../../services/google-sign-in.ts';
+import { EpButton } from '../button/button.tsx';
 
 export function GoogleSignInButton() {
     return (
