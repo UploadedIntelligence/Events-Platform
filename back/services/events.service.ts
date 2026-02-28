@@ -78,6 +78,14 @@ export function fetchUserHistoryService(today: Date, session: IUserSession): Pri
     });
 }
 
+export function fetchSpecificEventService(event_id: string): PrismaPromise<EventInfoDO | null> {
+    return prisma.event.findFirst({
+        where: {
+            id: event_id,
+        },
+    });
+}
+
 export function updateEventService(data: EventInfoDO, event_id: string) {
     return prisma.event.update({
         where: {
