@@ -55,12 +55,12 @@ export function Header({
                 </EpButton>
             </div>
             {user ? (
-                <div className="EpHeader-options">
+                <div className="EpHeader-option">
                     {/*buttons need to be toggleable*/}
                     <EpNavLink to="/discover">Discover</EpNavLink>
                     <EpNavLink to="/manage-events">Manage Events</EpNavLink>
                     <EpNavLink to="/calendar">Calendar</EpNavLink>
-                    <div className="EpHeader-options EpHeader-options--positionRight">
+                    <div className="EpHeader-option--positionRight">
                         <SearchBar />
                         <EpButton onClick={handleClick} variant="ghost">
                             <EpProfileImage />
@@ -84,8 +84,8 @@ export function Header({
                     </div>
                 </div>
             ) : (
-                <div className="EpHeader-options">
-                    <div className="EpHeader-options EpHeader-options--positionRight">
+                <div className="EpHeader-option">
+                    <div className="EpHeader-option--positionRight">
                         <EpButton onClick={() => navigate('/login')}>Sign In</EpButton>
                         <EpButton onClick={() => navigate('/register')}>Sign Up</EpButton>
                     </div>
