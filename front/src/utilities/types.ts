@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs';
 
 export type CreateEventForm = {
+    image?: File;
     name: string;
     description: string;
     location: string;
