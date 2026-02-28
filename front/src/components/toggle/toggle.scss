@@ -1,0 +1,9 @@
+.EpToggle {
+    display: flex;
+    flex-direction: row;
+    background: var(--Ep-toggle-background-color);
+    border: 1px solid var(--Ep-border-color);
+    width: fit-content;
+    align-self: end;
+    border-radius: 8px;
+}
