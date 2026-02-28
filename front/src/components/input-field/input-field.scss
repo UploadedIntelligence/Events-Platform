@@ -1,11 +1,38 @@
 .EpInputField {
-    color: var(--Ep-primaryText-color);
-    background: none;
-    border: none;
-    outline: none;
-    font-size: 14px;
+    display: flex;
+    flex-direction: column;
 
-    &:hover {
-        outline: var(--Ep-blue--hover);
+    &-container {
+        display: flex;
+        border-radius: 8px;
+        border: 1px solid var(--Ep-border-color);
+        background: var(--Ep-dataInput-background);
+
+        &:focus-within {
+            outline: 1px solid var(--Ep-blue--hover);
+        }
+
+        &.hasError {
+            outline: 1px solid var(--Ep-hasError-color);
+        }
+    }
+
+    &-input {
+        display: flex;
+        flex-grow: 1;
+        color: var(--Ep-primaryText-color);
+        background: transparent;
+        outline: none;
+        border: none;
+        border-radius: 8px;
+        padding: 0.7em;
+        font-size: 14px;
+    }
+
+    &-error {
+        font-size: 0.8em;
+        color: var(--Ep-hasError-color);
+        margin-top: 0.5em;
+        margin-bottom: 0;
     }
 }
