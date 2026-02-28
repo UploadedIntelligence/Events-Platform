@@ -3,36 +3,52 @@
     --Ep-primaryText-font-size: 1em;
     --Ep-secondaryText-font-size: 0.875rem;
 
+    --Ep-border-color: #334155;
+    --Ep-dividerText-color: #64748b;
+    --Ep-placeholderText-color: #808080ff;
+
+    --Ep-hasError-color: #f44336;
+
+    --Ep-grey: #9ca3af;
+
     --Ep-blue: #0d7ff2;
     --Ep-blue--hover: #0d7ff2e6;
     --Ep-secondaryBlue: #1e293b;
-    --Ep-secondaryBlue--hover: #334155;
+    --Ep-secondaryBlue--hover: #213961ff;
+    --Ep-navlink-color--hover: #535bf2;
+    --Ep-toggle-background-color: #0f162a;
     --Ep-ghostButton-background--active: #00000033;
-    --Ep-dataInput-background: #1e293b80;
-    --Ep-dataInput-border-color: #334155;
     --Ep-searchInput-background: #283039;
     --Ep-button-color--disabled: #ffffff4d;
-    --Ep-button-background-color--disabled: #ffffff1f;
+    --Ep-button-background-color--disabled: #21262dff;
+    --Ep-button-background-transparentColor--disabled: #21262d99;
 
     @media (prefers-color-scheme: dark) {
         --Ep-background-color: #0a0c10;
-        --Ep-secondaryBackground-color: #101922ff;
-        --Ep-header-background-color: #191a1f;
+        --Ep-secondaryBackground-color: #0f172a;
+        --Ep-header-background-color: #101922ff;
+        --Ep-dashboard-background: #020617;
+        --Ep-dataInput-background: #1b222d;
+
         --Ep-primaryText-color: #f4f4f4;
     }
 
     @media (prefers-color-scheme: light) {
         --Ep-background-color: #f4f4f4;
+
         --Ep-primaryText-color: #191a1f;
     }
 }
 
 html {
-    width: 100%;
-    height: 100%;
+    display: flex;
+    min-height: 100%;
+    min-width: 100%;
 }
 
-body {
-    width: 100%;
-    height: 100%;
+body,
+#root {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex;
+    flex: 1;
 }
