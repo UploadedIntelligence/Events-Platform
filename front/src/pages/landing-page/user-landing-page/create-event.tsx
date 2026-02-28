@@ -1,4 +1,4 @@
-import { TextField, Button, Alert, ClickAwayListener } from '@mui/material';
+import { Alert, ClickAwayListener } from '@mui/material';
 import axios from '../../../config/client.ts';
 import { Controller, useForm } from 'react-hook-form';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -7,15 +7,18 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
 import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import { getSession } from '../../../utilities/user-permissions.ts';
+import { canCreateEvent } from '../../../utilities/user-permissions.ts';
 import { Navigate } from 'react-router-dom';
 import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
-import { StyledPaper } from '../../../components/background-parent-components/background-parent-components.tsx';
+import { EpUserDataInput } from '../../../components/user-data-input/user-data-input.tsx';
+import { EpCredentialsPageContent } from '../../../components/credentials-page-content/credentials-page-content.tsx';
+import { EpButton } from '../../../components/button/button.tsx';
+import { EpUserCredentialsForm } from '../../../components/user-credentials-form/user-credentials-form.tsx';
 
 // passing a sequence of invalid dates causes the error message to flicker
 
 export function CreateEvent() {
-    const user = getSession();
+    const hasPermission = canCreateEvent();
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
@@ -59,11 +62,11 @@ export function CreateEvent() {
     }
 
     return (
-        <StyledPaper>
-            {user?.role === 'staff' || user?.role === 'admin' ? (
-                <form className="Create-event" onSubmit={handleSubmit(createEvent)} style={{ width: '75%' }}>
-                    <TextField
-                        label="Event Name"
+        <EpCredentialsPageContent>
+            {hasPermission ? (
+                <EpUserCredentialsForm onSubmit={handleSubmit(createEvent)}>
+                    <EpUserDataInput
+                        label="Event name"
                         error={!!errors.name}
                         helperText={errors.name?.message}
                         {...register('name', {
@@ -74,7 +77,7 @@ export function CreateEvent() {
                             },
                         })}
                     />
-                    <TextField
+                    <EpUserDataInput
                         label="Description"
                         error={!!errors.description}
                         helperText={errors.description?.message}
@@ -85,10 +88,10 @@ export function CreateEvent() {
                                 message: 'max 1000 characters',
                             },
                         })}
-                        multiline
+                        multiline={true}
                         rows={5}
                     />
-                    <TextField
+                    <EpUserDataInput
                         label="Location"
                         error={!!errors.location}
                         helperText={errors.location?.message}
@@ -183,14 +186,7 @@ export function CreateEvent() {
                             }}
                         />
                     </LocalizationProvider>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={!isValid || requestState !== 'Idle'}
-                        color="success"
-                    >
-                        Submit Event
-                    </Button>
+                    <EpButton disabled={!isValid || requestState !== 'Idle'}>Submit Event</EpButton>
                     {isVisible && (
                         <ClickAwayListener
                             onClickAway={() => {
@@ -209,10 +205,10 @@ export function CreateEvent() {
                             </Alert>
                         </ClickAwayListener>
                     )}
-                </form>
+                </EpUserCredentialsForm>
             ) : (
                 <Navigate to="/" />
             )}
-        </StyledPaper>
+        </EpCredentialsPageContent>
     );
 }
