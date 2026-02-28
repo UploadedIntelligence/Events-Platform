@@ -4,7 +4,6 @@ import { useState } from 'react';
 import type { Role } from '../../../../../utilities/types.ts';
 import { ViewApplications } from './view-applications.tsx';
 import { getSession } from '../../../../../utilities/user-permissions.ts';
-import { StyledPaper } from "../../../../../components/background-parent-components/background-parent-components.tsx";
 
 export interface Application {
     userEmail: string;
@@ -21,7 +20,7 @@ export function AdminSettings() {
     }
 
     return (
-        <StyledPaper>
+        <div>
             <Card>
                 <NavLink to="/user-profile">
                     <Button variant="outlined" sx={{ margin: '0.5em' }}>
@@ -43,6 +42,6 @@ export function AdminSettings() {
             <Routes>
                 <Route path="/view-applications" element={<ViewApplications />} />
             </Routes>
-        </StyledPaper>
+        </div>
     );
 }
