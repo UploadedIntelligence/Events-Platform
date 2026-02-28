@@ -1,11 +1,6 @@
 import './button.scss';
 import React from 'react';
 
-// deprecated
-// interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-//     variant?: 'primary' | 'secondary' | 'ghost';
-// }
-
 interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
     variant?: 'primary' | 'secondary' | 'ghost';
 }
