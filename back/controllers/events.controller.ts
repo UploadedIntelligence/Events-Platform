@@ -77,7 +77,7 @@ export async function createEvent(req: Request, res: Response) {
     }
 }
 
-export async function uploadImage(req: Request, res: Response) {
+export async function updateEventImage(req: Request, res: Response) {
     const session: IUserSession | null = await currentSession(req);
 
     if (!session || session.user.role === 'user') {
@@ -101,7 +101,7 @@ export async function uploadImage(req: Request, res: Response) {
     }
 }
 
-export async function updateEvent(req: Request, res: Response) {
+export async function updateEventDetails(req: Request, res: Response) {
     const session: IUserSession | null = await currentSession(req);
 
     if (!session || session.user.role === 'user') {
