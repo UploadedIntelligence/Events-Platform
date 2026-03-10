@@ -36,7 +36,7 @@ export function EpInputField(props: ICustomInputField | ICustomTextArea) {
                 )}
                 {endAdornment}
             </div>
-            {error && <p className="EpInputField-error">{helperText}</p>}
+            {error && helperText && <p className="EpInputField-error">{helperText}</p>}
         </div>
     );
 }
