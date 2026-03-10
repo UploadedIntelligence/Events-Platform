@@ -3,7 +3,14 @@ import cookieParser from 'cookie-parser';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
-import { createEvent, fetchEvents, attendOrCancelEvent, getEvent } from './controllers/events.controller';
+import {
+    createEvent,
+    fetchEvents,
+    attendOrCancelEvent,
+    getEvent,
+    updateEventDetails,
+    updateEventImage,
+} from './controllers/events.controller';
 import { applicationResponse, fetchApplications, roleRequest, deleteAccount } from './controllers/users.controller';
 
 const app = express();
@@ -26,7 +33,8 @@ app.get(['/upcoming-events', '/past-events', '/attending', '/user-history'], fet
 app.get('/event-details/:event_id', getEvent);
 app.post('/apply-staff', roleRequest);
 app.post('/create-event', createEvent);
-// app.put('/update-event/:event_id', updateEvent)
+app.put('/update-event/:event_id', updateEventDetails);
+app.put('/update-event/image/:event_id', express.raw({ type: 'application/octet-stream', limit: '2mb' }),  updateEventImage);
 app.put('/attend-or-cancel', attendOrCancelEvent);
 app.put('/application-response', applicationResponse);
 app.delete('/delete-account', deleteAccount);
