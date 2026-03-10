@@ -45,6 +45,7 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                     description: event.description,
                     start: event.start,
                     end: event.end,
+                    imgUrl: event.imgUrl,
                     actions:
                         eventUrl !== '/past-events' && eventUrl !== '/user-history'
                             ? [

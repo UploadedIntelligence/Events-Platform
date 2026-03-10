@@ -16,6 +16,8 @@
     --Ep-secondaryBlue: #1e293b;
     --Ep-secondaryBlue--hover: #213961ff;
     --Ep-navlink-color--hover: #535bf2;
+    --Ep-dropzone-background: #171f25ff;
+    --Ep-dropzone-background--hover: #151d24ff;
     --Ep-toggle-background-color: #0f162a;
     --Ep-ghostButton-background--active: #00000033;
     --Ep-searchInput-background: #283039;
@@ -31,6 +33,7 @@
         --Ep-dataInput-background: #1b222d;
 
         --Ep-primaryText-color: #f4f4f4;
+        --Ep-secondaryText-color: #94a3b8ff;
     }
 
     @media (prefers-color-scheme: light) {
