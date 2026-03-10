@@ -14,6 +14,9 @@ import { EpUserDataInput } from '../../../components/user-data-input/user-data-i
 import { EpCredentialsPageContent } from '../../../components/credentials-page-content/credentials-page-content.tsx';
 import { EpButton } from '../../../components/button/button.tsx';
 import { EpUserCredentialsForm } from '../../../components/user-credentials-form/user-credentials-form.tsx';
+import { EpImageUpload } from '../../../components/image-upload/image-upload.tsx';
+
+import dayjs from 'dayjs';
 
 // passing a sequence of invalid dates causes the error message to flicker
 
@@ -21,6 +24,10 @@ export function CreateEvent() {
     const hasPermission = canCreateEvent();
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
+
+    if (!hasPermission) {
+        return <Navigate to="/" />
+    }
 
     const {
         register,
@@ -34,24 +41,44 @@ export function CreateEvent() {
     } = useForm({
         mode: 'onChange',
         defaultValues: {
-            name: '',
-            description: '',
-            location: '',
-            start: null,
-            end: null,
+            image: undefined,
+            name: 'test',
+            description: 'test',
+            location: 'test',
+            start: dayjs().add(7, 'day'),
+            end: dayjs().add(10, 'day'),
         },
     });
+
+    const name = watch('name');
+    const description = watch('description');
+    const location = watch('location');
     const startDateTime = watch('start');
     const endDateTime = watch('end');
 
-    async function createEvent(event_data: CreateEventForm) {
+    async function createEvent(eventData: CreateEventForm) {
         setRequestState('Pending');
+        const { image, ...remainingData } = eventData;
+
         try {
-            await axios.post('/create-event', {
-                ...event_data,
-                start: event_data.start?.toISOString(),
-                end: event_data.end?.toISOString(),
+            const createdEvent = await axios.post('/create-event', {
+                ...remainingData,
+                start: eventData.start?.toISOString(),
+                end: eventData.end?.toISOString(),
             });
+
+
+            if (!image) return;
+
+            await fetch(`http://localhost:7000/update-event/image/${createdEvent.data.event.id}`, {
+                method: 'PUT',
+                body: image[0],
+                headers: {
+                    'Content-Type': 'application/octet-stream'
+                },
+                credentials: 'include'
+            });
+
             setRequestState('Success');
             reset();
         } catch (e) {
@@ -62,9 +89,13 @@ export function CreateEvent() {
     }
 
     return (
-        <EpCredentialsPageContent>
-            {hasPermission ? (
+        <EpCredentialsPageContent variant="wide">
                 <EpUserCredentialsForm onSubmit={handleSubmit(createEvent)}>
+                    <EpImageUpload
+                        {...register('image', {
+                            required: false,
+                        })}
+                    />
                     <EpUserDataInput
                         label="Event name"
                         error={!!errors.name}
@@ -72,11 +103,12 @@ export function CreateEvent() {
                         {...register('name', {
                             required: true,
                             pattern: {
-                                value: /^.{1,40}$/,
-                                message: 'max 40 characters',
+                                value: /^.{1,80}$/,
+                                message: 'Character limit exceeded',
                             },
                         })}
                     />
+                    <span style={{ display: 'flex', justifyContent: 'end', fontSize: '0.7em' }}>{name.length}/80</span>
                     <EpUserDataInput
                         label="Description"
                         error={!!errors.description}
@@ -84,13 +116,16 @@ export function CreateEvent() {
                         {...register('description', {
                             required: true,
                             pattern: {
-                                value: /^.{1,1000}$/,
-                                message: 'max 1000 characters',
+                                value: /^.{1,2000}$/,
+                                message: 'Character limit exceeded',
                             },
                         })}
                         multiline={true}
-                        rows={5}
+                        rows={8}
                     />
+                    <span style={{ display: 'flex', justifyContent: 'end', fontSize: '0.7em' }}>
+                        {description.length}/2000
+                    </span>
                     <EpUserDataInput
                         label="Location"
                         error={!!errors.location}
@@ -98,11 +133,14 @@ export function CreateEvent() {
                         {...register('location', {
                             required: true,
                             pattern: {
-                                value: /^.{1,40}$/,
-                                message: 'max 40 characters',
+                                value: /^.{1,80}$/,
+                                message: 'Character limit exceeded',
                             },
                         })}
                     />
+                    <span style={{ display: 'flex', justifyContent: 'end', fontSize: '0.7em' }}>
+                        {location.length}/80
+                    </span>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                         <Controller
                             control={control}
@@ -206,9 +244,6 @@ export function CreateEvent() {
                         </ClickAwayListener>
                     )}
                 </EpUserCredentialsForm>
-            ) : (
-                <Navigate to="/" />
-            )}
         </EpCredentialsPageContent>
     );
 }
