@@ -1,10 +1,45 @@
 import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
-import { IUserSession } from '../utilities/types';
+import { CreatedEvent, IUserSession } from '../utilities/types';
 import type { calendar_v3 } from 'googleapis';
 import { EventInfoDO, UserGoogleEventDO, GoogleCalendarEventDO } from '../utilities/types';
+import axios from 'axios';
+import FormData from 'form-data';
 
-export function createEventService(data: EventInfoDO): PrismaPromise<EventInfoDO> {
+export async function hostEventImage(data: Buffer | undefined, event_id: string) {
+    if (data) {
+        try {
+            const formData = new FormData();
+            formData.append('image', data, {
+                filename: 'some file',
+                contentType: 'image/png'
+            })
+            const uploadedImageUrl = await axios
+                .post(
+                    'https://api.imgbb.com/1/upload', formData,
+                    {
+                        params: {
+                            key: process.env.IMGBB_API_KEY,
+                        },
+                    },
+                )
+                .then(res => res.data.data.url);
+
+            return prisma.event.update({
+                where: {
+                    id: event_id
+                },
+                data: {
+                    imgUrl: uploadedImageUrl
+                }
+            })
+        } catch (e: any) {
+            console.log(e.response.data)
+        }
+    }
+}
+
+export function createEventService(data: EventInfoDO): PrismaPromise<CreatedEvent> {
     return prisma.event.create({
         data: {
             name: data.name,
@@ -17,7 +52,7 @@ export function createEventService(data: EventInfoDO): PrismaPromise<EventInfoDO
     });
 }
 
-export function fetchPastEventsService(today: Date): PrismaPromise<Array<EventInfoDO> | undefined> {
+export function fetchPastEventsService(today: Date): PrismaPromise<Array<CreatedEvent> | undefined> {
     return prisma.event.findMany({
         where: {
             start: {
