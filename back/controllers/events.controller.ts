@@ -10,6 +10,7 @@ import {
     fetchUpcomingEventsService,
     fetchUserHistoryService,
     getUserGoogleEventService,
+    hostEventImage,
     insertGoogleCalendarEventService,
     updateEventAttendanceService,
     updateEventService,
@@ -20,6 +21,7 @@ import { getUserAccountService, getUserGoogleClientService } from '../services/u
 import { ZodError } from 'zod';
 import { EventInfoDO, IUserThirdPartyAccount, IUserSession } from '../utilities/types';
 import * as z from 'zod';
+import { fileTypeFromBuffer } from "file-type";
 
 const zEventInfo = z.object({
     name: z.string(),
@@ -31,6 +33,7 @@ const zEventInfo = z.object({
 });
 
 const zIsDateValid = z.date().min(new Date());
+const zIsValidFileType = z.enum(['image/png', 'image/jpeg'])
 
 const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff']);
 
@@ -64,8 +67,8 @@ export async function createEvent(req: Request, res: Response) {
 
     try {
         zIsDateValid.parse(eventInfo.start);
-        await createEventService(eventInfo);
-        return res.status(200).json('Event successfully created');
+        const createdEvent = await createEventService(eventInfo);
+        return res.status(200).json({ message: 'Event successfully created', event: createdEvent });
     } catch (e) {
         if (e instanceof ZodError) {
             return res.status(400).json(e.issues);
@@ -74,16 +77,40 @@ export async function createEvent(req: Request, res: Response) {
     }
 }
 
-// export async function updateEvent(req: Request, res: Response) {
-//     const session: UserSession | null = await currentSession(req);
-//
-//     if (!session || session.user.role === 'user') {
-//         return res.status(401).json('Not authenticated');
-//     }
-//
-//     await updateEventService(req.body, req.params.event_id!);
-//     return res.status(200).json('Response')
-// }
+export async function uploadImage(req: Request, res: Response) {
+    const session: IUserSession | null = await currentSession(req);
+
+    if (!session || session.user.role === 'user') {
+        return res.status(401).json('Not authenticated');
+    }
+
+    if (req.body && req.params.event_id) {
+        try {
+            const fileType = await fileTypeFromBuffer(req.body)
+            if (fileType) {
+                zIsValidFileType.parse(fileType.mime);
+            }
+            await hostEventImage(req.body, req.params.event_id);
+            return res.status(200).json('Image uploaded successfully')
+        } catch (e) {
+            if (e instanceof ZodError) {
+                return res.status(400).json(e.issues);
+            }
+            return res.status(400).json(e);
+        }
+    }
+}
+
+export async function updateEvent(req: Request, res: Response) {
+    const session: IUserSession | null = await currentSession(req);
+
+    if (!session || session.user.role === 'user') {
+        return res.status(401).json('Not authenticated');
+    }
+
+    await updateEventService(req.body, req.params.event_id!);
+    return res.status(200).json('Response');
+}
 
 export async function fetchEvents(req: Request, res: Response) {
     const today = new Date();
