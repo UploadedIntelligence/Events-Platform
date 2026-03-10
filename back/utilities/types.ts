@@ -1,3 +1,7 @@
+export interface CreatedEvent extends EventInfoDO {
+    id: string;
+}
+
 export interface EventInfoDO {
     name: string;
     description: string;
