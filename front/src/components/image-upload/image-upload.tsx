@@ -24,7 +24,6 @@ export function EpImageUpload({ ref, ...props }: React.ComponentPropsWithRef<'in
     function handleDrop(event: React.DragEvent) {
         event.preventDefault();
         const files = event.dataTransfer.files;
-        console.log(files)
         if (files) {
             setPreview(createImgSource(files));
             inputRef.current!.files = files;
@@ -35,7 +34,7 @@ export function EpImageUpload({ ref, ...props }: React.ComponentPropsWithRef<'in
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const files: FileList | null = event.target.files;
         if (files) {
-            setPreview(createImgSource(files))
+            setPreview(createImgSource(files));
             if (props.onChange) {
                 props.onChange(event);
             }
@@ -43,7 +42,7 @@ export function EpImageUpload({ ref, ...props }: React.ComponentPropsWithRef<'in
     }
 
     function createImgSource(files: FileList): string {
-        return URL.createObjectURL(files[0])
+        return URL.createObjectURL(files[0]);
     }
 
     return (
