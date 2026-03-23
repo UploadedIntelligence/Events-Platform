@@ -1,3 +1,5 @@
+@use '../../styles/mixins';
+
 .EpImageUpload {
     display: flex;
     border-radius: 8px;
@@ -5,11 +7,10 @@
     border: 2px dashed var(--Ep-border-color);
 
     &-dropZone {
+        @include mixins.min-height-parent;
+        @include mixins.min-height-child-scrollbar;
         position: relative;
-        display: flex;
-        flex-direction: column;
         align-items: center;
-        flex-grow: 1;
         padding: 1em;
         gap: 0.5em;
         background: var(--Ep-dropzone-background);
@@ -41,7 +42,7 @@
     }
 
     &-image {
-        flex-grow: 1;
+        @include mixins.min-height-child-scrollbar;
         max-width: 100%;
         max-height: 100%;
         object-fit: cover;
@@ -62,7 +63,7 @@
     }
 }
 
-.material-symbols-outlined {
+.cloudUpload {
     color: var(--Ep-blue);
     font-size: 50px;
 }
