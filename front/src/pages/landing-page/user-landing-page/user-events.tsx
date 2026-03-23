@@ -2,8 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from '../../../config/client.ts';
 import { Spinner } from '../../../components/spinner/spinner.tsx';
 import { EventCard } from '../../../components/event-card/event-card.tsx';
-import { AttendOrCancelEventDialog } from '../../../components/attend-event-dialog.tsx';
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { EpEventGrid } from '../../../components/event-grid/event-grid.tsx';
@@ -27,9 +25,6 @@ export interface IUserEvents {
 }
 
 export function UserEvents({ eventUrl }: { eventUrl: string }) {
-    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-
     const { data, isPending, error } = useQuery({
             queryKey: [eventUrl],
             queryFn: () => {
@@ -46,19 +41,6 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                     start: event.start,
                     end: event.end,
                     imgUrl: event.imgUrl,
-                    actions:
-                        eventUrl !== '/past-events' && eventUrl !== '/user-history'
-                            ? [
-                                  {
-                                      title: eventUrl === '/attending' ? 'Cancel attendance' : 'Attend',
-                                      type: eventUrl,
-                                      action: () => {
-                                          setSelectedEventId(event.id);
-                                          setDialogOpen(true);
-                                      },
-                                  },
-                              ]
-                            : null,
                 };
             }) ?? [];
 
@@ -87,12 +69,6 @@ export function UserEvents({ eventUrl }: { eventUrl: string }) {
                     </Button>
                 ) : null}
                 <EventCard events={events} />
-                <AttendOrCancelEventDialog
-                    eventUrl={eventUrl}
-                    dialogOpen={dialogOpen}
-                    selectedEventId={selectedEventId}
-                    setDialogOpen={setDialogOpen}
-                />
             </EpEventGrid>
         </EpEventContainer>
     );
