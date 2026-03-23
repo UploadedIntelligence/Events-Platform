@@ -34,7 +34,11 @@ app.get('/event-details/:event_id', getEvent);
 app.post('/apply-staff', roleRequest);
 app.post('/create-event', createEvent);
 app.put('/update-event/:event_id', updateEventDetails);
-app.put('/update-event/image/:event_id', express.raw({ type: 'application/octet-stream', limit: '2mb' }),  updateEventImage);
+app.put(
+    '/update-event/image/:event_id',
+    express.raw({ type: 'application/octet-stream', limit: '2mb' }),
+    updateEventImage,
+);
 app.put('/attend-or-cancel', attendOrCancelEvent);
 app.put('/application-response', applicationResponse);
 app.delete('/delete-account', deleteAccount);
