@@ -4,8 +4,14 @@ import stockImage from '../../images/event_stock_photo.jpg';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import { EpButton } from '../button/button.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export function EventCard({ events }: { events: Array<IUserEvents> | [] }) {
+    const navigate = useNavigate();
+    function eventDetails(eventID: string) {
+        navigate(`/event-details/${eventID}`);
+    }
+
     return events.map((event, index) => {
         const formatDate = (date: string) => {
             return new Date(date).toLocaleString('en-GB', {
@@ -33,7 +39,7 @@ export function EventCard({ events }: { events: Array<IUserEvents> | [] }) {
                     {event.location}
                 </p>
                 <div className="EpEventCard-buttonContainer">
-                    <EpButton>View Details</EpButton>
+                    <EpButton onClick={() => eventDetails(event.id)}>View Details</EpButton>
                 </div>
             </div>
         );
