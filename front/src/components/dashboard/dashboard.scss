@@ -1,10 +1,10 @@
 @use '../../styles/mixins';
 
 .EpDashboard {
-    display: flex;
-    flex-direction: column;
+    @include mixins.min-height-parent;
     background: var(--Ep-dashboard-background);
-    flex: 0 0 250px;
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
     padding: 16px;
     gap: 1em;
 }
