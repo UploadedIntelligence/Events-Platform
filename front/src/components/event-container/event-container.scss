@@ -1,6 +1,7 @@
+@use '../../styles/mixins';
+
 .EpEventContainer {
-    display: flex;
-    flex-direction: column;
+    @include mixins.min-height-parent;
     gap: 1em;
     container-name: EpEventContainer;
     container-type: inline-size;
