@@ -3,7 +3,6 @@
     font-size: var(--Ep-secondaryText-font-size);
     display: flex;
     align-items: center;
-    text-decoration: none;
     text-transform: capitalize;
 
     &--primary {
@@ -30,7 +29,7 @@
         }
 
         &:hover {
-            opacity: 0.5;
+            opacity: 0.75;
         }
     }
 }
