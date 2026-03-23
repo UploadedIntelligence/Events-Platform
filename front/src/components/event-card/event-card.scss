@@ -1,6 +1,7 @@
+@use '../../styles/mixins';
+
 .EpEventCard {
-    display: flex;
-    flex-direction: column;
+    @include mixins.min-height-parent;
     color: var(--Ep-primaryText-color);
     border: 1px solid var(--Ep-border-color);
     border-radius: 8px;
