@@ -12,29 +12,26 @@ export async function hostEventImage(data: Buffer | undefined, event_id: string)
             const formData = new FormData();
             formData.append('image', data, {
                 filename: 'some file',
-                contentType: 'image/png'
-            })
+                contentType: 'image/png',
+            });
             const uploadedImageUrl = await axios
-                .post(
-                    'https://api.imgbb.com/1/upload', formData,
-                    {
-                        params: {
-                            key: process.env.IMGBB_API_KEY,
-                        },
+                .post('https://api.imgbb.com/1/upload', formData, {
+                    params: {
+                        key: process.env.IMGBB_API_KEY,
                     },
-                )
-                .then(res => res.data.data.url);
+                })
+                .then((res) => res.data.data.url);
 
             return prisma.event.update({
                 where: {
-                    id: event_id
+                    id: event_id,
                 },
                 data: {
-                    imgUrl: uploadedImageUrl
-                }
-            })
+                    imgUrl: uploadedImageUrl,
+                },
+            });
         } catch (e: any) {
-            console.log(e.response.data)
+            console.log(e.response.data);
         }
     }
 }
