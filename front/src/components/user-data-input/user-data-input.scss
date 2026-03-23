@@ -1,6 +1,7 @@
+@use '../../styles/mixins';
+
 .EpUserDataInput {
-    display: flex;
-    flex-direction: column;
+    @include mixins.min-height-parent;
 
     &-label {
         font-size: 0.8em;

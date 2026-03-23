@@ -76,7 +76,7 @@ export function EpImageUpload({ ref, ...props }: React.ComponentPropsWithRef<'in
                 ) : (
                     <>
                         <div className="EpImageUpload-iconContainer">
-                            <span className="material-symbols-outlined">cloud_upload</span>
+                            <span className="material-symbols-outlined cloudUpload">cloud_upload</span>
                         </div>
                         <span className="EpImageUpload-instructions--bold">Drag and drop your event cover</span>
                         <span className="EpImageUpload-instructions">Or browse files from your computer</span>

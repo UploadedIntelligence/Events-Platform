@@ -21,7 +21,7 @@ import { getUserAccountService, getUserGoogleClientService } from '../services/u
 import { ZodError } from 'zod';
 import { EventInfoDO, IUserThirdPartyAccount, IUserSession } from '../utilities/types';
 import * as z from 'zod';
-import { bufferFileType } from "../utilities/buffer-file-type";
+import { bufferFileType } from '../utilities/buffer-file-type';
 
 const zEventInfo = z.object({
     name: z.string(),
@@ -33,7 +33,7 @@ const zEventInfo = z.object({
 });
 
 const zIsDateValid = z.date().min(new Date());
-const zIsValidImageType = z.enum(['image/png', 'image/jpeg'])
+const zIsValidImageType = z.enum(['image/png', 'image/jpg']);
 
 const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff']);
 
@@ -86,10 +86,10 @@ export async function updateEventImage(req: Request, res: Response) {
 
     if (req.body && req.params.event_id) {
         try {
-            const fileType = bufferFileType(req.body)
+            const fileType = bufferFileType(req.body);
             zIsValidImageType.parse(fileType);
             await hostEventImage(req.body, req.params.event_id);
-            return res.status(200).json('Image uploaded successfully')
+            return res.status(200).json('Image uploaded successfully');
         } catch (e) {
             if (e instanceof ZodError) {
                 return res.status(400).json(e.issues);

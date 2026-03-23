@@ -1,6 +1,7 @@
+@use '../../styles/mixins';
+
 .EpInputField {
-    display: flex;
-    flex-direction: column;
+    @include mixins.min-height-parent;
 
     &-container {
         display: flex;

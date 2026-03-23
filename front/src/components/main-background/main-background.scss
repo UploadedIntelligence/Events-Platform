@@ -1,7 +1,11 @@
+@use '../../styles/mixins';
+
 .EpMainBackground {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: max-content 1fr max-content;
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+    overflow: hidden;
+    height: 100%;
     padding: 1em;
     background: var(--Ep-background-color);
     color: var(--Ep-primaryText-color);

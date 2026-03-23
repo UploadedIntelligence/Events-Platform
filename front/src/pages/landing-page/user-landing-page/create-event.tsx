@@ -22,7 +22,6 @@ import dayjs from 'dayjs';
 
 export function CreateEvent() {
     const hasPermission = canCreateEvent();
-    const [isVisible, setIsVisible] = useState<boolean>(false);
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
     if (!hasPermission) {
@@ -60,31 +59,32 @@ export function CreateEvent() {
         setRequestState('Pending');
         const { image, ...remainingData } = eventData;
 
-        try {
-            const createdEvent = await axios.post('/create-event', {
-                ...remainingData,
-                start: eventData.start?.toISOString(),
-                end: eventData.end?.toISOString(),
-            });
+        const createdEvent = await axios.post('/create-event', {
+            ...remainingData,
+            start: eventData.start?.toISOString(),
+            end: eventData.end?.toISOString(),
+        });
 
-            if (!image) return;
+        if (!image) return;
 
-            await fetch(`${import.meta.env.VITE_SERVER_URL}/update-event/image/${createdEvent.data.event.id}`, {
+        const imageResponse = await fetch(
+            `${import.meta.env.VITE_SERVER_URL}/update-event/image/${createdEvent.data.event.id}`,
+            {
                 method: 'PUT',
                 credentials: 'include',
                 body: image[0],
                 headers: {
                     'Content-Type': 'application/octet-stream',
                 },
-            });
+            },
+        );
 
+        if (imageResponse.status !== 200) {
+            setRequestState('Error');
+        } else {
             setRequestState('Success');
             reset();
-        } catch (e) {
-            setRequestState('Error');
-            console.log(e);
         }
-        setIsVisible(true);
     }
 
     return (
@@ -173,6 +173,15 @@ export function CreateEvent() {
                                         textField: {
                                             error: !!errors.start,
                                             helperText: errors.start?.message,
+                                            sx: {
+                                                '& .MuiPickersInputBase-root': {
+                                                    color: 'var(--Ep-primaryText-color)',
+                                                    background: 'var(--Ep-dataInput-background)',
+                                                },
+                                                '& .MuiFormLabel-root, .MuiSvgIcon-root': {
+                                                    color: 'var(--Ep-primaryText-color)',
+                                                },
+                                            },
                                         },
                                     }}
                                 />
@@ -214,6 +223,15 @@ export function CreateEvent() {
                                         textField: {
                                             error: !!errors.end,
                                             helperText: errors.end?.message,
+                                            sx: {
+                                                '& .MuiPickersInputBase-root': {
+                                                    color: 'var(--Ep-primaryText-color)',
+                                                    background: 'var(--Ep-dataInput-background)',
+                                                },
+                                                '& .MuiFormLabel-root, .MuiSvgIcon-root': {
+                                                    color: 'var(--Ep-primaryText-color)',
+                                                },
+                                            },
                                         },
                                     }}
                                 />
@@ -222,11 +240,10 @@ export function CreateEvent() {
                     />
                 </LocalizationProvider>
                 <EpButton disabled={!isValid || requestState !== 'Idle'}>Submit Event</EpButton>
-                {isVisible && (
+                {!(requestState === 'Idle' || requestState === 'Pending') && (
                     <ClickAwayListener
                         onClickAway={() => {
                             setRequestState('Idle');
-                            setIsVisible(false);
                         }}
                     >
                         <Alert

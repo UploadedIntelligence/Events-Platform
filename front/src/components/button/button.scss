@@ -35,6 +35,7 @@
 
     &--secondary {
         background: var(--Ep-secondaryBlue);
+        border: 1px solid var(--Ep-border-color);
 
         &:hover {
             background: var(--Ep-border-color);

@@ -40,7 +40,7 @@ export function Header({
     }
     return (
         <div className="EpHeader">
-            <div className="EpHeader-dashboard-button">
+            <div className="EpHeader-dashboardButton">
                 <EpButton variant="ghost" onClick={changeVisibility}>
                     <EventAvailableIcon
                         sx={{

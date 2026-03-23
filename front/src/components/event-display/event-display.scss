@@ -1,0 +1,142 @@
+@use '../../styles/mixins';
+
+.EpEventDisplay {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+
+    &-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-imageContainer {
+        display: flex;
+        border-radius: 1em;
+        overflow: hidden;
+    }
+
+    &-image {
+        @include mixins.min-height-child-scrollbar;
+        display: flex;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    h2 {
+        padding: 1em 0;
+    }
+
+    &-sidebarContainer {
+        @include mixins.min-height-parent;
+        position: sticky;
+        height: fit-content;
+        gap: 1em;
+        top: 0;
+        right: 0;
+    }
+
+    &-navigationMenu {
+        @include mixins.min-height-parent;
+        gap: 1em;
+    }
+
+    &-navigationOption {
+        font-size: 0.9em;
+        font-weight: 700;
+        color: var(--Ep-dividerText-color);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--Ep-primaryText-color);
+        }
+
+        &[aria-current='true'] {
+            color: #0d7ff2;
+        }
+    }
+
+    &-tickets {
+        @include mixins.min-height-parent;
+        background: var(--Ep-header-background-color);
+        gap: 0.5em;
+        border: 1px solid var(--Ep-border-color);
+        border-radius: 8px;
+    }
+
+    &-ticketInfo {
+        @include mixins.min-height-parent;
+        padding: 0.5em;
+        border-bottom: 1px solid var(--Ep-border-color);
+    }
+
+    &-ticketButtons {
+        @include mixins.min-height-parent;
+
+        padding: 0.5em;
+        width: max-content;
+        gap: 0.5em;
+    }
+
+    &-details {
+        @include mixins.min-height-parent;
+    }
+
+    &-detailsContainer {
+        @include mixins.min-height-parent;
+    }
+
+    &-about {
+        display: flex;
+        @include mixins.min-height-child-scrollbar;
+        color: var(--Ep-secondaryText-color);
+    }
+
+    &-gallery {
+        @include mixins.min-height-parent;
+    }
+
+    &-galleryHeader {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &-galleryButton {
+        display: flex;
+        margin-left: auto;
+        align-items: center;
+    }
+
+    &-buttonsContainer {
+        display: flex;
+        font-size: 0.9em;
+        font-weight: 700;
+    }
+
+    &-followButton {
+        display: flex;
+        gap: 0.25em;
+        color: var(--Ep-blue);
+    }
+
+    &-contactButton {
+        display: flex;
+        gap: 0.25em;
+        color: var(--Ep-dividerText-color);
+    }
+}
+
+.bookmark {
+    color: white;
+    font-size: 1.25em;
+}
+
+.mail {
+    color: var(--Ep-dividerText-color);
+    font-size: 1.25em;
+}
+
+.person_add {
+    color: var(--Ep-blue);
+    font-size: 1.25em;
+}

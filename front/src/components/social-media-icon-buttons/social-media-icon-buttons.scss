@@ -1,6 +1,7 @@
+@use '../../styles/mixins';
+
 .EpSocialMedia-loginsContainer {
-    display: flex;
-    flex-direction: column;
+    @include mixins.min-height-parent;
     justify-self: center;
     gap: 0.5em;
 }

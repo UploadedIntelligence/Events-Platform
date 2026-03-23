@@ -1,0 +1,119 @@
+* {
+    &[hidden] {
+        // stylelint-disable-next-line declaration-no-important
+        display: none !important; // Force hidden attribute applied by angular *ngHide not to be overridden by other styles
+    }
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    -ms-text-size-adjust: 100%; // Prevent adjustments of font size after orientation changes in IE.
+    -webkit-text-size-adjust: 100%; // Prevent adjustments of font size after orientation changes in iOS.
+}
+
+body {
+    display: flex;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+textarea,
+input {
+    all: unset;
+}
+
+body,
+p,
+dl,
+dd,
+dt,
+ul,
+li,
+ol,
+h1,
+h2,
+h3,
+h4,
+figure {
+    margin: 0;
+}
+
+// ie10 places border on img inside a but not doing multiple element selector because too specific
+img {
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+
+    &:not([disabled]) {
+        cursor: pointer;
+    }
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    min-width: 0; // This is to stop webkit browsers setting the min-width to min-content causing the fieldset to grow larger than the container
+    padding: 0;
+}
+
+legend {
+    box-sizing: border-box; // IE9-11 & Edge 12-13
+    margin: 0;
+    max-width: 100%; // Patch for IE9-11 & Edge 12-13
+    padding: 0;
+    position: static;
+
+    + * {
+        // Used to fix legend IOS bug (Margins collapsing) http://bit.ly/1S5K0of
+        -webkit-margin-collapse: separate;
+    }
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+[type='search'] {
+    -webkit-appearance: none; // Fix for Safari as CSS is not honoured on search input elements
+}
+
+iframe {
+    border: 0;
+}
+
+input,
+select,
+textarea {
+    color: inherit;
+    padding-left: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--Ep-primaryText-color);
+    transition: background-color 0s linear 1000000000s;
+}
+
+input::-ms-clear {
+    display: none; // Removes the clear icon in IE (angular bug #7297)
+}
