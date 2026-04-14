@@ -70,6 +70,7 @@
 
     &-eventLocation {
         display: flex;
+        align-items: center;
         margin: 0;
         font-size: 0.9em;
         color: var(--Ep-grey);
@@ -78,7 +79,6 @@
 
     &-eventLocationIcon {
         display: inline-block;
-        margin-top: 0.25em;
     }
 
     &-buttonContainer {
