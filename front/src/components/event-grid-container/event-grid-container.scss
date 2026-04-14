@@ -1,6 +1,6 @@
 @use '../../styles/mixins';
 
-.EpEventContainer {
+.EpEventGridContainer {
     @include mixins.min-height-parent;
     gap: 1em;
     container-name: EpEventContainer;
