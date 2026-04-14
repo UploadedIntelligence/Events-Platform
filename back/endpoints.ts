@@ -10,6 +10,7 @@ import {
     getEvent,
     updateEventDetails,
     updateEventImage,
+    // fetchUserEvents,
 } from './controllers/events.controller';
 import { applicationResponse, fetchApplications, roleRequest, deleteAccount } from './controllers/users.controller';
 
@@ -29,18 +30,17 @@ app.use(express.json());
 app.get('/', (req, res) => res.status(200).send('Root route working'));
 
 app.get('/applications', fetchApplications);
-app.get(['/upcoming-events', '/past-events', '/attending', '/user-history'], fetchEvents);
-app.get('/event-details/:event_id', getEvent);
-app.post('/apply-staff', roleRequest);
-app.post('/create-event', createEvent);
-app.put('/update-event/:event_id', updateEventDetails);
-app.put(
-    '/update-event/image/:event_id',
-    express.raw({ type: 'application/octet-stream', limit: '2mb' }),
-    updateEventImage,
-);
+// /role-requests with query params
+app.get('/events', fetchEvents);
+app.get('/users/:userId/events', fetchEvents);
+app.get('/events/:event_id', getEvent);
+app.put('/events/:event_id', updateEventDetails);
+app.put('/events/:event_id/image', express.raw({ type: 'application/octet-stream', limit: '2mb' }), updateEventImage);
 app.put('/attend-or-cancel', attendOrCancelEvent);
 app.put('/application-response', applicationResponse);
+app.post('/events', createEvent);
+app.post('/apply-staff', roleRequest);
+// /role-requests
 app.delete('/delete-account', deleteAccount);
 
 app.listen(process.env.APP_PORT, () => {

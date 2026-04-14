@@ -1,0 +1,18 @@
+.EpHeaderNavLink {
+    color: var(--Ep-primaryText-color);
+    font-size: var(--Ep-secondaryText-font-size);
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    border-bottom: 2px solid transparent;
+    padding: 0.5em 0.5em 0 0.5em;
+
+    &.active {
+        color: var(--Ep-blue);
+        border-bottom: 2px solid var(--Ep-blue);
+    }
+
+    &:hover {
+        color: var(--Ep-navlink-color--hover);
+    }
+}

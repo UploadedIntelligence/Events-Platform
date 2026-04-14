@@ -59,7 +59,7 @@ export function CreateEvent() {
         setRequestState('Pending');
         const { image, ...remainingData } = eventData;
 
-        const createdEvent = await axios.post('/create-event', {
+        const createdEvent = await axios.post('/events', {
             ...remainingData,
             start: eventData.start?.toISOString(),
             end: eventData.end?.toISOString(),
@@ -68,7 +68,7 @@ export function CreateEvent() {
         if (!image) return;
 
         const imageResponse = await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/update-event/image/${createdEvent.data.event.id}`,
+            `${import.meta.env.VITE_SERVER_URL}/events/${createdEvent.data.event.id}/image`,
             {
                 method: 'PUT',
                 credentials: 'include',

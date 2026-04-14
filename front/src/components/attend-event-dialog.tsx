@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import QueryClient from '../services/tanstack-query-client.ts';
 import * as React from 'react';
-import type { IUserEvents } from '../pages/landing-page/user-landing-page/user-events.tsx';
+import type { IEvents } from '../pages/landing-page/events.tsx';
 
 export function AttendOrCancelEventDialog({
     eventUrl,
@@ -21,7 +21,7 @@ export function AttendOrCancelEventDialog({
     const isAttending: boolean = eventUrl === '/attending';
     const { mutate } = useMutation({
         mutationFn: () => {
-            return axios.get<Array<IUserEvents>>(eventUrl);
+            return axios.get<Array<IEvents>>(eventUrl);
         },
         onSuccess: async () => {
             await QueryClient.invalidateQueries({

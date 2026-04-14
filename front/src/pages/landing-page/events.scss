@@ -1,0 +1,18 @@
+.EpEventGridNavLink {
+    color: var(--Ep-primaryText-color);
+    font-size: var(--Ep-secondaryText-font-size);
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    padding: 0.5em 1em;
+    border-radius: 8px;
+
+    &.active {
+        color: var(--Ep-primaryText-color);
+        background: var(--Ep-blue);
+    }
+
+    &:hover {
+        opacity: 0.75;
+    }
+}

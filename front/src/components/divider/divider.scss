@@ -1,3 +1,5 @@
+@use '../../styles/mixins';
+
 .EpDivider {
     font-size: 0.8em;
     display: flex;
@@ -8,8 +10,8 @@
 
     &::before,
     &::after {
+        @include mixins.min-height-child-scrollbar;
         content: '';
-        flex: 1 1 0;
         border-bottom: 1px solid var(--Ep-border-color);
     }
 }
