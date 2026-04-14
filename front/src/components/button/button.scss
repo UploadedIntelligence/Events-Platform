@@ -1,6 +1,7 @@
 .EpButton {
     display: flex;
     flex-grow: 1;
+    text-transform: capitalize;
     color: var(--Ep-primaryText-color);
     border-radius: 8px;
     border: none;
