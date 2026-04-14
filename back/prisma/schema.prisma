@@ -27,10 +27,12 @@ enum Status {
 model User {
   id               String            @id @default(cuid())
   name             String
-  email            String            @unique
+  email            String
   password         String?
   role             Role              @default(user)
-  attending        Event[]
+  attending        EventAttendance[]
+  bookmarkedEvents EventBookmark[]
+  organisedEvents  Event[]
   googleEvents     UserGoogleEvent[]
   emailVerified    Boolean           @default(false)
   image            String?
@@ -44,11 +46,14 @@ model User {
   banReason  String?
   banExpires DateTime?
 
+  @@unique([email])
   @@map("user")
 }
 
 model Event {
   id           String            @id @default(cuid())
+  organiser    User              @relation(fields: [organiserId], references: [id], onDelete: Cascade)
+  organiserId  String
   googleEvents UserGoogleEvent[]
   name         String
   description  String
@@ -56,7 +61,24 @@ model Event {
   end          DateTime
   location     String
   imgUrl       String?
-  attendees    User[]
+  attendees    EventAttendance[]
+  bookmarkedBy EventBookmark[]
+}
+
+model EventAttendance {
+  id      String @id @default(cuid())
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String
+}
+
+model EventBookmark {
+  id      String @id @default(cuid())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
 }
 
 model Session {
@@ -67,10 +89,8 @@ model Session {
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
-  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  impersonatedBy String?
+  userId    String
 
   @@unique([token])
   @@map("session")
@@ -80,8 +100,8 @@ model Account {
   id                    String    @id @default(cuid())
   accountId             String
   providerId            String
-  userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -108,13 +128,15 @@ model Verification {
 
 model RoleRequest {
   id         String    @id @default(cuid())
-  userEmail  String    @unique
+  userEmail  String
   user       User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   role       Role
   status     Status    @default(pending)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   rejectedAt DateTime?
+
+  @@unique([userEmail])
 }
 
 model UserGoogleEvent {
