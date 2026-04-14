@@ -1,8 +1,10 @@
+@use '../../styles/mixins';
+
 .EpFooter {
+    @include mixins.min-height-child-scrollbar;
     grid-column: 1 / -1;
     grid-row: 3;
     display: flex;
-    flex: 1 1 0px;
     background: var(--Ep-secondaryBackground-color);
     border-radius: 0 0 8px 8px;
     padding: 0.25em 1em;
