@@ -6,8 +6,7 @@
     gap: 0.5em;
 
     &-container {
-        display: flex;
-        flex-direction: column;
+        @include mixins.min-height-parent;
     }
 
     &-imageContainer {
@@ -44,7 +43,7 @@
     &-navigationOption {
         font-size: 0.9em;
         font-weight: 700;
-        color: var(--Ep-dividerText-color);
+        color: var(--Ep-secondaryText-color);
         text-decoration: none;
 
         &:hover {
@@ -52,7 +51,7 @@
         }
 
         &[aria-current='true'] {
-            color: #0d7ff2;
+            color: var(--Ep-blue);
         }
     }
 
@@ -72,7 +71,6 @@
 
     &-ticketButtons {
         @include mixins.min-height-parent;
-
         padding: 0.5em;
         width: max-content;
         gap: 0.5em;
