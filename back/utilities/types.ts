@@ -1,15 +1,27 @@
-export interface CreatedEvent extends EventInfoDO {
+export interface EventEntity {
     id: string;
-}
-
-export interface EventInfoDO {
+    organiserId: string;
     name: string;
-    description: string;
     location: string;
+    description: string;
     start: Date;
     end: Date;
     imgUrl?: string | null | undefined;
 }
+
+export type AttendeeInfo = {
+    id: string;
+    userId: string;
+    eventId: string;
+};
+
+export type OrganiserDTO = {
+    name: string;
+    email: string;
+    image: string | undefined | null;
+};
+
+export type CreateEventDTO = Omit<EventEntity, 'id' | 'organiserId'>;
 
 export interface UserGoogleEventDO {
     googleId: string;
@@ -26,6 +38,8 @@ export interface GoogleCalendarEventDO {
 export type Role = 'user' | 'staff' | 'admin';
 
 export type AdminResponse = 'approved' | 'rejected';
+
+export type User = IUserSession['user'];
 
 export interface IRoleRequest {
     id: string;
