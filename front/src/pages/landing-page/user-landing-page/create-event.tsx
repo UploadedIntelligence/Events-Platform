@@ -7,7 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
 import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import { canCreateEvent } from '../../../utilities/user-permissions.ts';
+import { canCreateEvent, getSession} from '../../../utilities/user-permissions.ts';
 import { Navigate } from 'react-router-dom';
 import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
 import { EpUserDataInput } from '../../../components/user-data-input/user-data-input.tsx';
@@ -21,10 +21,11 @@ import dayjs from 'dayjs';
 // passing a sequence of invalid dates causes the error message to flicker
 
 export function CreateEvent() {
+    const user = getSession();
     const hasPermission = canCreateEvent();
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
-    if (!hasPermission) {
+    if (!user || !hasPermission) {
         return <Navigate to="/" />;
     }
 
@@ -61,10 +62,10 @@ export function CreateEvent() {
 
         const createdEvent = await axios.post('/events', {
             ...remainingData,
+            organiser: user!.id,
             start: eventData.start?.toISOString(),
             end: eventData.end?.toISOString(),
         });
-
         if (!image) return;
 
         const imageResponse = await fetch(
