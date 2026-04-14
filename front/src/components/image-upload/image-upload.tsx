@@ -82,6 +82,7 @@ export function EpImageUpload({ ref, ...props }: React.ComponentPropsWithRef<'in
                         <span className="EpImageUpload-instructions">Or browse files from your computer</span>
                         <span className="EpImageUpload-instructions">Recommended ratio 16 : 9</span>
                         <span className="EpImageUpload-instructions">FORMAT MUST BE JPG / PNG</span>
+                        <span className="EpImageUpload-instructions">Max size 2MB</span>
                     </>
                 )}
             </div>
