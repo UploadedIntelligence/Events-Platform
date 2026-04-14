@@ -1,26 +1,45 @@
 import './dashboard.scss';
-import { EpNavLink } from '../nav-link/nav-link.tsx';
-import { canCreateEvent } from '../../utilities/user-permissions.ts';
+import { canCreateEvent, getSession } from '../../utilities/user-permissions.ts';
+import dayjs from 'dayjs';
+import { EventFilters } from '../../utilities/event-filters.ts';
+import { NavLink } from 'react-router-dom';
 
 export function Dashboard() {
+    const user = getSession();
+    const { fromDate, toDate } = EventFilters();
+    const today = dayjs().format('YYYY-MM-DD-HH');
     const hasPermission = canCreateEvent();
 
     return (
         <div className="EpDashboard">
             {hasPermission && (
-                <EpNavLink variant="secondary" to="/create-event">
+                <NavLink
+                    className="EpDashboard-option"
+                    to={{
+                        pathname: '/create-event',
+                    }}
+                >
                     create event
-                </EpNavLink>
+                </NavLink>
             )}
-            <EpNavLink variant="secondary" to="/discover/upcoming-events">
-                upcoming events
-            </EpNavLink>
-            <EpNavLink variant="secondary" to="/discover/past-events">
-                past events
-            </EpNavLink>
-            <EpNavLink variant="secondary" to="/attending">
+            <NavLink
+                className={({ isActive }) => `EpDashboard-option ${isActive && fromDate ? 'active' : ''}`}
+                to={{
+                    pathname: `/users/${user?.id}/events`,
+                    search: `fromDate=${today}`,
+                }}
+            >
                 attending
-            </EpNavLink>
+            </NavLink>
+            <NavLink
+                className={({ isActive }) => `EpDashboard-option ${isActive && toDate ? 'active' : ''}`}
+                to={{
+                    pathname: `/users/${user?.id}/events`,
+                    search: `toDate=${today}`,
+                }}
+            >
+                history
+            </NavLink>
         </div>
     );
 }

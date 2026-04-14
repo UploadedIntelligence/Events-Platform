@@ -7,4 +7,23 @@
     grid-column: 1 / 2;
     padding: 16px;
     gap: 1em;
+
+    &-option {
+        color: var(--Ep-primaryText-color);
+        font-size: var(--Ep-secondaryText-font-size);
+        display: flex;
+        align-items: center;
+        text-transform: capitalize;
+        padding: 0.5em 2em;
+        border-radius: 8px;
+
+        &.active {
+            color: var(--Ep-primaryText-color);
+            background: var(--Ep-blue);
+        }
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
 }
