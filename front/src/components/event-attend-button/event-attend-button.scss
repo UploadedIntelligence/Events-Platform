@@ -1,0 +1,77 @@
+.EpEventAttendButtonDialog {
+    &-page {
+        color: var(--Ep-primaryText-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    &-container {
+        display: flex;
+        flex-direction: column;
+        background: var(--Ep-attendanceDialog-background-color);
+        max-width: 400px;
+        padding: 1.5em;
+    }
+
+    &-detailsContainer {
+        background: var(--Ep-attendanceDialog-secondaryBackground-color);
+        border-radius: 8px;
+        padding: 1em;
+    }
+
+    &-details {
+        display: flex;
+        gap: 0.5em;
+    }
+
+    &-iconContainer {
+        padding: 0.5em;
+        border-radius: 8px;
+        background: var(--Ep-attendanceDialog-iconBackground-color);
+    }
+
+    &-icon {
+        color: var(--Ep-blue);
+    }
+
+    &-eventName {
+        color: var(--Ep-secondaryText-color);
+        font-weight: 600;
+        font-size: 1.2em;
+        align-self: center;
+    }
+
+    &-options {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-terms {
+        color: var(--Ep-termsText-color);
+        font-size: 0.8em;
+    }
+
+    &-buttonContainer {
+        display: flex;
+        margin: 0.5em;
+    }
+}
+
+#EpEventAttendButton-confirmation {
+    background: none;
+    justify-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    overflow: hidden;
+
+    &::backdrop {
+        backdrop-filter: blur(5px);
+    }
+}
