@@ -7,8 +7,9 @@ import { Menu, MenuItem } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 import authClient from '../../services/auth-client.ts';
 import { SearchBar } from '../search-bar/search-bar.tsx';
-import { EpNavLink } from '../nav-link/nav-link.tsx';
 import { EpProfileImage } from '../profile-image/profile-image.tsx';
+import { EpHeaderNavLink } from '../header-navlink/header-navlink.tsx';
+import dayjs from 'dayjs';
 
 export function Header({
     isVisible,
@@ -18,10 +19,14 @@ export function Header({
     setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const user = getSession();
+    const today = dayjs().format('YYYY-MM-DD-HH');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
-
     const open = Boolean(anchorEl);
+
+    if (!user) {
+        setIsVisible(false);
+    }
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -36,7 +41,9 @@ export function Header({
     }
 
     function changeVisibility() {
-        setIsVisible(!isVisible);
+        if (user) {
+            setIsVisible(!isVisible);
+        }
     }
     return (
         <div className="EpHeader">
@@ -51,15 +58,14 @@ export function Header({
                             fontSize: '1.5em',
                         }}
                     />
-                    Dashboard
+                    {user ? 'Dashboard' : ''}
                 </EpButton>
             </div>
             {user ? (
                 <div className="EpHeader-option">
-                    {/*buttons need to be toggleable*/}
-                    <EpNavLink to="/discover">Discover</EpNavLink>
-                    <EpNavLink to="/manage-events">Manage Events</EpNavLink>
-                    <EpNavLink to="/calendar">Calendar</EpNavLink>
+                    <EpHeaderNavLink to={{ pathname: '/events', search: `fromDate=${today}` }}>Events</EpHeaderNavLink>
+                    <EpHeaderNavLink to="/manage-events">Manage Events</EpHeaderNavLink>
+                    <EpHeaderNavLink to="/calendar">Calendar</EpHeaderNavLink>
                     <div className="EpHeader-option--positionRight">
                         <SearchBar />
                         <EpButton onClick={handleClick} variant="ghost">
@@ -85,6 +91,7 @@ export function Header({
                 </div>
             ) : (
                 <div className="EpHeader-option">
+                    <EpHeaderNavLink to={{ pathname: '/events', search: `fromDate=${today}` }}>Events</EpHeaderNavLink>
                     <div className="EpHeader-option--positionRight">
                         <EpButton onClick={() => navigate('/login')}>Sign In</EpButton>
                         <EpButton onClick={() => navigate('/register')}>Sign Up</EpButton>
