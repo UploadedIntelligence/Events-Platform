@@ -68,7 +68,7 @@ export function CreateEvent() {
         });
         if (!image) return;
 
-        const imageResponse = await fetch(
+        await fetch(
             `${import.meta.env.VITE_SERVER_URL}/events/${createdEvent.data.event.id}/image`,
             {
                 method: 'PUT',
@@ -80,7 +80,7 @@ export function CreateEvent() {
             },
         );
 
-        if (imageResponse.status !== 200) {
+        if (createdEvent.status !== 200) {
             setRequestState('Error');
         } else {
             setRequestState('Success');
