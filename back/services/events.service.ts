@@ -1,10 +1,130 @@
 import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
-import { CreatedEvent, IUserSession } from '../utilities/types';
+import {
+    type OrganiserDTO,
+    type CreateEventDTO,
+    type AttendeeInfo,
+    EventEntity,
+    IUserSession,
+    UserGoogleEventDO,
+    GoogleCalendarEventDO,
+} from '../utilities/types';
 import type { calendar_v3 } from 'googleapis';
-import { EventInfoDO, UserGoogleEventDO, GoogleCalendarEventDO } from '../utilities/types';
 import axios from 'axios';
 import FormData from 'form-data';
+import { pickKeys } from '../utilities/pickKeys';
+
+export async function fetchEvent(
+    event_id: string,
+): Promise<{ data: EventEntity; included: Array<{ organiser: OrganiserDTO; attendees: Array<AttendeeInfo> }> } | null> {
+    const event = await prisma.event.findFirstOrThrow({
+        where: {
+            id: event_id,
+        },
+        include: {
+            organiser: true,
+            attendees: true,
+        },
+    });
+
+    const returning = pickKeys(event, [
+        'id',
+        'organiserId',
+        'name',
+        'imgUrl',
+        'location',
+        'description',
+        'start',
+        'end',
+    ]);
+    const organiser = pickKeys(event.organiser, ['name', 'email', 'image']);
+    const attendees = event.attendees;
+
+    return { data: returning, included: [{ organiser, attendees }] };
+}
+
+export function fetchAllEvents(filters: {
+    from: Date | undefined;
+    to: Date | undefined;
+    userId?: string | undefined;
+}): PrismaPromise<Array<EventEntity>> {
+    console.log(filters.userId);
+    return prisma.event.findMany({
+        where: {
+            ...(filters.from || filters.to
+                ? {
+                      start: {
+                          ...(filters.from
+                              ? {
+                                    gt: filters.from,
+                                }
+                              : {}),
+                          ...(filters.to
+                              ? {
+                                    lt: filters.to,
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(filters.userId && {
+                attendees: {
+                    some: {
+                        id: filters.userId,
+                    },
+                },
+            }),
+        },
+        include: {
+            attendees: true,
+        },
+        orderBy: {
+            start: filters.from ? 'asc' : 'desc',
+        },
+    });
+}
+
+// export function fetchAttendingEvents(today: Date, userId: string): PrismaPromise<Array<EventEntity> | undefined> {
+//     return prisma.event.findMany({
+//         where: {
+//             start: {
+//                 gt: today,
+//             },
+//             attendees: { some: { id: userId } },
+//         },
+//         orderBy: {
+//             start: 'asc',
+//         },
+//     });
+// }
+
+// export function fetchUserHistory(today: Date, userId: string): PrismaPromise<Array<EventEntity>> {
+//     return prisma.event.findMany({
+//         where: {
+//             start: {
+//                 lt: today,
+//             },
+//             attendees: { some: { id: userId } },
+//         },
+//         orderBy: {
+//             start: 'asc',
+//         },
+//     });
+// }
+
+export function createPrismaEvent(data: CreateEventDTO, userId: string): PrismaPromise<EventEntity> {
+    return prisma.event.create({
+        data: {
+            name: data.name,
+            organiserId: userId,
+            description: data.description,
+            location: data.location,
+            start: data.start,
+            end: data.end,
+            imgUrl: data.imgUrl ?? null,
+        },
+    });
+}
 
 export async function hostEventImage(data: Buffer | undefined, event_id: string) {
     if (data) {
@@ -36,89 +156,7 @@ export async function hostEventImage(data: Buffer | undefined, event_id: string)
     }
 }
 
-export function createEventService(data: EventInfoDO): PrismaPromise<CreatedEvent> {
-    return prisma.event.create({
-        data: {
-            name: data.name,
-            description: data.description,
-            location: data.location,
-            start: data.start,
-            end: data.end,
-            imgUrl: data.imgUrl ?? null,
-        },
-    });
-}
-
-export function fetchPastEventsService(today: Date): PrismaPromise<Array<CreatedEvent> | undefined> {
-    return prisma.event.findMany({
-        where: {
-            start: {
-                lt: today,
-            },
-        },
-        orderBy: {
-            start: 'asc',
-        },
-    });
-}
-
-export function fetchUpcomingEventsService(
-    today: Date,
-    session: IUserSession,
-): PrismaPromise<Array<EventInfoDO> | undefined> {
-    return prisma.event.findMany({
-        where: {
-            start: {
-                gt: today,
-            },
-            attendees: { none: { id: session.user.id } },
-        },
-        orderBy: {
-            start: 'asc',
-        },
-    });
-}
-
-export function fetchAttendingEventsService(
-    today: Date,
-    session: IUserSession,
-): PrismaPromise<Array<EventInfoDO> | undefined> {
-    return prisma.event.findMany({
-        where: {
-            start: {
-                gt: today,
-            },
-            attendees: { some: { id: session.user.id } },
-        },
-        orderBy: {
-            start: 'asc',
-        },
-    });
-}
-
-export function fetchUserHistoryService(today: Date, session: IUserSession): PrismaPromise<Array<EventInfoDO>> {
-    return prisma.event.findMany({
-        where: {
-            start: {
-                lt: today,
-            },
-            attendees: { some: { id: session.user.id } },
-        },
-        orderBy: {
-            start: 'asc',
-        },
-    });
-}
-
-export function fetchSpecificEventService(event_id: string): PrismaPromise<EventInfoDO | null> {
-    return prisma.event.findFirst({
-        where: {
-            id: event_id,
-        },
-    });
-}
-
-export function updateEventService(data: EventInfoDO, event_id: string) {
+export function updateEvent(data: EventEntity, event_id: string) {
     return prisma.event.update({
         where: {
             id: event_id,
@@ -134,11 +172,11 @@ export function updateEventService(data: EventInfoDO, event_id: string) {
     });
 }
 
-export function updateEventAttendanceService(
+export function updateEventAttendance(
     event_id: string,
     is_attending: boolean,
     session: IUserSession,
-): PrismaPromise<EventInfoDO> {
+): PrismaPromise<EventEntity> {
     if (is_attending) {
         return prisma.event.update({
             where: {
@@ -167,10 +205,7 @@ export function updateEventAttendanceService(
     });
 }
 
-export function getUserGoogleEventService(
-    session: IUserSession,
-    event_id: string,
-): PrismaPromise<UserGoogleEventDO | null> {
+export function getUserGoogleEvent(session: IUserSession, event_id: string): PrismaPromise<UserGoogleEventDO | null> {
     return prisma.userGoogleEvent.findFirst({
         where: {
             userId: session.user.id,
@@ -179,9 +214,9 @@ export function getUserGoogleEventService(
     });
 }
 
-export function insertGoogleCalendarEventService(
+export function insertGoogleCalendarEvent(
     calendar: calendar_v3.Calendar,
-    event: EventInfoDO,
+    event: EventEntity,
 ): Promise<GoogleCalendarEventDO> {
     return calendar?.events.insert({
         calendarId: 'primary',
@@ -194,7 +229,7 @@ export function insertGoogleCalendarEventService(
     });
 }
 
-export function deleteGoogleCalendarEventService(
+export function deleteGoogleCalendarEvent(
     calendar: calendar_v3.Calendar,
     google_event: UserGoogleEventDO | null,
 ): Promise<GoogleCalendarEventDO> {
@@ -204,21 +239,7 @@ export function deleteGoogleCalendarEventService(
     });
 }
 
-export function deleteGoogleEventService(
-    google_event: UserGoogleEventDO,
-    session: IUserSession,
-    event_id: string,
-): PrismaPromise<UserGoogleEventDO> {
-    return prisma.userGoogleEvent.delete({
-        where: {
-            googleId: google_event!.googleId,
-            userId: session.user.id,
-            eventId: event_id,
-        },
-    });
-}
-
-export function createGoogleEventService(
+export function createGoogleEvent(
     google_calendar_event: GoogleCalendarEventDO,
     session: IUserSession,
     event_id: string,
@@ -226,6 +247,20 @@ export function createGoogleEventService(
     return prisma.userGoogleEvent.create({
         data: {
             googleId: google_calendar_event.data!.id!,
+            userId: session.user.id,
+            eventId: event_id,
+        },
+    });
+}
+
+export function deleteGoogleEvent(
+    google_event: UserGoogleEventDO,
+    session: IUserSession,
+    event_id: string,
+): PrismaPromise<UserGoogleEventDO> {
+    return prisma.userGoogleEvent.delete({
+        where: {
+            googleId: google_event!.googleId,
             userId: session.user.id,
             eventId: event_id,
         },
