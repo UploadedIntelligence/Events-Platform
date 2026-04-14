@@ -1,23 +1,26 @@
 import './event-display.scss';
 import { useQuery } from '@tanstack/react-query';
 import axios from '../../config/client.ts';
-import type { IUserEvents } from '../../pages/landing-page/user-landing-page/user-events.tsx';
+import type { IEvents } from '../../pages/landing-page/events.tsx';
 import { useParams } from 'react-router-dom';
 import { EpButton } from '../button/button.tsx';
 import { Spinner } from '../spinner/spinner.tsx';
 import { EpEventGallery } from '../event-gallery/event-gallery.tsx';
 import bigStockImage from '../../images/big_sample_photo.jpg';
-// import { AttendOrCancelEventDialog } from "../attend-event-dialog.tsx";
-// import { useState } from "react";
+import { EpEventAttendButton } from '../event-attend-button/event-attend-button.tsx';
+
+export interface OrganizerInfo {
+    name: string;
+    email: string;
+    image?: string;
+}
 
 export function EpEventDisplay() {
-    // const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    // const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-    const { eventID } = useParams<string>();
+    const { eventId } = useParams<string>();
     const { data, error, isPending } = useQuery({
-        queryKey: [eventID],
+        queryKey: [eventId],
         queryFn: () => {
-            return axios.get(`event-details/${eventID}`);
+            return axios.get<{ data: IEvents & { included: Array<OrganizerInfo> } }>(`events/${eventId}`);
         },
     });
 
@@ -29,17 +32,11 @@ export function EpEventDisplay() {
         return <>error</>;
     }
 
-    const displayEvent: IUserEvents = {
-        ...data.data,
-        actions: [
-            { title: 'Cancel attendance' },
-            { type: 'past or future event' },
-            // {action: () => {
-            //     setSelectedEventId(displayEvent.id);
-            //     setDialogOpen(true);
-            // }},
-        ],
+    const displayEvent: IEvents = {
+        ...data.data.data,
     };
+
+    console.log(data);
 
     return (
         <div className="EpEventDisplay">
@@ -72,6 +69,7 @@ export function EpEventDisplay() {
                         <div className="EpEventDisplay-organizer" id="EpEventDisplay-organizer">
                             <div>Profile image</div>
                             <div>Name</div>
+                            <div>{displayEvent.organiserId}asd</div>
                             <div>Bio info</div>
                             <div className="EpEventDisplay-buttonsContainer">
                                 <button className="EpEventDisplay-followButton">
@@ -99,35 +97,32 @@ export function EpEventDisplay() {
                         <div className="EpEventDisplay-attendOrCancel"></div>
                     </div>
                 </div>
-                <div>
-                    {displayEvent.actions?.map((action, idx) => {
-                        if (action !== null) {
-                            return <EpButton key={idx}>{action.title}</EpButton>;
-                        }
-                    })}
-                </div>
             </div>
 
             <aside className="EpEventDisplay-sidebarContainer">
                 <div className="EpEventDisplay-navigationMenu">
-                    <a className="EpEventDisplay-navigationOption" href={'#EpEventDisplay-about'} aria-current="true">
+                    <a className="EpEventDisplay-navigationOption" href={'#EpEventDisplay-about'} aria-current="false">
                         About
                     </a>
-                    <a className="EpEventDisplay-navigationOption" href={'#EpEventDisplay-gallery'} aria-current="true">
+                    <a
+                        className="EpEventDisplay-navigationOption"
+                        href={'#EpEventDisplay-gallery'}
+                        aria-current="false"
+                    >
                         Gallery
                     </a>
                     <a
                         className="EpEventDisplay-navigationOption"
                         href={'#EpEventDisplay-location'}
-                        aria-current="true"
+                        aria-current="false"
                     >
                         Location
                     </a>
                     <a
                         className="EpEventDisplay-navigationOption"
                         href={'#EpEventDisplay-organizer'}
-                        aria-current="true"
-                        onClick={(event) => event.currentTarget.setAttribute('aria-current', 'false')}
+                        aria-current="false"
+                        onClick={(event) => event.currentTarget.setAttribute('aria-current', 'true')}
                     >
                         Organizer
                     </a>
@@ -138,7 +133,7 @@ export function EpEventDisplay() {
                         <p>Price</p>
                     </div>
                     <div className="EpEventDisplay-ticketButtons">
-                        <EpButton>Attend</EpButton>
+                        <EpEventAttendButton>Attend</EpEventAttendButton>
                         <EpButton variant="secondary">
                             <span className="material-symbols-outlined bookmark">bookmark</span>
                             Save event
@@ -146,12 +141,6 @@ export function EpEventDisplay() {
                     </div>
                 </div>
             </aside>
-            {/*<AttendOrCancelEventDialog*/}
-            {/*    eventUrl='needs to be changed to type of event, like past/future/history/attending'*/}
-            {/*    dialogOpen={dialogOpen}*/}
-            {/*    selectedEventId={selectedEventId}*/}
-            {/*    setDialogOpen={setDialogOpen}*/}
-            {/*/>*/}
         </div>
     );
 }
