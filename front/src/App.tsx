@@ -1,6 +1,6 @@
 import authClient from './services/auth-client.ts';
-import { LandingPage } from './pages/landing-page';
 import { Spinner } from './components/spinner/spinner.tsx';
+import { Outlet } from 'react-router';
 
 export function App() {
     const { isPending } = authClient.useSession();
@@ -8,9 +8,5 @@ export function App() {
         return <Spinner />;
     }
 
-    return (
-        <>
-            <LandingPage />
-        </>
-    );
+    return <Outlet />;
 }
