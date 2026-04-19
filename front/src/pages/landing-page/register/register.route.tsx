@@ -1,17 +1,19 @@
 import { LinearProgress, Tooltip, Typography } from '@mui/material';
-import authClient from '../../services/auth-client.ts';
+import authClient from '../../../services/auth-client.ts';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons/social-media-icon-buttons.tsx';
-import { EpCredentialsPageContent } from '../../components/credentials-page-content/credentials-page-content.tsx';
-import { EpUserCredentialsForm } from '../../components/user-credentials-form/user-credentials-form.tsx';
-import { EpUserDataInput } from '../../components/user-data-input/user-data-input.tsx';
-import { EpButton } from '../../components/button/button.tsx';
+import { SocialMediaIconButtons } from '../../../components/social-media-icon-buttons/social-media-icon-buttons.tsx';
+import { EpCredentialsPageContent } from '../../../components/credentials-page-content/credentials-page-content.tsx';
+import { EpUserCredentialsForm } from '../../../components/user-credentials-form/user-credentials-form.tsx';
+import { EpUserDataInput } from '../../../components/user-data-input/user-data-input.tsx';
+import { EpButton } from '../../../components/button/button.tsx';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import dayjs from 'dayjs';
 
 export function RegisterPage() {
     const navigate = useNavigate();
+    const today = dayjs().format('YYYY-MM-DD-HH');
     const [strength, setStrength] = useState<number>(0);
     const {
         register,
@@ -64,7 +66,7 @@ export function RegisterPage() {
             },
             {
                 onSuccess: () => {
-                    navigate('/upcoming-events');
+                    navigate({ pathname: '/events', search: `fromDate=${today}` });
                 },
             },
         );

@@ -1,11 +1,11 @@
 import { Card, Button, CardContent, Typography, Paper } from '@mui/material';
-import { Navigate, NavLink } from 'react-router-dom';
-import { RoleApplication } from '../../../../components/role-application.tsx';
-import { DeleteAccount } from '../../../../components/delete-account-dialog.tsx';
-import { getSession } from '../../../../utilities/user-permissions.ts';
+import { Navigate, NavLink, useLoaderData } from 'react-router-dom';
+import { RoleApplication } from '../../../components/role-application.tsx';
+import { DeleteAccount } from '../../../components/delete-account-dialog.tsx';
+import type { IUser } from '../../../utilities/user-permissions.ts';
 
 export function UserProfile() {
-    const user = getSession();
+    const user: IUser = useLoaderData().data;
     return (
         <div>
             {user ? (

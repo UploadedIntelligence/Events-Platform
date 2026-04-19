@@ -14,12 +14,12 @@ export interface IUser {
     banExpires?: Date | null | undefined;
 }
 
-export function getSession(): IUser | undefined {
-    return authClient.useSession()?.data?.user;
+export async function getSession(): Promise<IUser | undefined> {
+    return (await authClient.getSession()).data?.user;
 }
 
-export function canCreateEvent(): boolean {
-    const user: IUser | undefined = getSession();
+export async function canCreateEvent(): Promise<boolean> {
+    const user: IUser | undefined = await getSession();
     if (!user) {
         return false;
     }
