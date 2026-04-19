@@ -1,5 +1,5 @@
 import './event-card.scss';
-import type { IEvents } from '../../pages/landing-page/events.tsx';
+import type { IEvents } from '../../pages/landing-page/events/events.route.tsx';
 import stockImage from '../../images/event_stock_photo.jpg';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
