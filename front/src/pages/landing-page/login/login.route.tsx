@@ -1,17 +1,19 @@
 import { Alert, Snackbar } from '@mui/material';
-import authClient from '../../services/auth-client.ts';
+import authClient from '../../../services/auth-client.ts';
 import { useState } from 'react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { SocialMediaIconButtons } from '../../components/social-media-icon-buttons/social-media-icon-buttons.tsx';
-import { EpUserDataInput } from '../../components/user-data-input/user-data-input.tsx';
-import { EpButton } from '../../components/button/button.tsx';
-import { EpCredentialsPageContent } from '../../components/credentials-page-content/credentials-page-content.tsx';
-import { EpDivider } from '../../components/divider/divider.tsx';
-import { EpUserCredentialsForm } from '../../components/user-credentials-form/user-credentials-form.tsx';
+import { SocialMediaIconButtons } from '../../../components/social-media-icon-buttons/social-media-icon-buttons.tsx';
+import { EpUserDataInput } from '../../../components/user-data-input/user-data-input.tsx';
+import { EpButton } from '../../../components/button/button.tsx';
+import { EpCredentialsPageContent } from '../../../components/credentials-page-content/credentials-page-content.tsx';
+import { EpDivider } from '../../../components/divider/divider.tsx';
+import { EpUserCredentialsForm } from '../../../components/user-credentials-form/user-credentials-form.tsx';
+import dayjs from 'dayjs';
 
 export function LoginPage() {
+    const today = dayjs().format('YYYY-MM-DD-HH');
     const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false);
 
     const {
@@ -32,7 +34,7 @@ export function LoginPage() {
         const { data, error } = await authClient.signIn.email({
             email: user_email,
             password: user_password,
-            callbackURL: '/upcoming-events',
+            callbackURL: `/events?fromDate=${today}`,
         });
 
         if (error !== null) {
