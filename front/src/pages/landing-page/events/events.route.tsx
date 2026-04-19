@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from '../../config/client.ts';
-import { Spinner } from '../../components/spinner/spinner.tsx';
-import { EventCard } from '../../components/event-card/event-card.tsx';
-import { EventFilters } from '../../utilities/event-filters.ts';
-import { EpEventGridContainer } from '../../components/event-grid-container/event-grid-container.tsx';
-import { EpEventGrid } from '../../components/event-grid/event-grid.tsx';
-import { EpEventGridToggle } from '../../components/event-grid-toggle/event-grid-toggle.tsx';
+import axios from '../../../config/client.ts';
+import { Spinner } from '../../../components/spinner/spinner.tsx';
+import { EventCard } from '../../../components/event-card/event-card.tsx';
+import { EventFilters } from '../../../utilities/event-filters.ts';
+import { EpEventGridContainer } from '../../../components/event-grid-container/event-grid-container.tsx';
+import { EpEventGrid } from '../../../components/event-grid/event-grid.tsx';
+import { EpEventGridToggle } from '../../../components/event-grid-toggle/event-grid-toggle.tsx';
 import dayjs from 'dayjs';
 import { NavLink } from 'react-router-dom';
 import './events.scss';
