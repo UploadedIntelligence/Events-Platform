@@ -2,17 +2,17 @@ import './style-reset.scss';
 import './index.scss';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import queryClient from '../src/services/tanstack-query-client.ts';
+import { RouterProvider } from 'react-router/dom';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { App } from './App.tsx';
+import queryClient from '../src/services/tanstack-query-client.ts';
+import router from './routes.ts';
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root');
+
+createRoot(root!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
+            <RouterProvider router={router} />
         </QueryClientProvider>
     </StrictMode>,
 );
