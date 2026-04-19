@@ -1,10 +1,10 @@
-import { Button, Dialog, DialogTitle, DialogActions, Alert } from '@mui/material';
+import { Alert, Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import axios from '../config/client.ts';
+import * as React from 'react';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import QueryClient from '../services/tanstack-query-client.ts';
-import * as React from 'react';
-import type { IEvents } from '../pages/landing-page/events.tsx';
+import type { IEvents } from '../pages/landing-page/events/events.route.tsx';
 
 export function AttendOrCancelEventDialog({
     eventUrl,
