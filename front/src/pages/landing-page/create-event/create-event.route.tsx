@@ -7,8 +7,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useState } from 'react';
 import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
-import { canCreateEvent, getSession} from '../../../utilities/user-permissions.ts';
-import { Navigate } from 'react-router-dom';
+import { type IUser } from '../../../utilities/user-permissions.ts';
+import { useLoaderData } from 'react-router-dom';
 import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
 import { EpUserDataInput } from '../../../components/user-data-input/user-data-input.tsx';
 import { EpCredentialsPageContent } from '../../../components/credentials-page-content/credentials-page-content.tsx';
@@ -21,13 +21,8 @@ import dayjs from 'dayjs';
 // passing a sequence of invalid dates causes the error message to flicker
 
 export function CreateEvent() {
-    const user = getSession();
-    const hasPermission = canCreateEvent();
+    const user: IUser = useLoaderData();
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
-
-    if (!user || !hasPermission) {
-        return <Navigate to="/" />;
-    }
 
     const {
         register,
@@ -62,23 +57,20 @@ export function CreateEvent() {
 
         const createdEvent = await axios.post('/events', {
             ...remainingData,
-            organiser: user!.id,
+            organiser: user.id,
             start: eventData.start?.toISOString(),
             end: eventData.end?.toISOString(),
         });
         if (!image) return;
 
-        await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/events/${createdEvent.data.event.id}/image`,
-            {
-                method: 'PUT',
-                credentials: 'include',
-                body: image[0],
-                headers: {
-                    'Content-Type': 'application/octet-stream',
-                },
+        await fetch(`${import.meta.env.VITE_SERVER_URL}/events/${createdEvent.data.event.id}/image`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: image[0],
+            headers: {
+                'Content-Type': 'application/octet-stream',
             },
-        );
+        });
 
         if (createdEvent.status !== 200) {
             setRequestState('Error');
