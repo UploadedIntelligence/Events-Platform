@@ -1,11 +1,8 @@
 import { Button, CardActions, Card } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import { getSession } from '../../../../utilities/user-permissions.ts';
 
 export function UserSettings() {
-    const user = getSession();
-
-    return user ? (
+    return (
         <div>
             <Card>
                 <NavLink to="/user-profile">
@@ -17,5 +14,5 @@ export function UserSettings() {
                 <CardActions></CardActions>
             </Card>
         </div>
-    ) : null;
+    );
 }
