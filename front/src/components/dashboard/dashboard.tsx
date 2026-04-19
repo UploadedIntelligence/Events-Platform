@@ -1,18 +1,17 @@
 import './dashboard.scss';
-import { canCreateEvent, getSession } from '../../utilities/user-permissions.ts';
+import { type IUser } from '../../utilities/user-permissions.ts';
 import dayjs from 'dayjs';
 import { EventFilters } from '../../utilities/event-filters.ts';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLoaderData } from 'react-router-dom';
 
 export function Dashboard() {
-    const user = getSession();
+    const { user }: { user: IUser } = useLoaderData();
     const { fromDate, toDate } = EventFilters();
     const today = dayjs().format('YYYY-MM-DD-HH');
-    const hasPermission = canCreateEvent();
 
     return (
         <div className="EpDashboard">
-            {hasPermission && (
+            {
                 <NavLink
                     className="EpDashboard-option"
                     to={{
@@ -21,7 +20,7 @@ export function Dashboard() {
                 >
                     create event
                 </NavLink>
-            )}
+            }
             <NavLink
                 className={({ isActive }) => `EpDashboard-option ${isActive && fromDate ? 'active' : ''}`}
                 to={{
