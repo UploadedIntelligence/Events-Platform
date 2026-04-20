@@ -1,6 +1,7 @@
 import authClient from './services/auth-client.ts';
 import { Spinner } from './components/spinner/spinner.tsx';
 import { Outlet } from 'react-router';
+import { MainBackground } from './components/main-background/main-background.tsx';
 
 export function App() {
     const { isPending } = authClient.useSession();
@@ -8,5 +9,9 @@ export function App() {
         return <Spinner />;
     }
 
-    return <Outlet />;
+    return (
+        <MainBackground>
+            <Outlet />
+        </MainBackground>
+    );
 }
