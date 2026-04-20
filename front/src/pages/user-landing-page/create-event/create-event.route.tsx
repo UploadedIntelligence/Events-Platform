@@ -82,7 +82,7 @@ export function CreateEvent() {
     }
 
     if (navigation.state === 'loading') {
-        return <Spinner/>
+        return <Spinner />;
     }
 
     return (
