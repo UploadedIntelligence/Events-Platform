@@ -2,7 +2,6 @@ import { Outlet } from 'react-router';
 import { Header } from '../../components/header/header.tsx';
 import { useState } from 'react';
 import { Dashboard } from '../../components/dashboard/dashboard.tsx';
-import { MainBackground } from '../../components/main-background/main-background.tsx';
 import { EpFooter } from '../../components/footer/footer.tsx';
 import { EpPageContent } from '../../components/page-content/page-content.tsx';
 import { EpButton } from '../../components/button/button.tsx';
@@ -10,12 +9,12 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { useLoaderData } from 'react-router-dom';
 import type { IUser } from '../../utilities/user-permissions.ts';
 
-export function LandingPage() {
+export function UserLandingPage() {
     const { user }: { user: IUser } = useLoaderData();
     const [isVisible, setIsVisible] = useState<boolean>(true);
 
     return (
-        <MainBackground>
+        <>
             <Header>
                 <EpButton variant="ghost" onClick={() => setIsVisible(!isVisible)}>
                     <EventAvailableIcon
@@ -35,6 +34,6 @@ export function LandingPage() {
                 <Outlet />
             </EpPageContent>
             <EpFooter />
-        </MainBackground>
+        </>
     );
 }

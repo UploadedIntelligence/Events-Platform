@@ -1,48 +1,70 @@
 import { createBrowserRouter } from 'react-router';
 import { App } from './App';
-import { LandingPage } from './pages/landing-page/landing-page.route.tsx';
-import { LoginPage } from './pages/landing-page/login/login.route.tsx';
-import { RegisterPage } from './pages/landing-page/register/register.route.tsx';
-import { CreateEvent } from './pages/landing-page/create-event/create-event.route.tsx';
-import { Events } from './pages/landing-page/events/events.route.tsx';
+import { UserLandingPage } from './pages/user-landing-page/user-landing-page.route.tsx';
+import { CreateEvent } from './pages/user-landing-page/create-event/create-event.route.tsx';
+import { Events } from './pages/events/events.route.tsx';
 import { EpEventDisplay } from './components/event-display/event-display.tsx';
 import { EpNotFound } from './components/not-found/not-found.tsx';
-import { CreateEventLoader } from './pages/landing-page/create-event/create-event-loader.tsx';
-import { LandingPageLoader } from './pages/landing-page/landing-page-loader.ts';
+import { CreateEventLoader } from './pages/user-landing-page/create-event/create-event-loader.tsx';
+import { UserLandingPageLoader } from './pages/user-landing-page/user-landing-page-loader.ts';
+import { LoginPage } from './pages/guest-landing-page/login/login.route.tsx';
+import { RegisterPage } from './pages/guest-landing-page/register/register.route.tsx';
+import { GuestLandingPage } from './pages/guest-landing-page/guest-landing-page.route.tsx';
+
+export const routePaths = {
+    user: {
+        path: 'users',
+        build: (id: string) => `users/${id}`,
+    },
+    guest: {
+        path: 'guest',
+    },
+    login: {
+        path: 'login',
+    },
+    register: {
+        path: 'register',
+    },
+    events: {
+        path: 'events',
+        build: () => `events`,
+    },
+    event: {
+        path: ':eventId',
+        build: (id: string) => `${routePaths.events.build()}/${id}`,
+    },
+    createEvent: {
+        path: 'create-event',
+    },
+};
+
+const sharedRoutes = {
+    path: routePaths.events.path,
+    Component: Events,
+    children: [
+        {
+            path: routePaths.event.path,
+            Component: EpEventDisplay,
+        },
+    ],
+};
 
 export default createBrowserRouter([
     {
+        path: '/',
         Component: App,
         children: [
             {
-                id: 'LandingPage',
-                Component: LandingPage,
-                loader: LandingPageLoader,
+                id: 'UserLandingPage',
+                path: routePaths.user.path,
+                Component: UserLandingPage,
+                loader: UserLandingPageLoader,
+                hasErrorBoundary: true,
+                errorElement: EpNotFound(),
                 children: [
+                    sharedRoutes,
                     {
-                        path: 'login',
-                        Component: LoginPage,
-                    },
-                    {
-                        path: 'register',
-                        Component: RegisterPage,
-                    },
-                    {
-                        path: 'events',
-                        Component: Events,
-                        children: [
-                            {
-                                path: ':eventId',
-                                Component: EpEventDisplay,
-                            },
-                        ],
-                    },
-                    {
-                        path: 'users/:userId/events',
-                        Component: Events,
-                    },
-                    {
-                        path: 'create-event',
+                        path: routePaths.createEvent.path,
                         loader: CreateEventLoader,
                         Component: CreateEvent,
                     },
@@ -50,6 +72,22 @@ export default createBrowserRouter([
                         path: '*',
                         Component: EpNotFound,
                     },
+                ],
+            },
+            {
+                id: 'GuestLandingPage',
+                path: routePaths.guest.path,
+                Component: GuestLandingPage,
+                children: [
+                    {
+                        path: routePaths.login.path,
+                        Component: LoginPage,
+                    },
+                    {
+                        path: routePaths.register.path,
+                        Component: RegisterPage,
+                    },
+                    sharedRoutes,
                 ],
             },
         ],

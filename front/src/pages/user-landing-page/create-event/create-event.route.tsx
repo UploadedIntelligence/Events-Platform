@@ -8,20 +8,21 @@ import { useState } from 'react';
 import { type CreateEventForm } from '../../../utilities/types.ts';
 import 'dayjs/locale/en-gb';
 import { type IUser } from '../../../utilities/user-permissions.ts';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigation } from 'react-router-dom';
 import { disablePast, isValidDateTime, minDateTime } from '../../../utilities/validation.ts';
 import { EpUserDataInput } from '../../../components/user-data-input/user-data-input.tsx';
 import { EpCredentialsPageContent } from '../../../components/credentials-page-content/credentials-page-content.tsx';
 import { EpButton } from '../../../components/button/button.tsx';
 import { EpUserCredentialsForm } from '../../../components/user-credentials-form/user-credentials-form.tsx';
 import { EpImageUpload } from '../../../components/image-upload/image-upload.tsx';
-
 import dayjs from 'dayjs';
+import { Spinner } from '../../../components/spinner/spinner.tsx';
 
 // passing a sequence of invalid dates causes the error message to flicker
 
 export function CreateEvent() {
     const user: IUser = useLoaderData();
+    const navigation = useNavigation();
     const [requestState, setRequestState] = useState<'Pending' | 'Error' | 'Success' | 'Idle'>('Idle');
 
     const {
@@ -78,6 +79,10 @@ export function CreateEvent() {
             setRequestState('Success');
             reset();
         }
+    }
+
+    if (navigation.state === 'loading') {
+        return <Spinner />;
     }
 
     return (

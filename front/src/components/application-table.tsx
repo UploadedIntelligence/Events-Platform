@@ -1,5 +1,5 @@
-import { Button, Typography, TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from '@mui/material';
-import { type Application } from '../pages/landing-page/user-profile/admin-settings/admin-settings.route.tsx';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { type Application } from '../pages/user-landing-page/user-profile/admin-settings/admin-settings.route.tsx';
 import axios from '../config/client.ts';
 import type { Role } from '../utilities/types.ts';
 import { useMutation } from '@tanstack/react-query';

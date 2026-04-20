@@ -7,7 +7,7 @@ import { type IUser } from '../../../../utilities/user-permissions.ts';
 import { useRouteLoaderData } from 'react-router-dom';
 
 export function ViewApplications() {
-    const user: IUser | undefined = useRouteLoaderData('LandingPage');
+    const user: IUser | undefined = useRouteLoaderData('UserLandingPage');
 
     if (user?.role !== 'admin') {
         return <div>Forbidden</div>;

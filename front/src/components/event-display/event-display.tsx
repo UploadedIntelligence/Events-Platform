@@ -1,7 +1,7 @@
 import './event-display.scss';
 import { useQuery } from '@tanstack/react-query';
 import axios from '../../config/client.ts';
-import type { IEvents } from '../../pages/landing-page/events/events.route.tsx';
+import type { IEvents } from '../../pages/events/events.route.tsx';
 import { useParams } from 'react-router-dom';
 import { EpButton } from '../button/button.tsx';
 import { Spinner } from '../spinner/spinner.tsx';

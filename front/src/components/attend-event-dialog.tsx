@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import QueryClient from '../services/tanstack-query-client.ts';
-import type { IEvents } from '../pages/landing-page/events/events.route.tsx';
+import type { IEvents } from '../pages/events/events.route.tsx';
 
 export function AttendOrCancelEventDialog({
     eventUrl,
