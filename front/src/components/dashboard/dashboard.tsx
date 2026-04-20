@@ -1,41 +1,51 @@
 import './dashboard.scss';
-import { type IUser } from '../../utilities/user-permissions.ts';
 import dayjs from 'dayjs';
 import { EventFilters } from '../../utilities/event-filters.ts';
-import { NavLink, useLoaderData } from 'react-router-dom';
+import { NavLink, useLoaderData, useNavigation } from 'react-router-dom';
+import { routePaths } from '../../routes.ts';
 
 export function Dashboard() {
-    const { user }: { user: IUser } = useLoaderData();
+    const navigation = useNavigation();
+    const isNavigating = Boolean(navigation.location);
+    const { userCanCreateEvent }: { userCanCreateEvent: boolean } = useLoaderData();
     const { fromDate, toDate } = EventFilters();
     const today = dayjs().format('YYYY-MM-DD-HH');
 
     return (
         <div className="EpDashboard">
-            {
+            {userCanCreateEvent && (
                 <NavLink
-                    className="EpDashboard-option"
+                    className={({ isActive, isPending }) =>
+                        `EpDashboard-option ${(isActive && !isNavigating) || isPending ? 'active' : ''}`
+                    }
                     to={{
-                        pathname: '/create-event',
+                        pathname: routePaths.createEvent.path,
                     }}
                 >
                     create event
                 </NavLink>
-            }
+            )}
             <NavLink
-                className={({ isActive }) => `EpDashboard-option ${isActive && fromDate ? 'active' : ''}`}
+                className={({ isActive, isPending }) =>
+                    `EpDashboard-option ${(isActive && fromDate && !isNavigating) || (isPending && navigation.location?.search.includes('?fromDate')) ? 'active' : ''}`
+                }
                 to={{
-                    pathname: `/users/${user?.id}/events`,
+                    pathname: routePaths.events.path,
                     search: `fromDate=${today}`,
                 }}
+                viewTransition
             >
                 attending
             </NavLink>
             <NavLink
-                className={({ isActive }) => `EpDashboard-option ${isActive && toDate ? 'active' : ''}`}
+                className={({ isActive, isPending }) =>
+                    `EpDashboard-option ${(isActive && toDate && !isNavigating) || (isPending && navigation.location?.search.includes('?toDate')) ? 'active' : ''}`
+                }
                 to={{
-                    pathname: `/users/${user?.id}/events`,
+                    pathname: routePaths.events.path,
                     search: `toDate=${today}`,
                 }}
+                viewTransition
             >
                 history
             </NavLink>
