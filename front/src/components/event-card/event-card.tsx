@@ -1,15 +1,16 @@
 import './event-card.scss';
-import type { IEvents } from '../../pages/landing-page/events/events.route.tsx';
+import type { IEvents } from '../../pages/events/events.route.tsx';
 import stockImage from '../../images/event_stock_photo.jpg';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import { EpButton } from '../button/button.tsx';
 import { useNavigate } from 'react-router-dom';
+import { routePaths } from '../../routes.ts';
 
 export function EventCard({ events }: { events: Array<IEvents> | [] }) {
     const navigate = useNavigate();
     function eventDetails(eventID: string) {
-        navigate(`/events/${eventID}`);
+        navigate(routePaths.event.build(eventID));
     }
 
     return events.map((event, index) => {
