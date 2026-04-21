@@ -1,13 +1,13 @@
 import { PrismaPromise } from '../generated/prisma';
 import prisma from '../lib/prisma';
 import {
-    type OrganiserDTO,
-    type CreateEventDTO,
     type AttendeeInfo,
+    type CreateEventDTO,
     EventEntity,
-    IUserSession,
-    UserGoogleEventDO,
     GoogleCalendarEventDO,
+    IUserSession,
+    type OrganiserDTO,
+    UserGoogleEventDO
 } from '../utilities/types';
 import type { calendar_v3 } from 'googleapis';
 import axios from 'axios';
@@ -15,11 +15,11 @@ import FormData from 'form-data';
 import { pickKeys } from '../utilities/pickKeys';
 
 export async function fetchEvent(
-    event_id: string,
+    eventId: string,
 ): Promise<{ data: EventEntity; included: Array<{ organiser: OrganiserDTO; attendees: Array<AttendeeInfo> }> } | null> {
     const event = await prisma.event.findFirstOrThrow({
         where: {
-            id: event_id,
+            id: eventId,
         },
         include: {
             organiser: true,
@@ -126,7 +126,7 @@ export function createPrismaEvent(data: CreateEventDTO, userId: string): PrismaP
     });
 }
 
-export async function hostEventImage(data: Buffer | undefined, event_id: string) {
+export async function hostEventImage(data: Buffer | undefined, eventId: string) {
     if (data) {
         try {
             const formData = new FormData();
@@ -144,7 +144,7 @@ export async function hostEventImage(data: Buffer | undefined, event_id: string)
 
             return prisma.event.update({
                 where: {
-                    id: event_id,
+                    id: eventId,
                 },
                 data: {
                     imgUrl: uploadedImageUrl,
@@ -156,10 +156,10 @@ export async function hostEventImage(data: Buffer | undefined, event_id: string)
     }
 }
 
-export function updateEvent(data: EventEntity, event_id: string) {
+export function updateEvent(data: EventEntity, eventId: string) {
     return prisma.event.update({
         where: {
-            id: event_id,
+            id: eventId,
         },
         data: {
             name: data.name,
@@ -173,14 +173,14 @@ export function updateEvent(data: EventEntity, event_id: string) {
 }
 
 export function updateEventAttendance(
-    event_id: string,
+    eventId: string,
     is_attending: boolean,
     session: IUserSession,
 ): PrismaPromise<EventEntity> {
     if (is_attending) {
         return prisma.event.update({
             where: {
-                id: event_id,
+                id: eventId,
             },
             data: {
                 attendees: {
@@ -193,7 +193,7 @@ export function updateEventAttendance(
     }
     return prisma.event.update({
         where: {
-            id: event_id,
+            id: eventId,
         },
         data: {
             attendees: {
@@ -205,11 +205,11 @@ export function updateEventAttendance(
     });
 }
 
-export function getUserGoogleEvent(session: IUserSession, event_id: string): PrismaPromise<UserGoogleEventDO | null> {
+export function getUserGoogleEvent(session: IUserSession, eventId: string): PrismaPromise<UserGoogleEventDO | null> {
     return prisma.userGoogleEvent.findFirst({
         where: {
             userId: session.user.id,
-            eventId: event_id,
+            eventId: eventId,
         },
     });
 }
@@ -242,13 +242,13 @@ export function deleteGoogleCalendarEvent(
 export function createGoogleEvent(
     google_calendar_event: GoogleCalendarEventDO,
     session: IUserSession,
-    event_id: string,
+    eventId: string,
 ) {
     return prisma.userGoogleEvent.create({
         data: {
             googleId: google_calendar_event.data!.id!,
             userId: session.user.id,
-            eventId: event_id,
+            eventId: eventId,
         },
     });
 }
@@ -256,13 +256,13 @@ export function createGoogleEvent(
 export function deleteGoogleEvent(
     google_event: UserGoogleEventDO,
     session: IUserSession,
-    event_id: string,
+    eventId: string,
 ): PrismaPromise<UserGoogleEventDO> {
     return prisma.userGoogleEvent.delete({
         where: {
             googleId: google_event!.googleId,
             userId: session.user.id,
-            eventId: event_id,
+            eventId: eventId,
         },
     });
 }
