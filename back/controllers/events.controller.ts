@@ -1,25 +1,23 @@
 import { Request, Response } from 'express';
 import {
-    createPrismaEvent,
     createGoogleEvent,
+    createPrismaEvent,
     deleteGoogleCalendarEvent,
     deleteGoogleEvent,
-    // fetchAttendingEvents,
+    fetchAllEvents,
     fetchEvent,
-    // fetchUserHistory,
     getUserGoogleEvent,
     hostEventImage,
     insertGoogleCalendarEvent,
-    updateEventAttendance,
     updateEvent,
-    fetchAllEvents,
+    updateEventAttendance,
 } from '../services/events.service';
 import { google } from 'googleapis';
 import { currentSession } from '../utilities/user-session';
 import { getUserAccountService, getUserGoogleClientService } from '../services/users.service';
-import { ZodError } from 'zod';
-import { type CreateEventDTO, type User, IUserThirdPartyAccount, IUserSession } from '../utilities/types';
 import * as z from 'zod';
+import { ZodError } from 'zod';
+import { type CreateEventDTO, IUserSession, IUserThirdPartyAccount } from '../utilities/types';
 import { bufferFileType } from '../utilities/buffer-file-type';
 import dayjs from 'dayjs';
 
@@ -39,14 +37,14 @@ const zIsValidImageType = z.enum(['image/png', 'image/jpg']);
 const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff']);
 
 export async function getEvent(req: Request, res: Response) {
-    const { event_id } = req.params;
+    const { eventId } = req.params;
 
-    if (!event_id) {
+    if (!eventId) {
         return res.status(401).json('Invalid event id');
     }
 
     try {
-        const eventDetails = await fetchEvent(event_id);
+        const eventDetails = await fetchEvent(eventId);
         return res.status(200).json(eventDetails);
     } catch (e) {
         if (e instanceof ZodError) {

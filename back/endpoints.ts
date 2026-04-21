@@ -4,15 +4,14 @@ import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 import cors from 'cors';
 import {
+    attendOrCancelEvent,
     createEvent,
     fetchEvents,
-    attendOrCancelEvent,
     getEvent,
     updateEventDetails,
     updateEventImage,
-    // fetchUserEvents,
 } from './controllers/events.controller';
-import { applicationResponse, fetchApplications, roleRequest, deleteAccount } from './controllers/users.controller';
+import { applicationResponse, deleteAccount, fetchApplications, roleRequest } from './controllers/users.controller';
 
 const app = express();
 
@@ -33,9 +32,9 @@ app.get('/applications', fetchApplications);
 // /role-requests with query params
 app.get('/events', fetchEvents);
 app.get('/users/:userId/events', fetchEvents);
-app.get('/events/:event_id', getEvent);
-app.put('/events/:event_id', updateEventDetails);
-app.put('/events/:event_id/image', express.raw({ type: 'application/octet-stream', limit: '2mb' }), updateEventImage);
+app.get('/events/:eventId', getEvent);
+app.put('/events/:eventId', updateEventDetails);
+app.put('/events/:eventId/image', express.raw({ type: 'application/octet-stream', limit: '2mb' }), updateEventImage);
 app.put('/attend-or-cancel', attendOrCancelEvent);
 app.put('/application-response', applicationResponse);
 app.post('/events', createEvent);

@@ -28,7 +28,7 @@ export function Header({ children }: { children: ReactNode }) {
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {
-                    navigate(routePaths.login.path);
+                    navigate(routePaths.login.build());
                 },
             },
         });
