@@ -13,14 +13,16 @@ import { GuestLandingPage } from './pages/guest-landing-page/guest-landing-page.
 
 export const routePaths = {
     user: {
-        path: 'users',
+        path: '/',
         build: (id: string) => `users/${id}`,
     },
     guest: {
         path: 'guest',
+        build: () => 'guest',
     },
     login: {
         path: 'login',
+        build: () => `${routePaths.guest.path}/${routePaths.login.path}`,
     },
     register: {
         path: 'register',
@@ -31,7 +33,7 @@ export const routePaths = {
     },
     event: {
         path: ':eventId',
-        build: (id: string) => `${routePaths.events.build()}/${id}`,
+        build: (id: string) => `${routePaths.events.path}/${id}`,
     },
     createEvent: {
         path: 'create-event',
@@ -51,7 +53,6 @@ const sharedRoutes = {
 
 export default createBrowserRouter([
     {
-        path: '/',
         Component: App,
         children: [
             {
