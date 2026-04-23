@@ -3,7 +3,7 @@
         "start:database": "docker compose up -d --wait && npm run migration:deploy:local",
         "migration:deploy:local": "dotenv -e ./config/.env -- prisma migrate deploy",
         "migration:generate": "dotenv -e ./config/.env -- prisma migrate dev",
-        "start:dev": "dotenv -e ./config/.env -- ts-node endpoints.ts",
+        "start:dev": "dotenv -e ./config/.env -- ts-node endpoints",
         "prettier": "npx prettier ./**/* --write"
     },
     "dependencies": {
@@ -30,7 +30,7 @@
         "@types/express": "^5.0.3",
         "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^24.5.2",
-        "dotenv-cli": "^10.0.0",
+        "dotenv-cli": "^11.0.0",
         "prettier": "^3.6.2",
         "prisma": "^7.7.0",
         "ts-node": "^10.9.2",

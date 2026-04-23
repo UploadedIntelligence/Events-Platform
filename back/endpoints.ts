@@ -1,7 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { toNodeHandler } from 'better-auth/node';
-import { auth } from './lib/auth';
+import { auth } from './lib/auth.ts';
 import cors from 'cors';
 import {
     attendOrCancelEvent,
@@ -10,8 +10,8 @@ import {
     getEvent,
     updateEventDetails,
     updateEventImage,
-} from './controllers/events.controller';
-import { applicationResponse, deleteAccount, fetchApplications, roleRequest } from './controllers/users.controller';
+} from './controllers/events.controller.ts';
+import { applicationResponse, deleteAccount, fetchApplications, roleRequest } from './controllers/users.controller.ts';
 
 const app = express();
 
