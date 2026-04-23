@@ -1,4 +1,4 @@
-import { PrismaPromise } from '../generated/prisma';
+import { PrismaPromise } from '../generated/prisma/client';
 import prisma from '../lib/prisma';
 import {
     type AttendeeInfo,
@@ -7,7 +7,7 @@ import {
     GoogleCalendarEventDO,
     IUserSession,
     type OrganiserDTO,
-    UserGoogleEventDO
+    UserGoogleEventDO,
 } from '../utilities/types';
 import type { calendar_v3 } from 'googleapis';
 import axios from 'axios';
