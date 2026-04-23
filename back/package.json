@@ -1,5 +1,4 @@
 {
-    "type": "module",
     "scripts": {
         "start:database": "docker compose up -d --wait && npm run migration:deploy:local",
         "migration:deploy:local": "dotenv -e ./config/.env -- prisma migrate deploy",
