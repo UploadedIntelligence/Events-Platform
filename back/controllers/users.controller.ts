@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { currentSession } from '../utilities/user-session';
+import { currentSession } from '../utilities/user-session.ts';
 import {
     adminShowRoleRequestsService,
     deleteUserService,
@@ -7,9 +7,9 @@ import {
     updateUserRoleService,
     userCreateRoleRequestService,
     userHasRoleRequestService,
-} from '../services/users.service';
+} from '../services/users.service.ts';
 import * as z from 'zod';
-import { type Role } from '../utilities/types';
+import { type Role } from '../utilities/types.ts';
 
 const zRole = z.enum(['user', 'staff', 'admin']);
 

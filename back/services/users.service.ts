@@ -1,8 +1,14 @@
-import prisma from '../lib/prisma';
+import prisma from '../lib/prisma.ts';
 import { google } from 'googleapis';
-import { Prisma } from '@prisma/client/extension';
+import { Prisma } from '@prisma/client';
+import {
+    type AdminResponse,
+    IRoleRequest,
+    IUserSession,
+    IUserThirdPartyAccount,
+    type Role,
+} from '../utilities/types.ts';
 import PrismaPromise = Prisma.PrismaPromise;
-import { IUserSession, IRoleRequest, IUserThirdPartyAccount, type Role, type AdminResponse } from '../utilities/types';
 
 export async function getUserAccountService(
     session: IUserSession,

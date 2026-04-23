@@ -1,5 +1,5 @@
-import { PrismaPromise } from '../generated/prisma/client';
-import prisma from '../lib/prisma';
+import {Prisma} from '@prisma/client';
+import prisma from '../lib/prisma.ts';
 import {
     type AttendeeInfo,
     type CreateEventDTO,
@@ -8,11 +8,12 @@ import {
     IUserSession,
     type OrganiserDTO,
     UserGoogleEventDO,
-} from '../utilities/types';
-import type { calendar_v3 } from 'googleapis';
+} from '../utilities/types.ts';
+import type {calendar_v3} from 'googleapis';
 import axios from 'axios';
 import FormData from 'form-data';
-import { pickKeys } from '../utilities/pickKeys';
+import {pickKeys} from '../utilities/pickKeys.ts';
+import PrismaPromise = Prisma.PrismaPromise;
 
 export async function fetchEvent(
     eventId: string,

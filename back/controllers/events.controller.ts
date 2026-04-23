@@ -11,14 +11,14 @@ import {
     insertGoogleCalendarEvent,
     updateEvent,
     updateEventAttendance,
-} from '../services/events.service';
+} from '../services/events.service.ts';
 import { google } from 'googleapis';
-import { currentSession } from '../utilities/user-session';
-import { getUserAccountService, getUserGoogleClientService } from '../services/users.service';
+import { currentSession } from '../utilities/user-session.ts';
+import { getUserAccountService, getUserGoogleClientService } from '../services/users.service.ts';
 import * as z from 'zod';
 import { ZodError } from 'zod';
-import { type CreateEventDTO, IUserSession, IUserThirdPartyAccount } from '../utilities/types';
-import { bufferFileType } from '../utilities/buffer-file-type';
+import { type CreateEventDTO, IUserSession, IUserThirdPartyAccount } from '../utilities/types.ts';
+import { bufferFileType } from '../utilities/buffer-file-type.ts';
 import dayjs from 'dayjs';
 
 const zEventInfo = z.object({
