@@ -1,4 +1,3 @@
-import {Prisma} from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import {
     type AttendeeInfo,
@@ -9,11 +8,10 @@ import {
     type OrganiserDTO,
     UserGoogleEventDO,
 } from '../utilities/types.js';
-import type {calendar_v3} from 'googleapis';
+import type { calendar_v3 } from 'googleapis';
 import axios from 'axios';
 import FormData from 'form-data';
-import {pickKeys} from '../utilities/pickKeys.js';
-import PrismaPromise = Prisma.PrismaPromise;
+import { pickKeys } from '../utilities/pickKeys.js';
 
 export async function fetchEvent(
     eventId: string,
@@ -48,7 +46,7 @@ export function fetchAllEvents(filters: {
     from: Date | undefined;
     to: Date | undefined;
     userId?: string | undefined;
-}): PrismaPromise<Array<EventEntity>> {
+}): Promise<Array<EventEntity>> {
     console.log(filters.userId);
     return prisma.event.findMany({
         where: {
@@ -113,7 +111,7 @@ export function fetchAllEvents(filters: {
 //     });
 // }
 
-export function createPrismaEvent(data: CreateEventDTO, userId: string): PrismaPromise<EventEntity> {
+export function createPrismaEvent(data: CreateEventDTO, userId: string): Promise<EventEntity> {
     return prisma.event.create({
         data: {
             name: data.name,
@@ -177,7 +175,7 @@ export function updateEventAttendance(
     eventId: string,
     is_attending: boolean,
     session: IUserSession,
-): PrismaPromise<EventEntity> {
+): Promise<EventEntity> {
     if (is_attending) {
         return prisma.event.update({
             where: {
@@ -206,7 +204,7 @@ export function updateEventAttendance(
     });
 }
 
-export function getUserGoogleEvent(session: IUserSession, eventId: string): PrismaPromise<UserGoogleEventDO | null> {
+export function getUserGoogleEvent(session: IUserSession, eventId: string): Promise<UserGoogleEventDO | null> {
     return prisma.userGoogleEvent.findFirst({
         where: {
             userId: session.user.id,
@@ -258,7 +256,7 @@ export function deleteGoogleEvent(
     google_event: UserGoogleEventDO,
     session: IUserSession,
     eventId: string,
-): PrismaPromise<UserGoogleEventDO> {
+): Promise<UserGoogleEventDO> {
     return prisma.userGoogleEvent.delete({
         where: {
             googleId: google_event!.googleId,
