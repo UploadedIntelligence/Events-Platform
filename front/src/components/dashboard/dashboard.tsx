@@ -3,11 +3,12 @@ import dayjs from 'dayjs';
 import { EventFilters } from '../../utilities/event-filters.ts';
 import { NavLink, useLoaderData, useNavigation } from 'react-router-dom';
 import { routePaths } from '../../routes.ts';
+import type { IUser } from '../../utilities/user-permissions.ts';
 
 export function Dashboard() {
     const navigation = useNavigation();
     const isNavigating = Boolean(navigation.location);
-    const { userCanCreateEvent }: { userCanCreateEvent: boolean } = useLoaderData();
+    const { user, userCanCreateEvent }: { user: IUser; userCanCreateEvent: boolean } = useLoaderData();
     const { fromDate, toDate } = EventFilters();
     const today = dayjs().format('YYYY-MM-DD-HH');
 
@@ -30,7 +31,7 @@ export function Dashboard() {
                     `EpDashboard-option ${(isActive && fromDate && !isNavigating) || (isPending && navigation.location?.search.includes('?fromDate')) ? 'active' : ''}`
                 }
                 to={{
-                    pathname: routePaths.events.path,
+                    pathname: `${routePaths.user.build(user.id)}/${routePaths.events.path}`,
                     search: `fromDate=${today}`,
                 }}
                 viewTransition
@@ -42,7 +43,7 @@ export function Dashboard() {
                     `EpDashboard-option ${(isActive && toDate && !isNavigating) || (isPending && navigation.location?.search.includes('?toDate')) ? 'active' : ''}`
                 }
                 to={{
-                    pathname: routePaths.events.path,
+                    pathname: `${routePaths.user.build(user.id)}/${routePaths.events.path}`,
                     search: `toDate=${today}`,
                 }}
                 viewTransition

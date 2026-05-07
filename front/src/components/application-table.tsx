@@ -7,9 +7,9 @@ import QueryClient from '../services/tanstack-query-client.ts';
 
 export function ApplicationTable({ applications }: { applications: Array<Application> | undefined }) {
     const { mutate } = useMutation({
-        mutationFn: (variables: { applicant_email: string; response: 'approved' | 'rejected'; role: Role }) => {
+        mutationFn: (variables: { applicantEmail: string; response: 'approved' | 'rejected'; role: Role }) => {
             return axios.put('/application-response', {
-                applicant_email: variables.applicant_email,
+                applicantEmail: variables.applicantEmail,
                 response: variables.response,
                 role: variables.role,
             });
@@ -51,7 +51,7 @@ export function ApplicationTable({ applications }: { applications: Array<Applica
                                             color="success"
                                             onClick={() =>
                                                 mutate({
-                                                    applicant_email: application.userEmail,
+                                                    applicantEmail: application.userEmail,
                                                     response: 'approved',
                                                     role: application.role,
                                                 })
@@ -64,7 +64,7 @@ export function ApplicationTable({ applications }: { applications: Array<Applica
                                             color="error"
                                             onClick={() =>
                                                 mutate({
-                                                    applicant_email: application.userEmail,
+                                                    applicantEmail: application.userEmail,
                                                     response: 'rejected',
                                                     role: application.role,
                                                 })

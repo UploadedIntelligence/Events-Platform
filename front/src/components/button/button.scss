@@ -54,4 +54,14 @@
             background: var(--Ep-border-color);
         }
     }
+
+    &--cancel {
+        background: none;
+        border: 1px solid var(--Ep-cancel-color);
+
+        &:hover {
+            border: 1px solid var(--Ep-hasError-color);
+            background: var(--Ep-cancel-background-color--hover);
+        }
+    }
 }

@@ -22,9 +22,9 @@ export async function roleRequest(req: Request, res: Response) {
         return res.status(401).json('Not authenticated');
     }
 
-    const has_application = await userHasRoleRequestService(session);
+    const hasApplication = await userHasRoleRequestService(session);
 
-    if (has_application) {
+    if (hasApplication) {
         return res.status(400).json('You cannot send more than 1 application');
     } else if (session.user.role === 'user') {
         await userCreateRoleRequestService(session, userRole);
@@ -52,15 +52,15 @@ export async function fetchApplications(req: Request, res: Response) {
 
 export async function applicationResponse(req: Request, res: Response) {
     const session = await currentSession(req);
-    const { applicant_email, role, response } = req.body;
+    const { applicantEmail, role, response } = req.body;
 
     if (session?.user.role !== 'admin') {
         return res.status(401).json('Forbidden');
     }
 
     try {
-        await updateUserRoleRequestService(applicant_email, response);
-        await updateUserRoleService(applicant_email, role, response);
+        await updateUserRoleRequestService(applicantEmail, response);
+        await updateUserRoleService(applicantEmail, role, response);
         return res.status(200).json('Application status successfully updated');
     } catch (e) {
         return res.status(401).json('Forbidden');

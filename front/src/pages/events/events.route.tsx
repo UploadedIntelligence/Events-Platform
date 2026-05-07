@@ -9,8 +9,9 @@ import { EpEventGridToggle } from '../../components/event-grid-toggle/event-grid
 import dayjs from 'dayjs';
 import { NavLink, useNavigation, useParams } from 'react-router-dom';
 import './events.scss';
+import { Outlet } from 'react-router';
 
-export interface IEvents {
+export interface IEvent {
     id: string;
     organiserId: string;
     name: string;
@@ -33,7 +34,7 @@ export interface IAttendeeInfo {
 }
 
 export function Events() {
-    const { userId } = useParams();
+    const { userId, eventId } = useParams();
     const today = dayjs().format('YYYY-MM-DD-HH');
     const { fromDate, toDate } = EventFilters();
     const navigation = useNavigation();
@@ -44,7 +45,7 @@ export function Events() {
             queryFn: () => {
                 const hasFromDate = dayjs(fromDate, 'YYYY-MM-DD-HH');
                 const hasToDate = dayjs(toDate, 'YYYY-MM-DD-HH');
-                return axios.get<Array<IEvents & { attendees: Array<IAttendeeInfo> }>>(
+                return axios.get<Array<IEvent & { attendees: Array<IAttendeeInfo> }>>(
                     `${userId ? `/users/${userId}/events` : '/events'}`,
                     {
                         params: {
@@ -55,7 +56,7 @@ export function Events() {
                 );
             },
         }),
-        events: Array<IEvents> =
+        events: Array<IEvent> =
             data?.data.map((event) => {
                 return {
                     id: event.id,
@@ -77,7 +78,7 @@ export function Events() {
         console.log(error);
     }
 
-    return (
+    return !eventId ? (
         <EpEventGridContainer>
             {!userId && (
                 <EpEventGridToggle>
@@ -107,14 +108,11 @@ export function Events() {
                 <Spinner />
             ) : (
                 <EpEventGrid>
-                    {/*{searchParams!.get('eventType') === 'history' ? (*/}
-                    {/*    <Button component={NavLink} to="/user-profile" variant="outlined" style={{ margin: '0.5em' }}>*/}
-                    {/*        Go Back*/}
-                    {/*    </Button>*/}
-                    {/*) : null}*/}
                     <EventCard events={events} />
                 </EpEventGrid>
             )}
         </EpEventGridContainer>
+    ) : (
+        <Outlet />
     );
 }

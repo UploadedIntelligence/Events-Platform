@@ -11,19 +11,15 @@
 
     &-imageContainer {
         display: flex;
-        border-radius: 1em;
-        overflow: hidden;
+        padding-bottom: 1em;
     }
 
     &-image {
         @include mixins.min-height-child-scrollbar;
         display: flex;
         object-fit: cover;
+        border-radius: 1em;
         width: 100%;
-    }
-
-    h2 {
-        padding: 1em 0;
     }
 
     &-sidebarContainer {
@@ -55,15 +51,16 @@
         }
     }
 
-    &-tickets {
+    &-ticket {
         @include mixins.min-height-parent;
         background: var(--Ep-header-background-color);
         gap: 0.5em;
         border: 1px solid var(--Ep-border-color);
         border-radius: 8px;
+        width: 240px;
     }
 
-    &-ticketInfo {
+    &-ticketPrice {
         @include mixins.min-height-parent;
         padding: 0.5em;
         border-bottom: 1px solid var(--Ep-border-color);
@@ -72,16 +69,60 @@
     &-ticketButtons {
         @include mixins.min-height-parent;
         padding: 0.5em;
-        width: max-content;
         gap: 0.5em;
     }
 
-    &-details {
+    &-ticketTerms {
         @include mixins.min-height-parent;
+        padding: 0.5em;
+        font-size: 0.75em;
+        color: var(--Ep-secondaryText-color);
+        text-align: center;
     }
 
     &-detailsContainer {
         @include mixins.min-height-parent;
+    }
+
+    &-details {
+        @include mixins.min-height-parent;
+        gap: 0.75em;
+    }
+
+    &-timeContainer {
+        @include mixins.min-height-parent;
+    }
+
+    &-timeLabels {
+        display: flex;
+        justify-content: space-between;
+        text-transform: uppercase;
+        font-size: 0.8em;
+        font-weight: 600;
+        color: var(--Ep-primaryText-color);
+    }
+
+    &-timeStartEnd {
+        display: flex;
+        justify-content: space-between;
+        color: var(--Ep-secondaryText-color);
+        font-weight: 600;
+    }
+
+    &-name {
+        font-size: 1.25em;
+        font-weight: 600;
+    }
+
+    &-location {
+        display: flex;
+        font-size: 1em;
+        gap: 0.5em;
+        color: var(--Ep-grey);
+    }
+
+    &-locationIcon {
+        font-size: inherit;
     }
 
     &-about {
@@ -111,6 +152,15 @@
         font-weight: 700;
     }
 
+    &-cancelIcon {
+        color: var(--Ep-hasError-color)
+    }
+
+    &-bookmarkIcon {
+        color: white;
+        font-size: 1.25em;
+    }
+
     &-followButton {
         display: flex;
         gap: 0.25em;
@@ -122,11 +172,6 @@
         gap: 0.25em;
         color: var(--Ep-dividerText-color);
     }
-}
-
-.bookmark {
-    color: white;
-    font-size: 1.25em;
 }
 
 .mail {

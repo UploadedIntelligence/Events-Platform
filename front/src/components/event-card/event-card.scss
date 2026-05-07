@@ -49,6 +49,10 @@
         z-index: 1;
     }
 
+    &-calendarIcon {
+        font-size: 1.25em;
+    }
+
     &-start {
         font-family: 'Plus Jakarta Sans', sans-serif;
         display: flex;
@@ -78,7 +82,7 @@
     }
 
     &-eventLocationIcon {
-        display: inline-block;
+        font-size: inherit;
     }
 
     &-buttonContainer {

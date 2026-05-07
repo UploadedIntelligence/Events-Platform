@@ -11,9 +11,13 @@ import { LoginPage } from './pages/guest-landing-page/login/login.route.tsx';
 import { RegisterPage } from './pages/guest-landing-page/register/register.route.tsx';
 import { GuestLandingPage } from './pages/guest-landing-page/guest-landing-page.route.tsx';
 
+//check if documentation has a way of accessing route objects similar to routePaths
 export const routePaths = {
-    user: {
+    main: {
         path: '/',
+    },
+    user: {
+        path: 'users/:userId',
         build: (id: string) => `users/${id}`,
     },
     guest: {
@@ -35,10 +39,17 @@ export const routePaths = {
         path: ':eventId',
         build: (id: string) => `${routePaths.events.path}/${id}`,
     },
+    attendance: {
+        path: 'attendance',
+        build: (id: string) => `${routePaths.event.build(id)}/${routePaths.attendance.path}`,
+    },
     createEvent: {
         path: 'create-event',
     },
 };
+
+// for creating url paths for server requests
+export const apiClient = {};
 
 const sharedRoutes = {
     path: routePaths.events.path,
@@ -57,13 +68,20 @@ export default createBrowserRouter([
         children: [
             {
                 id: 'UserLandingPage',
-                path: routePaths.user.path,
+                path: routePaths.main.path,
                 Component: UserLandingPage,
                 loader: UserLandingPageLoader,
-                hasErrorBoundary: true,
-                errorElement: EpNotFound(),
                 children: [
                     sharedRoutes,
+                    {
+                        path: routePaths.user.path,
+                        children: [
+                            {
+                                path: routePaths.events.path,
+                                Component: Events,
+                            },
+                        ],
+                    },
                     {
                         path: routePaths.createEvent.path,
                         loader: CreateEventLoader,

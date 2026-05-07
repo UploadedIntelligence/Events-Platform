@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -25,11 +22,11 @@ enum Status {
 model User {
   id               String            @id @default(cuid())
   name             String
-  email            String
+  email            String            @unique
   password         String?
   role             Role              @default(user)
-  attending        EventAttendance[]
-  bookmarkedEvents EventBookmark[]
+  attendances      EventAttendance[]
+  eventBookmarks   EventBookmark[]
   organisedEvents  Event[]
   googleEvents     UserGoogleEvent[]
   emailVerified    Boolean           @default(false)
@@ -44,7 +41,6 @@ model User {
   banReason  String?
   banExpires DateTime?
 
-  @@unique([email])
   @@map("user")
 }
 
@@ -59,7 +55,7 @@ model Event {
   end          DateTime
   location     String
   imgUrl       String?
-  attendees    EventAttendance[]
+  attendances  EventAttendance[]
   bookmarkedBy EventBookmark[]
 }
 
@@ -69,6 +65,8 @@ model EventAttendance {
   userId  String
   event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId String
+
+  @@unique([userId, eventId])
 }
 
 model EventBookmark {
@@ -82,7 +80,7 @@ model EventBookmark {
 model Session {
   id        String   @id @default(cuid())
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
@@ -90,7 +88,6 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 
-  @@unique([token])
   @@map("session")
 }
 
@@ -126,15 +123,13 @@ model Verification {
 
 model RoleRequest {
   id         String    @id @default(cuid())
-  userEmail  String
+  userEmail  String    @unique
   user       User      @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   role       Role
   status     Status    @default(pending)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   rejectedAt DateTime?
-
-  @@unique([userEmail])
 }
 
 model UserGoogleEvent {

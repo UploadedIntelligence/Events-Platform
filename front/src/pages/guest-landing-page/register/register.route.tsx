@@ -10,6 +10,7 @@ import { EpUserDataInput } from '../../../components/user-data-input/user-data-i
 import { EpButton } from '../../../components/button/button.tsx';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import dayjs from 'dayjs';
+import { routePaths } from '../../../routes.ts';
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -66,7 +67,7 @@ export function RegisterPage() {
             },
             {
                 onSuccess: () => {
-                    navigate({ pathname: '/events', search: `fromDate=${today}` });
+                    navigate({ pathname: `/${routePaths.events.path}`, search: `fromDate=${today}` });
                 },
             },
         );
