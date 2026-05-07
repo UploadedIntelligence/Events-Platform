@@ -4,14 +4,16 @@ import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth.js';
 import cors from 'cors';
 import {
-    attendOrCancelEvent,
+    attendEvent,
+    cancelAttendance,
     createEvent,
-    fetchEvents,
     getEvent,
+    getEvents,
     updateEventDetails,
     updateEventImage,
 } from './controllers/events.controller.js';
 import { applicationResponse, deleteAccount, fetchApplications, roleRequest } from './controllers/users.controller.js';
+import { authenticateSession, userStaffPermissions } from './middleware/user.js';
 
 const app = express();
 
@@ -30,16 +32,21 @@ app.get('/', (req, res) => res.status(200).send('Root route working'));
 
 app.get('/applications', fetchApplications);
 // /role-requests with query params
-app.get('/events', fetchEvents);
-app.get('/users/:userId/events', fetchEvents);
+app.get('/events', getEvents);
+app.get('/users/:userId/events', getEvents);
 app.get('/events/:eventId', getEvent);
-app.put('/events/:eventId', updateEventDetails);
-app.put('/events/:eventId/image', express.raw({ type: 'application/octet-stream', limit: '2mb' }), updateEventImage);
-app.put('/attend-or-cancel', attendOrCancelEvent);
+app.put('/events/:eventId', userStaffPermissions, updateEventDetails);
+app.put(
+    '/events/:eventId/image',
+    express.raw({ type: 'application/octet-stream', limit: '2mb' }),
+    userStaffPermissions,
+    updateEventImage,
+);
+app.delete('/events/:eventId/attendance', authenticateSession, cancelAttendance);
+app.post('/events/:eventId/attendance', authenticateSession, attendEvent);
 app.put('/application-response', applicationResponse);
-app.post('/events', createEvent);
+app.post('/events', userStaffPermissions, createEvent);
 app.post('/apply-staff', roleRequest);
-// /role-requests
 app.delete('/delete-account', deleteAccount);
 
 app.listen(process.env.APP_PORT, () => {
