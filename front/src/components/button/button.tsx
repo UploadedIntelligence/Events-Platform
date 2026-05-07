@@ -2,7 +2,7 @@ import './button.scss';
 import React from 'react';
 
 interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
-    variant?: 'primary' | 'secondary' | 'ghost';
+    variant?: 'primary' | 'secondary' | 'ghost' | 'cancel';
 }
 
 export function EpButton({ children, variant = 'primary', ...remainingProps }: ButtonProps) {
