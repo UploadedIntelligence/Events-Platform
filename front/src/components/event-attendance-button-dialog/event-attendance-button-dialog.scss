@@ -1,0 +1,163 @@
+.EpEventAttendanceButtonDialog {
+    &-page {
+        color: var(--Ep-primaryText-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    &-container {
+        display: flex;
+        flex-direction: column;
+        background: var(--Ep-attendanceDialog-background-color);
+        max-width: 400px;
+        border-radius: 8px;
+        padding: 1.5em;
+    }
+
+    &-detailsContainer {
+        background: var(--Ep-attendanceDialog-secondaryBackground-color);
+        border-radius: 8px;
+        padding: 0.5em;
+    }
+
+    &-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-size: 0.9em;
+        padding: 0.5em;
+        gap: 0.5em;
+    }
+
+    &-eventNameContainer {
+        display: flex;
+        padding: 0.5em;
+        gap: 0.5em;
+    }
+
+    &-iconContainer {
+        padding: 0.5em;
+        border-radius: 8px;
+        background: var(--Ep-attendanceDialog-iconBackground-color);
+    }
+
+    &-icon {
+        color: var(--Ep-blue);
+    }
+
+    &-eventName {
+        color: var(--Ep-primaryText-color);
+        font-weight: 600;
+        font-size: 1.2em;
+        align-self: center;
+    }
+
+    &-options {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-dateAndPriceTags {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.65em;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--Ep-termsText-color);
+    }
+
+    &-dateAndPriceContainer {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &-calendarIcon {
+        font-size: inherit;
+        align-self: center;
+    }
+
+    &-date {
+        display: flex;
+        gap: 0.5em;
+    }
+
+    &-price {
+        font-weight: 600;
+        color: var(--Ep-priceText-color);
+    }
+
+    &-location {
+        display: flex;
+        color: var(--Ep-grey);
+        gap: 0.5em;
+    }
+
+    &-eventLocationIcon {
+        display: flex;
+        font-size: inherit;
+        align-items: center;
+    }
+
+    &-terms {
+        display: flex;
+        color: var(--Ep-termsText-color);
+        font-size: 0.75em;
+        padding: 1em;
+        text-align: center;
+    }
+
+    &-buttonContainer {
+        display: flex;
+        margin: 0.5em;
+    }
+
+    &-cancelIcon {
+        color: var(--Ep-hasError-color);
+    }
+
+    &-cancellationPolicyContainer {
+        display: flex;
+        padding: 1em;
+        margin: 2em;
+        background: var(--Ep-cancellationPolicy-background-color);
+        gap: 1em;
+        border-radius: 8px;
+    }
+
+    &-policyIconContainer {
+        display: flex;
+        background: #1F1217FF;
+        align-self: center;
+        align-items: center;
+        padding: 0.5em;
+        height: fit-content;
+        border-radius: 8px;
+    }
+
+    &-policyText {
+        font-weight: 500;
+    }
+
+    &-policyInfoIcon {
+        color: var(--Ep-hasError-color)
+    }
+}
+
+#EpEventAttendanceButtonDialog {
+    background: none;
+    justify-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    overflow: hidden;
+
+    &::backdrop {
+        backdrop-filter: blur(5px);
+    }
+}
