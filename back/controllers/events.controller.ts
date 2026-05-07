@@ -1,40 +1,41 @@
 import { Request, Response } from 'express';
 import {
+    createEventAttendance,
     createGoogleEvent,
     createPrismaEvent,
+    deleteEventAttendance,
     deleteGoogleCalendarEvent,
-    deleteGoogleEvent,
     fetchAllEvents,
     fetchEvent,
-    getUserGoogleEvent,
+    fetchUserGoogleEvent,
     hostEventImage,
     insertGoogleCalendarEvent,
     updateEvent,
-    updateEventAttendance,
 } from '../services/events.service.js';
-import { google } from 'googleapis';
 import { currentSession } from '../utilities/user-session.js';
-import { getUserAccountService, getUserGoogleClientService } from '../services/users.service.js';
 import * as z from 'zod';
 import { ZodError } from 'zod';
-import { type CreateEventDTO, IUserSession, IUserThirdPartyAccount } from '../utilities/types.js';
+import { type CreateEventDTO, EventEntity, IUserSession } from '../utilities/types.js';
 import { bufferFileType } from '../utilities/buffer-file-type.js';
-import dayjs from 'dayjs';
+import { formatStringToDate } from '../utilities/format-string-to-date.js';
+import { generateUserGoogleCalendar } from '../utilities/generate-user-google-calendar.js';
 
-const zEventInfo = z.object({
-    name: z.string(),
-    organiser: z.string(),
-    description: z.string(),
-    location: z.string(),
-    start: z.string().transform((value) => new Date(value)),
-    end: z.string().transform((value) => new Date(value)),
-    imgUrl: z.string().optional(),
-});
+const zEventInfo = z
+    .object({
+        name: z.string(),
+        organiser: z.string(),
+        description: z.string(),
+        location: z.string(),
+        start: z.coerce.date().min(new Date()),
+        end: z.coerce.date(),
+        imgUrl: z.string().optional(),
+    })
+    .refine((data) => data.start < data.end, {
+        message: 'Start time must be before end time',
+        path: ['end'],
+    });
 
-const zIsDateValid = z.date().min(new Date());
 const zIsValidImageType = z.enum(['image/png', 'image/jpg']);
-
-const zAuthorizedEventCreatorRoles = z.enum(['admin', 'staff']);
 
 export async function getEvent(req: Request, res: Response) {
     const { eventId } = req.params;
@@ -54,83 +55,40 @@ export async function getEvent(req: Request, res: Response) {
     }
 }
 
-export async function fetchEvents(req: Request, res: Response) {
+export async function getEvents(req: Request, res: Response) {
     const { fromDate, toDate } = req.query;
     const { userId } = req.params;
     const session: IUserSession | null = await currentSession(req);
-    let formattedFrom, formattedTo;
-
-    if (fromDate !== 'false' && typeof fromDate === 'string') {
-        formattedFrom = dayjs(fromDate);
-        if (!formattedFrom.isValid()) {
-            return res.status(400).json({ message: 'Invalid date format.' });
-        }
-    }
-
-    if (toDate !== 'false' && typeof toDate === 'string') {
-        formattedTo = dayjs(toDate);
-        if (!formattedTo.isValid()) {
-            return res.status(400).json({ message: 'Invalid date format.' });
-        }
-    }
+    const formattedFromDate = formatStringToDate(fromDate);
+    const formattedToDate = formatStringToDate(toDate);
 
     try {
         if (session?.user.id === userId) {
             const events = await fetchAllEvents({
-                from: formattedFrom?.toDate(),
-                to: formattedTo?.toDate(),
+                from: formattedFromDate,
+                to: formattedToDate,
                 userId: userId,
             });
             if (events) {
                 return res.status(200).send(events);
             }
         } else {
-            const events = await fetchAllEvents({ from: formattedFrom?.toDate(), to: formattedTo?.toDate() });
+            const events = await fetchAllEvents({ from: formattedFromDate, to: formattedToDate });
             if (events) {
                 return res.status(200).send(events);
             }
         }
-        return res.status(400).json({ message: 'Something went wrong, please try again later.' });
+        return res.status(200).json({ message: 'No events to display' });
     } catch (e) {
         console.log(e);
     }
 }
 
-// export async function fetchUserEvents(req: Request, res: Response) {
-//     const today = new Date();
-//     const session: IUserSession | null = await currentSession(req);
-//     const { eventType } = req.params;
-//
-//     console.log(eventType);
-//
-//     if (!session) {
-//         return res.status(401).json('Not authenticated');
-//     }
-//
-//     let events;
-//     try {
-//         if (eventType === 'attending') {
-//             events = await fetchAttendingEvents(today, session.user.id);
-//         } else if (eventType === 'history') {
-//             events = await fetchUserHistory(today, session.user.id);
-//         }
-//         return res.status(200).send(events);
-//     } catch (e) {
-//         console.log(e);
-//     }
-// }
-
 export async function createEvent(req: Request, res: Response) {
-    const session: IUserSession | null = await currentSession(req);
-
-    if (!session || !zAuthorizedEventCreatorRoles.safeParse(session.user.role).success) {
-        return res.status(401).json('Not authenticated');
-    }
-
+    const session: IUserSession = res.locals.session;
     const eventInfo: CreateEventDTO = zEventInfo.parse(req.body);
 
     try {
-        zIsDateValid.parse(eventInfo.start);
         const createdEvent = await createPrismaEvent(eventInfo, session.user.id);
         return res.status(200).json({ message: 'Event successfully created', event: createdEvent });
     } catch (e) {
@@ -142,17 +100,20 @@ export async function createEvent(req: Request, res: Response) {
 }
 
 export async function updateEventImage(req: Request, res: Response) {
-    const session: IUserSession | null = await currentSession(req);
+    const session: IUserSession = res.locals.session;
+    const { eventId } = req.params;
+    const imageData = req.body;
 
-    if (!session || session.user.role === 'user') {
-        return res.status(401).json('Not authenticated');
-    }
+    if (eventId && imageData) {
+        const eventOwner = (await fetchEvent(eventId))?.included[0]?.organiser.email;
+        if (eventOwner !== session.user.email) {
+            return res.status(400).json('You must be the owner of the event to edit it');
+        }
 
-    if (req.body && req.params.event_id) {
         try {
-            const fileType = bufferFileType(req.body);
+            const fileType = bufferFileType(imageData);
             zIsValidImageType.parse(fileType);
-            await hostEventImage(req.body, req.params.event_id);
+            await hostEventImage(imageData, eventId);
             return res.status(200).json('Image uploaded successfully');
         } catch (e) {
             if (e instanceof ZodError) {
@@ -161,52 +122,72 @@ export async function updateEventImage(req: Request, res: Response) {
             return res.status(400).json(e);
         }
     }
+    return res.status(400).json('Event id or image missing');
 }
 
 export async function updateEventDetails(req: Request, res: Response) {
-    const session: IUserSession | null = await currentSession(req);
+    const session: IUserSession = res.locals.session;
+    const eventData: EventEntity = req.body;
 
-    if (!session || session.user.role === 'user') {
+    if (eventData.organiserId === session.user.id || session.user.role === 'admin') {
+        await updateEvent(eventData, req.params.event_id!);
+    } else {
         return res.status(401).json('Not authenticated');
     }
-
-    await updateEvent(req.body, req.params.event_id!);
-    return res.status(200).json('Response');
+    return res.status(200).json('Event updated');
 }
 
-export async function attendOrCancelEvent(req: Request, res: Response) {
-    const { event_id, is_attending } = req.body;
-    const session: IUserSession | null = await currentSession(req);
+export async function cancelAttendance(req: Request, res: Response) {
+    const { eventId } = req.params;
+    const session: IUserSession = res.locals.session;
 
-    if (!session) {
-        return res.status(401).json('Not authenticated');
-    }
+    if (eventId) {
+        const userId = session.user.id;
+        const userGoogleEvent = await fetchUserGoogleEvent(userId, eventId);
 
-    try {
-        let calendar;
-        const googleAccount: IUserThirdPartyAccount | null = await getUserAccountService(session, 'google');
+        try {
+            const calendar = await generateUserGoogleCalendar(userId);
 
-        if (googleAccount?.accessToken) {
-            const client = getUserGoogleClientService(googleAccount);
-            calendar = google.calendar({ version: 'v3', auth: client });
-        }
-
-        const updated_event = await updateEventAttendance(event_id, is_attending, session);
-        const google_event = await getUserGoogleEvent(session, event_id);
-
-        if (is_attending && googleAccount && google_event && calendar) {
-            await deleteGoogleCalendarEvent(calendar, google_event);
-            await deleteGoogleEvent(google_event, session, event_id);
-        } else if (googleAccount && calendar) {
-            const google_calendar_event = await insertGoogleCalendarEvent(calendar, updated_event);
-            if (!google_calendar_event) {
-                return res.status(401).json('Not authenticated');
+            if (calendar && userGoogleEvent) {
+                await deleteGoogleCalendarEvent(calendar, userGoogleEvent);
             }
-            await createGoogleEvent(google_calendar_event, session, event_id);
-        }
 
-        return res.status(200).json({ message: 'Your attendance successfully updated' });
-    } catch (e) {
-        console.log(e);
+            await deleteEventAttendance(eventId, userId);
+
+            return res.status(200).json({ message: 'Your attendance successfully updated' });
+        } catch (e) {
+            console.log(e);
+        }
+    } else {
+        throw Error('You must provide an event id');
+    }
+}
+
+export async function attendEvent(req: Request, res: Response) {
+    const { eventId } = req.params;
+    const session: IUserSession = res.locals.session;
+    const userId = session.user.id;
+
+    if (eventId) {
+        try {
+            let calendar = await generateUserGoogleCalendar(userId);
+
+            const updatedEvent = (await fetchEvent(eventId))?.data;
+            await createEventAttendance(eventId, userId);
+
+            if (calendar && updatedEvent) {
+                const googleCalendarEvent = await insertGoogleCalendarEvent(calendar, updatedEvent);
+                if (!googleCalendarEvent) {
+                    return res.status(401).json('Not authenticated');
+                }
+                await createGoogleEvent(googleCalendarEvent, userId, eventId);
+            }
+
+            return res.status(200).json({ message: 'Your attendance successfully updated' });
+        } catch (e) {
+            console.log(e);
+        }
+    } else {
+        throw Error('You must provide an event id');
     }
 }
