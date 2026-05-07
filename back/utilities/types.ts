@@ -9,7 +9,7 @@ export interface EventEntity {
     imgUrl?: string | null | undefined;
 }
 
-export type AttendeeInfo = {
+export type AttendanceInfo = {
     id: string;
     userId: string;
     eventId: string;
