@@ -8,13 +8,13 @@ import {
     type Role,
 } from '../utilities/types.js';
 
-export async function getUserAccountService(
-    session: IUserSession,
+export async function fetchUserAccount(
+    userId: string,
     provider: string,
 ): Promise<IUserThirdPartyAccount | null> {
     return prisma.account.findFirst({
         where: {
-            userId: session.user.id,
+            userId: userId,
             providerId: provider,
         },
     });
@@ -60,10 +60,10 @@ export function adminShowRoleRequestsService(): Promise<Array<IRoleRequest>> {
     });
 }
 
-export function updateUserRoleRequestService(applicant_email: string, response: AdminResponse): Promise<IRoleRequest> {
+export function updateUserRoleRequestService(applicantEmail: string, response: AdminResponse): Promise<IRoleRequest> {
     return prisma.roleRequest.update({
         where: {
-            userEmail: applicant_email,
+            userEmail: applicantEmail,
         },
         data: {
             status: response,
